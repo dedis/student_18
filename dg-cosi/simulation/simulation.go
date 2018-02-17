@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/BurntSushi/toml"
-	"github.com/dedis/student_18_dgcosi/cosi/crypto"
+	"github.com/dedis/student_18_dgcosi/dg-cosi/crypto"
 	"github.com/dedis/onet"
 	"github.com/dedis/onet/log"
 	"github.com/dedis/onet/simul/monitor"

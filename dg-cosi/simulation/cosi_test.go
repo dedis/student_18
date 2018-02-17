@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/dedis/cothority"
-	"github.com/dedis/student_18_dgcosi/cosi/crypto"
+	"github.com/dedis/student_18_dgcosi/dg-cosi/crypto"
 	"github.com/dedis/onet"
 	"github.com/dedis/onet/log"
 )

@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"github.com/dedis/cothority"
-	"github.com/dedis/student_18_dgcosi/cosi/crypto"
-	cosi "github.com/dedis/student_18_dgcosi/cosi/protocol"
+	"github.com/dedis/student_18_dgcosi/dg-cosi/crypto"
+	cosi "github.com/dedis/student_18_dgcosi/dg-cosi/protocol"
 	"github.com/dedis/onet"
 	"github.com/dedis/onet/log"
 	"github.com/stretchr/testify/require"
