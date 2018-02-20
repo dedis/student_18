@@ -42,6 +42,7 @@ import (
 	"fmt"
 
 	"github.com/dedis/kyber"
+	"github.com/dedis/onet/log"
 )
 
 // CoSi is the struct that implements one round of a CoSi protocol.
@@ -189,6 +190,9 @@ func (c *CoSi) Response(responses []kyber.Scalar) (kyber.Scalar, error) {
 // root knows the aggregate response.
 func (c *CoSi) Signature() []byte {
 	// Sig = C || R || bitmask
+	//TODO remove log
+	log.Lvl2("***** K COSI Sign *****")
+
 	lenC := c.suite.PointLen()
 	lenSig := lenC + c.suite.ScalarLen()
 	sigC, err := c.aggregateCommitment.MarshalBinary()

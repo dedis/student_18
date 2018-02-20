@@ -1,0 +1,14 @@
+Login = "kedalat"
+Host = "users.deterlab.net"
+Project = "SAFER"
+Experiment = "DgCosi"
+ProxyAddress = "localhost"
+MonitorAddress = "users.isi.deterlab.net"
+MonitorPort = 10000
+Servers = 16
+Simulation = "CoSimul"
+Hosts = 4096
+Debug = 0
+RunWait = 0
+Suite = "Ed25519"
+PreScript = ""
