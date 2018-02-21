@@ -42,6 +42,7 @@ import (
 	"fmt"
 
 	"github.com/dedis/kyber"
+	"github.com/dedis/onet/log"
 )
 
 // CoSi is the struct that implements one round of a CoSi protocol.
@@ -84,15 +85,15 @@ type CoSi struct {
 	// the longterm private key CoSi will use during the response phase.
 	// The private key must have its public version in the list of publics keys
 	// given to CoSi.
-	private kyber.Scalar
+	private DgScalar
 	// random is our own secret that we wish to commit during the commitment phase.
-	random kyber.Scalar
+	random DgScalar
 	// commitment is our own commitment
 	commitment kyber.Point
 	// response is our own computed response
-	response kyber.Scalar
+	response DgScalar
 	// aggregateResponses is the aggregated response from the children + our own
-	aggregateResponse kyber.Scalar
+	aggregateResponse DgScalar
 }
 
 // NewCosi returns a new Cosi struct given the suite, the longterm secret, and
@@ -100,7 +101,7 @@ type CoSi struct {
 // have to set the mask using `SetMask` method. By default, all participants are
 // designated as participating. If you wish to specify which co-signers are
 // participating, use NewCosiWithMask
-func NewCosi(suite kyber.Group, private kyber.Scalar, publics []kyber.Point) *CoSi {
+func NewCosi(suite kyber.Group, private DgScalar, publics []kyber.Point) *CoSi {
 	cosi := &CoSi{
 		suite:   suite,
 		private: private,
@@ -136,12 +137,14 @@ func (c *CoSi) Commit(s cipher.Stream, subComms []kyber.Point) kyber.Point {
 
 // CreateChallenge creates the challenge out of the message it has been given.
 // This is typically called by Root.
-func (c *CoSi) CreateChallenge(msg []byte) (kyber.Scalar, error) {
-	// H( Commit || AggPublic || M)
+func (c *CoSi) ComputeChallenge(msg []byte) (kyber.Scalar, error) {
+	// H( 'sig' || Commit || AggPublic || M)
 	hash := sha512.New()
+	hash.Write([]byte("sig"))
 	if _, err := c.aggregateCommitment.MarshalTo(hash); err != nil {
 		return nil, err
 	}
+	// FIXME stop computing aggregate from mask
 	if _, err := c.mask.Aggregate().MarshalTo(hash); err != nil {
 		return nil, err
 	}
@@ -154,6 +157,7 @@ func (c *CoSi) CreateChallenge(msg []byte) (kyber.Scalar, error) {
 }
 
 // TODO: change challenge to compute the hash
+// TODO: send commit and aggregate to nodes
 // Challenge keeps in memory the Challenge from the message.
 func (c *CoSi) Challenge(challenge kyber.Scalar) {
 	c.challenge = challenge
@@ -162,70 +166,81 @@ func (c *CoSi) Challenge(challenge kyber.Scalar) {
 // CreateResponse is called by a leaf to create its own response from the
 // challenge + commitment + private key. It returns the response to send up to
 // the tree.
-func (c *CoSi) CreateResponse() (kyber.Scalar, error) {
+func (c *CoSi) CreateResponse() (DgScalar, error) {
 	err := c.genResponse()
 	return c.response, err
 }
 
 // Response generates the response from the commitment, challenge and the
 // responses of its children.
-func (c *CoSi) Response(responses []kyber.Scalar) (kyber.Scalar, error) {
+func (c *CoSi) Response(responses []DgScalar) (DgScalar, error) {
 	//create your own response
 	if err := c.genResponse(); err != nil {
-		return nil, err
+		return DgScalar{}, err
 	}
 	// Add our own
-	c.aggregateResponse = c.suite.Scalar().Set(c.response)
+	c.aggregateResponse = c.response.Clone()
 	for _, resp := range responses {
 		// add responses of child
-		c.aggregateResponse.Add(c.aggregateResponse, resp)
+		c.aggregateResponse.X.Add(c.aggregateResponse.X, resp.X)
+		c.aggregateResponse.Y.Add(c.aggregateResponse.Y, resp.Y)
 	}
 	return c.aggregateResponse, nil
 }
 
-// Signature returns a signature using the same format as EdDSA signature
+// Signature returns a signature using Double Generator signature
 // AggregateCommit || AggregateResponse || Mask
 // *NOTE*: Signature() is only intended to be called by the root since only the
 // root knows the aggregate response.
 func (c *CoSi) Signature() []byte {
 	// Sig = C || R || bitmask
 	lenC := c.suite.PointLen()
-	lenSig := lenC + c.suite.ScalarLen()
+	lenSigMid := lenC + c.suite.ScalarLen()
+	lenSig := lenC + 2*c.suite.ScalarLen()
 	sigC, err := c.aggregateCommitment.MarshalBinary()
 	if err != nil {
 		panic("Can't marshal Commitment")
 	}
-	sigR, err := c.aggregateResponse.MarshalBinary()
+	sigRX, err := c.aggregateResponse.X.MarshalBinary()
+	if err != nil {
+		panic("Can't generate signature !")
+	}
+	sigRY, err := c.aggregateResponse.Y.MarshalBinary()
 	if err != nil {
 		panic("Can't generate signature !")
 	}
 	final := make([]byte, lenSig+c.mask.MaskLen())
 	copy(final[:], sigC)
-	copy(final[lenC:lenSig], sigR)
+	copy(final[lenC:lenSigMid], sigRX)
+	copy(final[lenSigMid:lenSig], sigRY)
 	copy(final[lenSig:], c.mask.mask)
 	return final
 }
 
+// NOTE removed for performance
 // VerifyResponses verifies the response this CoSi has against the aggregated
 // public key the tree is using. This is callable by any nodes in the tree,
 // after it has aggregated its responses. You can enforce verification at each
 // level of the tree for faster reactivity.
 func (c *CoSi) VerifyResponses(aggregatedPublic kyber.Point) error {
-	k := c.challenge
-
-	// k * -aggPublic + s * B = k*-A + s*B
-	// from s = k * a + r => s * B = k * a * B + r * B <=> s*B = k*A + r*B
-	// <=> s*B + k*-A = r*B
-	minusPublic := c.suite.Point().Neg(aggregatedPublic)
-	kA := c.suite.Point().Mul(k, minusPublic)
-	sB := c.suite.Point().Mul(c.aggregateResponse, nil)
-	left := c.suite.Point().Add(kA, sB)
-
-	if !left.Equal(c.aggregateCommitment) {
-		return errors.New("recreated commitment is not equal to one given")
-	}
-
+	//TODO remove function completely
 	return nil
+
+	//k := c.challenge
+	//
+	//// k * -aggPublic + s * B = k*-A + s*B
+	//// from s = k * a + r => s * B = k * a * B + r * B <=> s*B = k*A + r*B
+	//// <=> s*B + k*-A = r*B
+	//minusPublic := c.suite.Point().Neg(aggregatedPublic)
+	//kA := c.suite.Point().Mul(k, minusPublic)
+	//sB := c.suite.Point().Mul(c.aggregateResponse, nil)
+	//left := c.suite.Point().Add(kA, sB)
+	//
+	//if !left.Equal(c.aggregateCommitment) {
+	//	return errors.New("recreated commitment is not equal to one given")
+	//}
+	//
+	//return nil
 }
 
 // VerifySignature is the method to call to verify a signature issued by a Cosi
@@ -234,14 +249,19 @@ func (c *CoSi) VerifyResponses(aggregatedPublic kyber.Point) error {
 // participate
 func VerifySignature(suite kyber.Group, publics []kyber.Point, message, sig []byte) error {
 	lenC := suite.PointLen()
-	lenSig := lenC + suite.ScalarLen()
+	lenSigMid := lenC + suite.ScalarLen()
+	lenSig    := lenC + 2*suite.ScalarLen()
 	aggCommitBuff := sig[:lenC]
 	aggCommit := suite.Point()
 	if err := aggCommit.UnmarshalBinary(aggCommitBuff); err != nil {
 		panic(err)
 	}
-	sigBuff := sig[lenC:lenSig]
-	sigInt := suite.Scalar().SetBytes(sigBuff)
+	sigBuffX := sig[lenC:lenSigMid]
+	sigIntX := suite.Scalar().SetBytes(sigBuffX)
+
+	sigBuffY := sig[lenSigMid:lenSig]
+	sigIntY := suite.Scalar().SetBytes(sigBuffY)
+
 	maskBuff := sig[lenSig:]
 	mask := newMask(suite, publics)
 	mask.SetMask(maskBuff)
@@ -251,19 +271,23 @@ func VerifySignature(suite kyber.Group, publics []kyber.Point, message, sig []by
 		return err
 	}
 
+	// H( 'sig' || Commit || AggPublic || M)
 	hash := sha512.New()
+	hash.Write([]byte("sig"))
 	hash.Write(aggCommitBuff)
 	hash.Write(aggPublicMarshal)
 	hash.Write(message)
 	buff := hash.Sum(nil)
 	k := suite.Scalar().SetBytes(buff)
+	log.Lvl2("**** cosi sign challenge ", buff)
 
+	// c = Hash(sig, g^s1*h^s2 * PK^-c, PK, m)
 	// k * -aggPublic + s * B = k*-A + s*B
 	// from s = k * a + r => s * B = k * a * B + r * B <=> s*B = k*A + r*B
 	// <=> s*B + k*-A = r*B
 	minusPublic := suite.Point().Neg(aggPublic)
 	kA := suite.Point().Mul(k, minusPublic)
-	sB := suite.Point().Mul(sigInt, nil)
+	sB := DgScalar{sigIntX, sigIntY}.ComputePublic(suite)
 	left := suite.Point().Add(kA, sB)
 
 	if !left.Equal(aggCommit) {
@@ -275,7 +299,7 @@ func VerifySignature(suite kyber.Group, publics []kyber.Point, message, sig []by
 
 // AggregateResponse returns the aggregated response that this cosi has
 // accumulated.
-func (c *CoSi) AggregateResponse() kyber.Scalar {
+func (c *CoSi) AggregateResponse() DgScalar {
 	return c.aggregateResponse
 }
 
@@ -290,7 +314,7 @@ func (c *CoSi) GetCommitment() kyber.Point {
 }
 
 // GetResponse returns the individual response generated by this CoSi
-func (c *CoSi) GetResponse() kyber.Scalar {
+func (c *CoSi) GetResponse() DgScalar {
 	return c.response
 }
 
@@ -300,17 +324,17 @@ func (c *CoSi) genCommit(s cipher.Stream) {
 	if s == nil {
 		panic("s is required")
 	}
-	c.random = c.suite.Scalar().Pick(s)
-	c.commitment = c.suite.Point().Mul(c.random, nil)
+	c.random = DgScalar{c.suite.Scalar().Pick(s), c.suite.Scalar().Pick(s)}
+	c.commitment = c.random.ComputePublic(c.suite)
 	c.aggregateCommitment = c.commitment
 }
 
 // genResponse creates the response
 func (c *CoSi) genResponse() error {
-	if c.private == nil {
+	if c.private.IsEmpty() {
 		return errors.New("No private key given in this cosi")
 	}
-	if c.random == nil {
+	if c.random.IsEmpty() {
 		return errors.New("No random scalar computed in this cosi")
 	}
 	if c.challenge == nil {
@@ -319,12 +343,13 @@ func (c *CoSi) genResponse() error {
 
 	// resp = random - challenge * privatekey
 	// i.e. ri = vi + c * xi
-	resp := c.suite.Scalar().Mul(c.private, c.challenge)
-	c.response = resp.Add(c.random, resp)
+	respX := c.suite.Scalar().Mul(c.private.X, c.challenge)
+	respY := c.suite.Scalar().Mul(c.private.Y, c.challenge)
+	c.response = DgScalar{respX.Add(c.random.X, respX),respY.Add(c.random.Y, respY)}
 	// no aggregation here
 	c.aggregateResponse = c.response
 	// paranoid protection: delete the random
-	c.random = nil
+	c.random = DgScalar{}
 	return nil
 }
 

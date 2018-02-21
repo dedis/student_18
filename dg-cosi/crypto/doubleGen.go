@@ -2,15 +2,14 @@ package crypto
 
 import (
 	"github.com/dedis/kyber"
-	"github.com/dedis/kyber/suites"
 )
 
 // GetHDirty is the discrete logarithm of H
 // undermines security [break dlog] only for simulation
-const hBase  =  12345
+const hBase  =  123400
 // used to encode both x and y in one scalar
 // undermines security [reduce security size] only for simulation
-const yDec   =  123
+const yDec   =  1200
 
 
 
@@ -25,27 +24,38 @@ const yDec   =  123
 // private = (x, y) = (priv, priv+yDec)
 // public  = xG + yH,     H = hBase.G
 type DGkey struct {
-	Public  DgPublic   // Public key Pub = xG+yH
-	Private DgPrivate  // Private x key
+	Public  kyber.Point  // Public key Pub = xG+yH
+	Private DgScalar // Private x key
 }
 
-type DgPublic struct{
-	Public  kyber.Point   // Public key Pub = xG+yH
-}
 
-type DgPrivate struct{
+//type DgPoint struct{
+//	Public  kyber.Point   // Public key Pub = xG+yH
+//}
+
+type DgScalar struct{
 	X kyber.Scalar // Private x key
 	Y kyber.Scalar // Private y key
 }
 
+func (priv *DgScalar)IsEmpty() bool {
+	if priv.X == nil{
+		return true
+	}
+	return priv.Y == nil
+}
+func (priv *DgScalar)Clone() DgScalar{
+	dg := DgScalar{priv.X.Clone(), priv.Y.Clone()}
+	return dg
+}
+
+
 
 //Compute public dg key from private dg key
-func (priv *DgPrivate)ComputePublic(suit suites.Suite) DgPublic{
+func (priv *DgScalar)ComputePublic(suit kyber.Group) kyber.Point {
 	G, H := suit.Point().Base(), GetH(suit)
-	pub := DgPublic{}
 	// pub = xG + yH
-	pub.Public = suit.Point().Add( suit.Point().Mul(priv.Y,H), suit.Point().Mul(priv.X, G))
-	return pub
+	return suit.Point().Add( suit.Point().Mul(priv.Y,H), suit.Point().Mul(priv.X, G))
 }
 
 
@@ -53,16 +63,18 @@ func (priv *DgPrivate)ComputePublic(suit suites.Suite) DgPublic{
 // Due to knowing the discrete logarithm the security doesn't hold.
 // Only used to encode a DoubleGenerator key to a normal key.
 // WARNING: NEVER should be deployed
-func GetH(suit suites.Suite) kyber.Point{
+func GetH(suit kyber.Group) kyber.Point{
 	return suit.Point().Mul(suit.Scalar().SetInt64(hBase), nil)
 }
 
-func ConvertNormalPrivateToDg( x kyber.Scalar) DgPrivate{
-	priv := DgPrivate{}
-	priv.X = x.Clone()
-	priv.Y = x.Add(x, x.Clone().SetInt64(yDec))
-	return priv
+func ConvertNormalPrivateToDg( x kyber.Scalar) DgScalar {
+	return DgScalar{ x.Clone(),  x.Clone().Add(x, x.Clone().SetInt64(yDec)) }
 }
-func ConvertDgPrivateToNormal( dg DgPrivate) kyber.Scalar{
+func ConvertDgPrivateToNormal( dg DgScalar) kyber.Scalar{
 	return dg.X
+}
+func ConvertNormalKeyToDg(x kyber.Scalar, suite kyber.Group)DGkey{
+	priv := ConvertNormalPrivateToDg(x)
+	pub := priv.ComputePublic(suite)
+	return DGkey{pub, priv}
 }
