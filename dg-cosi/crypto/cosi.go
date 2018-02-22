@@ -287,7 +287,8 @@ func VerifySignature(suite kyber.Group, publics []kyber.Point, message, sig []by
 	// <=> s*B + k*-A = r*B
 	minusPublic := suite.Point().Neg(aggPublic)
 	kA := suite.Point().Mul(k, minusPublic)
-	sB := DgScalar{sigIntX, sigIntY}.ComputePublic(suite)
+	ss :=DgScalar{sigIntX, sigIntY}
+	sB := ss.ComputePublic(suite)
 	left := suite.Point().Add(kA, sB)
 
 	if !left.Equal(aggCommit) {

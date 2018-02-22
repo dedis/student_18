@@ -2,6 +2,8 @@ package crypto
 
 import (
 	"github.com/dedis/kyber"
+	"github.com/dedis/kyber/suites"
+	"github.com/dedis/kyber/util/key"
 )
 
 // GetHDirty is the discrete logarithm of H
@@ -11,6 +13,8 @@ const hBase  =  123400
 // undermines security [reduce security size] only for simulation
 const yDec   =  1200
 
+var BaseH kyber.Point
+var UpdateStep kyber.Point
 
 
 // Pair represents a public/private double generator keypair
@@ -59,13 +63,37 @@ func (priv *DgScalar)ComputePublic(suit kyber.Group) kyber.Point {
 }
 
 
-// GetHDirty deterministically determine second generator from first one
+// GetH deterministically determine second generator from first one
 // Due to knowing the discrete logarithm the security doesn't hold.
 // Only used to encode a DoubleGenerator key to a normal key.
 // WARNING: NEVER should be deployed
 func GetH(suit kyber.Group) kyber.Point{
-	return suit.Point().Mul(suit.Scalar().SetInt64(hBase), nil)
+	if BaseH == nil{
+		BaseH = suit.Point().Mul(suit.Scalar().SetInt64(hBase), nil)
+	}
+	return BaseH
 }
+// GetStep provides the incremental update step for fast simulation
+func GetStep(suit kyber.Group) kyber.Point{
+	if BaseH == nil{
+		BaseH = suit.Point().Mul(suit.Scalar().SetInt64(hBase), nil)
+	}
+	return BaseH
+}
+
+//
+func NewDgKeyScalar(suite suites.Suite) (k DgScalar) {
+	random := suite.RandomStream()
+	if g, ok := suite.(key.Generator); ok {
+		k.X = g.NewKey(random)
+		k.Y = g.NewKey(random)
+	} else {
+		k.X = suite.Scalar().Pick(random)
+		k.Y = suite.Scalar().Pick(random)
+	}
+	return k
+}
+
 
 func ConvertNormalPrivateToDg( x kyber.Scalar) DgScalar {
 	return DgScalar{ x.Clone(),  x.Clone().Add(x, x.Clone().SetInt64(yDec)) }
@@ -78,3 +106,7 @@ func ConvertNormalKeyToDg(x kyber.Scalar, suite kyber.Group)DGkey{
 	pub := priv.ComputePublic(suite)
 	return DGkey{pub, priv}
 }
+//func NextKey(pair *key.Pair, suite suites.Suite) key.Pair{
+//	pair.Private.Add(pair.Private, suite.Scalar().One())
+//	pair
+//}
