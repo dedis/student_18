@@ -61,6 +61,8 @@ type CoSi struct {
 	done chan bool
 	// temporary buffer of commitment messages
 	tempCommitment []kyber.Point
+	// temporary buffer of commitment public key messages
+	tempCommitmentPub []kyber.Point
 	// lock associated
 	tempCommitLock *sync.Mutex
 	// temporary buffer of Response messages
@@ -223,6 +225,7 @@ func (c *CoSi) handleCommitment(in *Commitment) error {
 		// add to temporary
 		c.tempCommitLock.Lock()
 		c.tempCommitment = append(c.tempCommitment, in.Comm)
+		c.tempCommitmentPub = append(c.tempCommitmentPub, in.AggPub)
 		c.tempCommitLock.Unlock()
 		// do we have enough ?
 		// TODO: exception mechanism will be put into another protocol
@@ -246,7 +249,7 @@ func (c *CoSi) handleCommitment(in *Commitment) error {
 	////////////////////////////
 
 	// go to Commit()
-	out := c.cosi.Commit(c.Suite().RandomStream(), c.tempCommitment)
+	out, pub := c.cosi.Commit(c.Suite().RandomStream(), c.tempCommitment, c.tempCommitmentPub)
 
 	// if we are the root, we need to start the Challenge
 	if c.IsRoot() {
@@ -256,6 +259,7 @@ func (c *CoSi) handleCommitment(in *Commitment) error {
 	// otherwise send it to parent
 	outMsg := &Commitment{
 		Comm: out,
+		AggPub: pub,
 	}
 	return c.SendTo(c.Parent(), outMsg)
 }
@@ -273,6 +277,11 @@ func (c *CoSi) startChallenge() error {
 	//log.Lvl1("******************  K COSI start root work end **********************")
 	////////////////////////////
 	rootAggr := c.cosi.RootAggregateCommit(nil)
+	aggPub, err := c.cosi.GetAggregatePublicKey()
+	if err != nil {
+		return err
+	}
+
 	challenge, err := c.cosi.ComputeChallenge(c.Message)
 	if err != nil {
 		return err
@@ -280,6 +289,7 @@ func (c *CoSi) startChallenge() error {
 	out := &Challenge{
 		Msg:         c.Message,
 		RootAggCommit: rootAggr,
+		AggPub: aggPub,
 	}
 	log.Lvlf3("%s Starting Chal=%+v (message = %x)", c.Name(), challenge, c.Message)
 	return c.handleChallenge(out)
@@ -293,6 +303,7 @@ func (c *CoSi) handleChallenge(in *Challenge) error {
 	log.Lvl3( c.Name(), " rootAggr:", in.RootAggCommit, " Msg:", in.Msg)
 
 	c.cosi.RootAggregateCommit(in.RootAggCommit)
+	c.cosi.SetAggregatePublicKey(in.AggPub)
 	c.cosi.ComputeChallenge(in.Msg)
 
 	//if c.challengeHook != nil {
@@ -357,9 +368,9 @@ func (c *CoSi) handleResponse(in *Response) error {
 // TODO remove intermediate verify check
 // VerifyResponses allows to check at each intermediate node whether the
 // responses are valid
-func (c *CoSi) VerifyResponses(agg kyber.Point) error {
-	return c.cosi.VerifyResponses(agg)
-}
+//func (c *CoSi) VerifyResponses(agg kyber.Point) error {
+//	return c.cosi.VerifyResponses(agg)
+//}
 
 // SigningMessage simply set the message to sign for this round
 func (c *CoSi) SigningMessage(msg []byte) {

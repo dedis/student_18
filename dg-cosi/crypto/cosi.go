@@ -81,6 +81,10 @@ type CoSi struct {
 	aggregateCommitment kyber.Point
 	// V_hat is the root aggregated commit (Every Witness)
 	rootAggregateCommitment kyber.Point
+	// use to compute and store aggregate public key
+	aggregatePublicKey kyber.Point
+	//enable aggregating public key while running commitment phase
+	enablePubKeyAggregationInTree bool
 	// challenge holds the challenge for this round
 	challenge kyber.Scalar
 
@@ -88,6 +92,8 @@ type CoSi struct {
 	// The private key must have its public version in the list of publics keys
 	// given to CoSi.
 	private DgScalar
+	// Nodes public key
+	publicKey kyber.Point
 	// random is our own secret that we wish to commit during the commitment phase.
 	random DgScalar
 	// commitment is our own commitment
@@ -107,7 +113,10 @@ func NewCosi(suite kyber.Group, private DgScalar, publics []kyber.Point) *CoSi {
 	cosi := &CoSi{
 		suite:   suite,
 		private: private,
+		enablePubKeyAggregationInTree: true,
 	}
+	cosi.publicKey = cosi.private.ComputePublic(suite)
+	cosi.aggregatePublicKey =  nil
 	// Start with an all-disabled participation mask, then set it correctly
 	cosi.mask = newMask(suite, publics)
 	return cosi
@@ -123,20 +132,31 @@ func (c *CoSi) CreateCommitment(s cipher.Stream) kyber.Point {
 
 // Commit creates the commitment / secret as in CreateCommitment and it also
 // aggregate children commitments from the children's messages.
-func (c *CoSi) Commit(s cipher.Stream, subComms []kyber.Point) kyber.Point {
+func (c *CoSi) Commit(s cipher.Stream, subComms []kyber.Point, subPubs []kyber.Point, ) (commit, public kyber.Point) {
 	// generate our own commit
 	c.genCommit(s)
 
 	// add our own commitment to the aggregate commitment
 	c.aggregateCommitment = c.suite.Point().Add(c.suite.Point().Null(), c.commitment)
+	if c.enablePubKeyAggregationInTree == true{
+		c.aggregatePublicKey = c.suite.Point().Add(c.suite.Point().Null(), c.publicKey)
+	}
 	// take the children commitments
 	for _, com := range subComms {
 		c.aggregateCommitment.Add(c.aggregateCommitment, com)
 	}
-	return c.aggregateCommitment
+	// take the children public key
+	if c.enablePubKeyAggregationInTree == true{
+		for _, pub := range subPubs {
+			c.aggregatePublicKey.Add(c.aggregatePublicKey, pub)
+		}
+
+	}
+	return c.aggregateCommitment, c.aggregatePublicKey
 
 }
-
+// sets root aggregate commit
+// in root rootAggr is nil and we informs the node that it is the root
 func (c *CoSi) RootAggregateCommit(rootAggr kyber.Point) kyber.Point {
 	if rootAggr == nil{
 		c.rootAggregateCommitment = c.aggregateCommitment
@@ -144,6 +164,18 @@ func (c *CoSi) RootAggregateCommit(rootAggr kyber.Point) kyber.Point {
 		c.rootAggregateCommitment = rootAggr
 	}
 	return c.rootAggregateCommitment
+}
+// sets group aggregate public key aggregate
+// in root rootAggr is nil and we informs the node that it is the root
+func (c *CoSi) GroupAggregateKey(pub kyber.Point) kyber.Point {
+	// in computation phase aggregatePublicKey is temporary and we overwrite it in the end
+	if pub == nil{
+		// c.aggregatePublicKey = c.aggregateCommitment
+
+	} else{
+		c.aggregatePublicKey = pub
+	}
+	return c.aggregatePublicKey
 }
 // CreateChallenge creates the challenge out of the message it has been given.
 // This is typically called by Root.
@@ -154,8 +186,11 @@ func (c *CoSi) ComputeChallenge(msg []byte) (kyber.Scalar, error) {
 	if _, err := c.rootAggregateCommitment.MarshalTo(hash); err != nil {
 		return nil, err
 	}
-	// FIXME stop computing aggregate from mask
-	if _, err := c.mask.Aggregate().MarshalTo(hash); err != nil {
+	aggPub, err := c.GetAggregatePublicKey()
+	if err != nil{
+		return nil, err
+	}
+	if _, err := aggPub.MarshalTo(hash); err != nil {
 		return nil, err
 	}
 	hash.Write(msg)
@@ -169,9 +204,9 @@ func (c *CoSi) ComputeChallenge(msg []byte) (kyber.Scalar, error) {
 // TODO: change challenge to compute the hash
 // TODO: send commit and aggregate to nodes
 // Challenge keeps in memory the Challenge from the message.
-func (c *CoSi) Challenge(challenge kyber.Scalar) {
-	c.challenge = challenge
-}
+//func (c *CoSi) Challenge(challenge kyber.Scalar) {
+//	c.challenge = challenge
+//}
 
 // CreateResponse is called by a leaf to create its own response from the
 // challenge + commitment + private key. It returns the response to send up to
@@ -232,9 +267,9 @@ func (c *CoSi) Signature() []byte {
 // public key the tree is using. This is callable by any nodes in the tree,
 // after it has aggregated its responses. You can enforce verification at each
 // level of the tree for faster reactivity.
-func (c *CoSi) VerifyResponses(aggregatedPublic kyber.Point) error {
-	//TODO remove function completely
-	return nil
+//TODO remove function completely
+//func (c *CoSi) VerifyResponses(aggregatedPublic kyber.Point) error {
+//	return nil
 
 	//k := c.challenge
 	//
@@ -251,7 +286,7 @@ func (c *CoSi) VerifyResponses(aggregatedPublic kyber.Point) error {
 	//}
 	//
 	//return nil
-}
+//}
 
 // VerifySignature is the method to call to verify a signature issued by a Cosi
 // struct. Publics is the WHOLE list of publics keys, the mask at the end of the
@@ -362,6 +397,16 @@ func (c *CoSi) genResponse() error {
 	// paranoid protection: delete the random
 	c.random = DgScalar{}
 	return nil
+}
+
+func (c *CoSi)GetAggregatePublicKey() (kyber.Point , error){
+	if c.enablePubKeyAggregationInTree == false{
+		return nil, errors.New("disabled enablePubKeyAggregationInTree")
+	}
+	return c.aggregatePublicKey, nil
+}
+func (c *CoSi)SetAggregatePublicKey(pub kyber.Point ){
+	c.aggregatePublicKey = pub
 }
 
 // mask holds the mask utilities
@@ -480,7 +525,7 @@ func (cm *mask) bytes() []byte {
 	return clone
 }
 
-// Aggregate returns the aggregate public key of all *participating* signers
+ //Aggregate returns the aggregate public key of all *participating* signers
 func (cm *mask) Aggregate() kyber.Point {
 	return cm.aggPublic
 }

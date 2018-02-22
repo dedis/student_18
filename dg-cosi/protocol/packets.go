@@ -122,13 +122,14 @@ type Announcement struct {
 // Commitment of all nodes, aggregated over all children.
 type Commitment struct {
 	Comm kyber.Point
-	//TODO ADD PUBLIC KEY GENERATION
+	AggPub kyber.Point
 }
 
 // Challenge is the challenge against the aggregate commitment.
 type Challenge struct {
 	Msg         []byte
 	RootAggCommit kyber.Point
+	AggPub kyber.Point
 }
 
 // Response of all nodes, aggregated over all children.
