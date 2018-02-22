@@ -64,13 +64,14 @@ type CoSi struct {
 	// lock associated
 	tempCommitLock *sync.Mutex
 	// temporary buffer of Response messages
-	tempResponse []kyber.Scalar
+	tempResponse []crypto.DgScalar
 	// lock associated
 	tempResponseLock *sync.Mutex
 
 	// hooks related to the various phase of the protocol.
 	announcementHook AnnouncementHook
 	commitmentHook   CommitmentHook
+	// NOTE DISABLED
 	challengeHook    ChallengeHook
 	responseHook     ResponseHook
 	signatureHook    SignatureHook
@@ -114,8 +115,9 @@ func NewProtocol(node *onet.TreeNodeInstance) (onet.ProtocolInstance, error) {
 		publics[i] = e.Public
 	}
 
+	privateDgKey := crypto.ConvertNormalPrivateToDg(node.Private())
 	c := &CoSi{
-		cosi:             crypto.NewCosi(node.Suite(), node.Private(), publics),
+		cosi:             crypto.NewCosi(node.Suite(), privateDgKey, publics),
 		TreeNodeInstance: node,
 		done:             make(chan bool),
 		tempCommitLock:   new(sync.Mutex),
@@ -188,7 +190,6 @@ func (c *CoSi) Start() error {
 	return c.handleAnnouncement(out)
 }
 
-//TODO: remove verification
 // VerifySignature verifies if the challenge and the secret (from the response phase) form a
 // correct signature for this message using the aggregated public key.
 // This is copied from cosi, so that you don't need to include both lib/cosi
@@ -271,13 +272,14 @@ func (c *CoSi) startChallenge() error {
 	//WasteTime(14000)
 	//log.Lvl1("******************  K COSI start root work end **********************")
 	////////////////////////////
-
-	challenge, err := c.cosi.CreateChallenge(c.Message)
+	rootAggr := c.cosi.RootAggregateCommit(nil)
+	challenge, err := c.cosi.ComputeChallenge(c.Message)
 	if err != nil {
 		return err
 	}
 	out := &Challenge{
-		Chall: challenge,
+		Msg:         c.Message,
+		RootAggCommit: rootAggr,
 	}
 	log.Lvlf3("%s Starting Chal=%+v (message = %x)", c.Name(), challenge, c.Message)
 	return c.handleChallenge(out)
@@ -288,12 +290,14 @@ func (c *CoSi) startChallenge() error {
 // handleChallenge dispatch the challenge to the round and then dispatch the
 // results down the tree.
 func (c *CoSi) handleChallenge(in *Challenge) error {
-	log.Lvlf3("%s chal=%+v", c.Name(), in.Chall)
-	c.cosi.Challenge(in.Chall)
+	log.Lvl3( c.Name(), " rootAggr:", in.RootAggCommit, " Msg:", in.Msg)
 
-	if c.challengeHook != nil {
-		c.challengeHook(in.Chall)
-	}
+	c.cosi.RootAggregateCommit(in.RootAggCommit)
+	c.cosi.ComputeChallenge(in.Msg)
+
+	//if c.challengeHook != nil {
+	//	c.challengeHook(in.Chall)
+	//}
 
 	// if we are leaf, then go to response
 	if c.IsLeaf() {
@@ -330,9 +334,9 @@ func (c *CoSi) handleResponse(in *Response) error {
 		return err
 	}
 
-	if c.responseHook != nil {
-		c.responseHook(c.tempResponse)
-	}
+	//if c.responseHook != nil {
+	//	c.responseHook(c.tempResponse)
+	//}
 
 	out := &Response{
 		Resp: outResponse,

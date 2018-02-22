@@ -1,0 +1,12 @@
+Simulation = "CoSimul"
+Servers = 16
+Rounds = 8
+Bf = 3
+Suite = "Ed25519"
+
+
+Depth
+2
+3
+4
+

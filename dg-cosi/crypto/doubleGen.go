@@ -13,8 +13,8 @@ const hBase  =  123400
 // undermines security [reduce security size] only for simulation
 const yDec   =  1200
 
-var BaseH kyber.Point
-var UpdateStep kyber.Point
+var baseH kyber.Point
+var updateStep kyber.Point
 
 
 // Pair represents a public/private double generator keypair
@@ -55,11 +55,12 @@ func (priv *DgScalar)Clone() DgScalar{
 
 
 
+// TODO OPTIMIZE combine getH and privY into 1 Mul
 //Compute public dg key from private dg key
 func (priv *DgScalar)ComputePublic(suit kyber.Group) kyber.Point {
 	G, H := suit.Point().Base(), GetH(suit)
 	// pub = xG + yH
-	return suit.Point().Add( suit.Point().Mul(priv.Y,H), suit.Point().Mul(priv.X, G))
+	return suit.Point().Add( suit.Point().Mul(priv.X, G), suit.Point().Mul(priv.Y,H))
 }
 
 
@@ -68,17 +69,17 @@ func (priv *DgScalar)ComputePublic(suit kyber.Group) kyber.Point {
 // Only used to encode a DoubleGenerator key to a normal key.
 // WARNING: NEVER should be deployed
 func GetH(suit kyber.Group) kyber.Point{
-	if BaseH == nil{
-		BaseH = suit.Point().Mul(suit.Scalar().SetInt64(hBase), nil)
+	if baseH == nil{
+		baseH = suit.Point().Mul(suit.Scalar().SetInt64(hBase), nil)
 	}
-	return BaseH
+	return baseH
 }
-// GetStep provides the incremental update step for fast simulation
+// GetStep provides the incremental update step for fast simulation (Dirty)
 func GetStep(suit kyber.Group) kyber.Point{
-	if BaseH == nil{
-		BaseH = suit.Point().Mul(suit.Scalar().SetInt64(hBase), nil)
+	if updateStep == nil{
+		updateStep = suit.Point().Add(GetH(suit), suit.Point().Base())
 	}
-	return BaseH
+	return updateStep
 }
 
 //
@@ -98,15 +99,13 @@ func NewDgKeyScalar(suite suites.Suite) (k DgScalar) {
 func ConvertNormalPrivateToDg( x kyber.Scalar) DgScalar {
 	return DgScalar{ x.Clone(),  x.Clone().Add(x, x.Clone().SetInt64(yDec)) }
 }
-func ConvertDgPrivateToNormal( dg DgScalar) kyber.Scalar{
-	return dg.X
-}
 func ConvertNormalKeyToDg(x kyber.Scalar, suite kyber.Group)DGkey{
 	priv := ConvertNormalPrivateToDg(x)
 	pub := priv.ComputePublic(suite)
 	return DGkey{pub, priv}
 }
-//func NextKey(pair *key.Pair, suite suites.Suite) key.Pair{
-//	pair.Private.Add(pair.Private, suite.Scalar().One())
-//	pair
-//}
+func (dg *DGkey)NextKey( suite suites.Suite) {
+	dg.Private.X.Add(dg.Private.X, suite.Scalar().One())
+	dg.Private.Y.Add(dg.Private.Y, suite.Scalar().One())
+	dg.Public.Add(GetStep(suite), dg.Public)
+}

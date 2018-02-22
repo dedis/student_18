@@ -6,6 +6,7 @@ import (
 	"github.com/dedis/kyber"
 	"github.com/dedis/onet"
 	"github.com/dedis/onet/network"
+	"github.com/dedis/student_18_dgcosi/dg-cosi/crypto"
 )
 
 func init() {
@@ -121,16 +122,18 @@ type Announcement struct {
 // Commitment of all nodes, aggregated over all children.
 type Commitment struct {
 	Comm kyber.Point
+	//TODO ADD PUBLIC KEY GENERATION
 }
 
 // Challenge is the challenge against the aggregate commitment.
 type Challenge struct {
-	Chall kyber.Scalar
+	Msg         []byte
+	RootAggCommit kyber.Point
 }
 
 // Response of all nodes, aggregated over all children.
 type Response struct {
-	Resp kyber.Scalar
+	Resp crypto.DgScalar
 }
 
 // Overlay-structures to retrieve the sending TreeNode.

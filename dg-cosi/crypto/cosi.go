@@ -79,6 +79,8 @@ type CoSi struct {
 	message []byte
 	// V_hat is the aggregated commit (our own + the children's)
 	aggregateCommitment kyber.Point
+	// V_hat is the root aggregated commit (Every Witness)
+	rootAggregateCommitment kyber.Point
 	// challenge holds the challenge for this round
 	challenge kyber.Scalar
 
@@ -135,13 +137,21 @@ func (c *CoSi) Commit(s cipher.Stream, subComms []kyber.Point) kyber.Point {
 
 }
 
+func (c *CoSi) RootAggregateCommit(rootAggr kyber.Point) kyber.Point {
+	if rootAggr == nil{
+		c.rootAggregateCommitment = c.aggregateCommitment
+	} else{
+		c.rootAggregateCommitment = rootAggr
+	}
+	return c.rootAggregateCommitment
+}
 // CreateChallenge creates the challenge out of the message it has been given.
 // This is typically called by Root.
 func (c *CoSi) ComputeChallenge(msg []byte) (kyber.Scalar, error) {
 	// H( 'sig' || Commit || AggPublic || M)
 	hash := sha512.New()
 	hash.Write([]byte("sig"))
-	if _, err := c.aggregateCommitment.MarshalTo(hash); err != nil {
+	if _, err := c.rootAggregateCommitment.MarshalTo(hash); err != nil {
 		return nil, err
 	}
 	// FIXME stop computing aggregate from mask
@@ -197,7 +207,7 @@ func (c *CoSi) Signature() []byte {
 	lenC := c.suite.PointLen()
 	lenSigMid := lenC + c.suite.ScalarLen()
 	lenSig := lenC + 2*c.suite.ScalarLen()
-	sigC, err := c.aggregateCommitment.MarshalBinary()
+	sigC, err := c.rootAggregateCommitment.MarshalBinary()
 	if err != nil {
 		panic("Can't marshal Commitment")
 	}
