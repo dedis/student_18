@@ -247,7 +247,7 @@ func (s *SimulationBFTree) CreateRoster(sc *SimulationConfig, addresses []string
 	key := key.NewKeyPair(suite)
 	dgKey := crypto.ConvertNormalKeyToDg(key.Private, suite)
 	for c := 0; c < hosts; c++ {
-		if DGENABLE{
+		if DGENABLE {
 			dgKey.NextKey(suite)
 			key.Public = dgKey.Public
 			key.Private = dgKey.Private.X

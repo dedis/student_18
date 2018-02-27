@@ -71,7 +71,7 @@ func NewCount(n *onet.TreeNodeInstance) (onet.ProtocolInstance, error) {
 	p := &ProtocolCount{
 		TreeNodeInstance: n,
 		Quit:             make(chan bool),
-		timeout:          1 * time.Second,
+		timeout:          60 * time.Second,
 	}
 	p.Count = make(chan int, 1)
 	if err := p.RegisterChannel(&p.CountChan); err != nil {
@@ -164,6 +164,9 @@ func (p *ProtocolCount) FuncC(cc []CountMsg) {
 	count := 1
 	for _, c := range cc {
 		count += c.Count.Children
+	}
+	if count > 1 {
+		log.Print("Found", count, "node")
 	}
 	if !p.IsRoot() {
 		log.Lvl3(p.Info(), "Sends to", p.Parent().ID, p.Parent().ServerIdentity.Address)

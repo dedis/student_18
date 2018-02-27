@@ -16,7 +16,7 @@ import (
 
 // a connection will return an io.EOF after readTimeout if nothing has been
 // sent.
-var readTimeout = 1 * time.Minute
+var readTimeout = 10 * time.Minute
 
 // MaxPacketSize limits the amount of memory that is allocated before a packet
 // is checked and thrown away if it's not legit. If you need more than 10MB

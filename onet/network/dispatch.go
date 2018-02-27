@@ -61,6 +61,7 @@ func NewBlockingDispatcher() *BlockingDispatcher {
 
 // RegisterProcessor saves the given processor in the dispatcher.
 func (d *BlockingDispatcher) RegisterProcessor(p Processor, msgType ...MessageTypeID) {
+	// log.Printf("%#v - %+v", msgType, msgType)
 	d.Lock()
 	defer d.Unlock()
 	for _, t := range msgType {
@@ -77,12 +78,21 @@ func (d *BlockingDispatcher) RegisterProcessorFunc(msgType MessageTypeID, fn fun
 	d.RegisterProcessor(p, msgType)
 }
 
+var myglobal int
+
 // Dispatch calls the corresponding processor's method Process. It's a
 // blocking call if the Processor is blocking.
 func (d *BlockingDispatcher) Dispatch(packet *Envelope) error {
 	// cannot use the "defer unlock" idiom here because we cannot
 	// be holding the lock while calling p.Process in case the
 	// processor wants to call RegisterProcessor.
+
+	// log.Printf("%+v - %#v", packet.MsgType, packet.MsgType)
+	if packet.MsgType.Equal(MessageTypeID{0x2d, 0xae, 0x95, 0xc7, 0x32, 0xb, 0x5c, 0xae, 0xa3, 0x22, 0xe3, 0xcc, 0x2b, 0xfd, 0x21, 0xa2}) {
+		myglobal++
+		// log.Print("received cosi-protocolmsg", myglobal)
+	}
+
 	d.Lock()
 	var p Processor
 	if p = d.procs[packet.MsgType]; p == nil {

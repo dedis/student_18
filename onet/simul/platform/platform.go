@@ -71,7 +71,7 @@ func NewPlatform(t string) Platform {
 		p = &MiniNet{}
 		_, err := os.Stat("server_list")
 		if os.IsNotExist(err) {
-			path := build.Default.GOPATH + "/src/"github.com/dedis/student_18_dgcosi/onet/simul/platform/mininet/"
+			path := build.Default.GOPATH + "/src/github.com/dedis/student_18_dgcosi/onet/simul/platform/mininet/"
 			var command string
 			if app.InputYN(true, "Do you want to run mininet on ICCluster?") {
 				command = path + "setup_iccluster.sh"

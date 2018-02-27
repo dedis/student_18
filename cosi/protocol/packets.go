@@ -2,6 +2,7 @@ package cosi
 
 import (
 	"errors"
+	"log"
 
 	"github.com/dedis/kyber"
 	"github.com/dedis/student_18_dgcosi/onet"
@@ -55,6 +56,7 @@ type MessageProxy struct{}
 // Wrap implements the onet.MessageProxy interface by wrapping up any of the
 // four-step messages into a ProtooclPacket.
 func (p *MessageProxy) Wrap(msg interface{}, info *onet.OverlayMsg) (interface{}, error) {
+	log.Print()
 	var packet = new(ProtocolPacket)
 	packet.OverlayMessage = info
 

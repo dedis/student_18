@@ -4,14 +4,17 @@ package cosi
 import (
 	"sync"
 
-	"github.com/dedis/student_18_dgcosi/cosi/crypto"
+	"errors"
+	"time"
+
 	"github.com/dedis/kyber"
+	"github.com/dedis/kyber/suites"
+	"github.com/dedis/student_18_dgcosi/cosi/crypto"
 	"github.com/dedis/student_18_dgcosi/onet"
 	"github.com/dedis/student_18_dgcosi/onet/log"
-	"github.com/dedis/kyber/suites"
-	"time"
-	"errors"
 )
+
+var timeout = time.Second * 100
 
 func WasteTime(t int) {
 	// E[1350] -> 0.1sec
@@ -153,6 +156,8 @@ func (c *CoSi) Dispatch() error {
 	if !c.IsLeaf() {
 		select {
 		case cis := <-c.commit:
+			log.Lvlf3("%s Handling %d commitments",
+				c.Name(), nbrChild)
 			for n, commit := range cis {
 				log.Lvlf3("%s Handling commitment %d/%d",
 					c.Name(), n+1, nbrChild)
@@ -161,7 +166,7 @@ func (c *CoSi) Dispatch() error {
 					return err
 				}
 			}
-		case <-time.After(time.Second * 10):
+		case <-time.After(timeout):
 			log.Error(c.ServerIdentity().Address, "did not receive all commitments after 10 seconds")
 			return errors.New("Commit timeout")
 		}
@@ -185,9 +190,9 @@ func (c *CoSi) Dispatch() error {
 					return err
 				}
 			}
-		case <-time.After(time.Second * 10):
-				log.Error(c.ServerIdentity().Address, "did not receive all responses after 10 seconds")
-				return errors.New("Response timeout")
+		case <-time.After(timeout):
+			log.Error(c.ServerIdentity().Address, "did not receive all responses after 10 seconds")
+			return errors.New("Response timeout")
 		}
 
 	}
@@ -214,7 +219,7 @@ func VerifySignature(suite kyber.Group, publics []kyber.Point, msg, sig []byte) 
 // handleAnnouncement will pass the message to the round and send back the
 // output. If in == nil, we are root and we start the round.
 func (c *CoSi) handleAnnouncement(in *Announcement) error {
-	log.Lvlf3("Message: %x", c.Message)
+	log.Lvlf3("%s: Message: %x", c.Name(), c.Message)
 	// If we have a hook on announcement call the hook
 	if c.announcementHook != nil {
 		return c.announcementHook()
@@ -225,12 +230,16 @@ func (c *CoSi) handleAnnouncement(in *Announcement) error {
 		return c.handleCommitment(nil)
 	}
 
-	lerr := c.SendToChildrenInParallel(in)
-	if len(lerr) > 0 {
-		return lerr[0]
+	if true {
+		return c.SendToChildren(in)
+	} else {
+		lerr := c.SendToChildrenInParallel(in)
+		if len(lerr) > 0 {
+			return lerr[0]
+		}
+		// send to children
+		return nil
 	}
-	// send to children
-	return nil
 }
 
 // handleAllCommitment relay the commitments up in the tree
@@ -254,7 +263,6 @@ func (c *CoSi) handleCommitment(in *Commitment) error {
 		return c.commitmentHook(c.tempCommitment)
 	}
 
-
 	// go to Commit()
 	out := c.cosi.Commit(c.Suite().RandomStream(), c.tempCommitment)
 
@@ -272,7 +280,6 @@ func (c *CoSi) handleCommitment(in *Commitment) error {
 
 // StartChallenge starts the challenge phase. Typically called by the Root ;)
 func (c *CoSi) startChallenge() error {
-
 
 	challenge, err := c.cosi.CreateChallenge(c.Message)
 	if err != nil {
@@ -304,12 +311,16 @@ func (c *CoSi) handleChallenge(in *Challenge) error {
 
 	// otherwise send it to children
 
-	lerr := c.SendToChildrenInParallel(in)
-	if len(lerr) > 0 {
-		return lerr[0]
+	if true {
+		return c.SendToChildren(in)
+	} else {
+		lerr := c.SendToChildrenInParallel(in)
+		if len(lerr) > 0 {
+			return lerr[0]
+		}
+		// send to children
+		return nil
 	}
-	// send to children
-	return nil
 }
 
 // handleResponse brings up the response of each node in the tree to the root.

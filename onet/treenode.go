@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"reflect"
 	"sync"
+	"time"
 
 	"github.com/dedis/kyber"
 	"github.com/dedis/student_18_dgcosi/onet/log"
@@ -616,6 +617,7 @@ func (n *TreeNodeInstance) Multicast(msg interface{}, nodes ...*TreeNode) []erro
 
 // SendToParent sends a given message to the parent of the calling node (unless it is the root)
 func (n *TreeNodeInstance) SendToParent(msg interface{}) error {
+	time.Sleep(time.Millisecond * 100)
 	if n.IsRoot() {
 		return nil
 	}
@@ -630,6 +632,7 @@ func (n *TreeNodeInstance) SendToChildren(msg interface{}) error {
 	if n.IsLeaf() {
 		return nil
 	}
+	time.Sleep(time.Millisecond * 100)
 	for _, node := range n.Children() {
 		if err := n.SendTo(node, msg); err != nil {
 			return err

@@ -18,7 +18,7 @@ func TestProxy(t *testing.T) {
 	monitor.SinkPort = 0
 	done := make(chan bool, 2)
 	go func() {
-		// See dedis/onet#262 for ideas on a proper fix for all this hard-coding of ports.
+		// See dedis/student_18_dgcosi/onet#262 for ideas on a proper fix for all this hard-coding of ports.
 		err := monitor.Listen()
 		if err != nil {
 			panic("monitor.Listen failed")

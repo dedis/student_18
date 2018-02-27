@@ -4,14 +4,17 @@ package cosi
 import (
 	"sync"
 
-	"github.com/dedis/student_18_dgcosi/dg-cosi/crypto"
+	"errors"
+	"time"
+
 	"github.com/dedis/kyber"
+	"github.com/dedis/kyber/suites"
+	"github.com/dedis/student_18_dgcosi/dg-cosi/crypto"
 	"github.com/dedis/student_18_dgcosi/onet"
 	"github.com/dedis/student_18_dgcosi/onet/log"
-	"github.com/dedis/kyber/suites"
-	"time"
-	"errors"
 )
+
+var timeout = 100 * time.Second
 
 func WasteTime(t int) {
 	// E[1350] -> 0.1sec
@@ -65,7 +68,7 @@ type CoSi struct {
 	tempCommitment []kyber.Point
 	// temporary buffer of commitment public key messages
 	tempCommitmentPub []kyber.Point
-	groupPub kyber.Point
+	groupPub          kyber.Point
 	// lock associated
 	tempCommitLock *sync.Mutex
 	// temporary buffer of Response messages
@@ -77,9 +80,9 @@ type CoSi struct {
 	announcementHook AnnouncementHook
 	commitmentHook   CommitmentHook
 	// NOTE DISABLED
-	challengeHook    ChallengeHook
-	responseHook     ResponseHook
-	signatureHook    SignatureHook
+	challengeHook ChallengeHook
+	responseHook  ResponseHook
+	signatureHook SignatureHook
 }
 
 // AnnouncementHook allows for handling what should happen upon an
@@ -101,7 +104,7 @@ type ResponseHook func(in []kyber.Scalar)
 // SignatureHook allows registering a handler when the signature is done
 type SignatureHook func(sig []byte)
 
-func (c *CoSi)GetGroupAggregateKey() kyber.Point {
+func (c *CoSi) GetGroupAggregateKey() kyber.Point {
 	return c.groupPub
 }
 
@@ -172,7 +175,7 @@ func (c *CoSi) Dispatch() error {
 					return err
 				}
 			}
-		case <-time.After(time.Second * 10):
+		case <-time.After(timeout):
 			log.Error(c.ServerIdentity().Address, "did not receive all commitments after 10 seconds")
 			return errors.New("Commit timeout")
 		}
@@ -195,7 +198,7 @@ func (c *CoSi) Dispatch() error {
 					return err
 				}
 			}
-		case <-time.After(time.Second * 10):
+		case <-time.After(timeout):
 			log.Error(c.ServerIdentity().Address, "did not receive all responses after 10 seconds")
 			return errors.New("Response timeout")
 		}
@@ -278,7 +281,7 @@ func (c *CoSi) handleCommitment(in *Commitment) error {
 
 	// otherwise send it to parent
 	outMsg := &Commitment{
-		Comm: out,
+		Comm:   out,
 		AggPub: pub,
 	}
 	return c.SendTo(c.Parent(), outMsg)
@@ -286,7 +289,6 @@ func (c *CoSi) handleCommitment(in *Commitment) error {
 
 // StartChallenge starts the challenge phase. Typically called by the Root ;)
 func (c *CoSi) startChallenge() error {
-
 
 	// FIXME remove log
 	//log.Lvl1("******************  K COSI start root wait 1 sec **********************")
@@ -308,9 +310,9 @@ func (c *CoSi) startChallenge() error {
 		return err
 	}
 	out := &Challenge{
-		Msg:         c.Message,
+		Msg:           c.Message,
 		RootAggCommit: rootAggr,
-		AggPub: aggPub,
+		AggPub:        aggPub,
 	}
 	log.Lvlf3("%s Starting Chal=%+v (message = %x)", c.Name(), challenge, c.Message)
 	return c.handleChallenge(out)
@@ -321,7 +323,7 @@ func (c *CoSi) startChallenge() error {
 // handleChallenge dispatch the challenge to the round and then dispatch the
 // results down the tree.
 func (c *CoSi) handleChallenge(in *Challenge) error {
-	log.Lvl3( c.Name(), " rootAggr:", in.RootAggCommit, " Msg:", in.Msg)
+	log.Lvl3(c.Name(), " rootAggr:", in.RootAggCommit, " Msg:", in.Msg)
 
 	c.cosi.RootAggregateCommit(in.RootAggCommit)
 	c.cosi.SetAggregatePublicKey(in.AggPub)

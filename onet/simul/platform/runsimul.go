@@ -56,6 +56,8 @@ func Simulate(suite, serverAddress, simul, monitorAddress string) error {
 		}
 		// Launch a server and notifies when it's done
 		wgServer.Add(1)
+		sc.Overlay.RegisterRoster(sc.Roster)
+		sc.Overlay.RegisterTree(sc.Tree)
 		go func(c *onet.Server, m monitor.Measure) {
 			ready <- true
 			defer wgServer.Done()
@@ -104,7 +106,7 @@ func Simulate(suite, serverAddress, simul, monitorAddress string) error {
 		wait := true
 		// The timeout starts with 1 minute, which is the time of response between
 		// each level of the tree.
-		timeout := time.Minute*3
+		timeout := time.Minute * 10
 		for wait {
 			p, err := rootSC.Overlay.CreateProtocol("Count", rootSC.Tree, onet.NilServiceID)
 			if err != nil {
@@ -151,8 +153,8 @@ func Simulate(suite, serverAddress, simul, monitorAddress string) error {
 		}
 		// Recreate a tree out of the original roster, to be sure all nodes are included and
 		// that the tree is easy to close.
-		closeTree := rootSC.Roster.GenerateBinaryTree()
-		pi, err := rootSC.Overlay.CreateProtocol("CloseAll", closeTree, onet.NilServiceID)
+		// closeTree := rootSC.Roster.GenerateBinaryTree()
+		pi, err := rootSC.Overlay.CreateProtocol("CloseAll", rootSC.Tree, onet.NilServiceID)
 		pi.Start()
 		if err != nil {
 			return err
