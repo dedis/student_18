@@ -106,7 +106,7 @@ func Simulate(suite, serverAddress, simul, monitorAddress string) error {
 		wait := true
 		// The timeout starts with 1 minute, which is the time of response between
 		// each level of the tree.
-		timeout := time.Minute * 10
+		timeout := time.Second * 2
 		for wait {
 			p, err := rootSC.Overlay.CreateProtocol("Count", rootSC.Tree, onet.NilServiceID)
 			if err != nil {
