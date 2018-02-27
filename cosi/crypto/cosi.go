@@ -39,7 +39,6 @@ import (
 	"crypto/cipher"
 	"crypto/sha512"
 	"errors"
-	"fmt"
 
 	"github.com/dedis/kyber"
 	"github.com/dedis/onet/log"
@@ -125,6 +124,14 @@ func (c *CoSi) Commit(s cipher.Stream, subComms []kyber.Point) kyber.Point {
 	// generate our own commit
 	c.genCommit(s)
 
+	if len(subComms) > 1{
+
+		log.Lvl3("******* K COSI running commit in a non-leaf node")
+	} else {
+		//log.Lvl2("******* K COSI running commit in a leaf node")
+
+	}
+
 	// add our own commitment to the aggregate commitment
 	c.aggregateCommitment = c.suite.Point().Add(c.suite.Point().Null(), c.commitment)
 	// take the children commitments
@@ -138,6 +145,7 @@ func (c *CoSi) Commit(s cipher.Stream, subComms []kyber.Point) kyber.Point {
 // CreateChallenge creates the challenge out of the message it has been given.
 // This is typically called by Root.
 func (c *CoSi) CreateChallenge(msg []byte) (kyber.Scalar, error) {
+	log.Lvl1("********** K COSI CreateChallenge")
 	// H( Commit || AggPublic || M)
 	hash := sha512.New()
 	if _, err := c.aggregateCommitment.MarshalTo(hash); err != nil {
@@ -191,7 +199,7 @@ func (c *CoSi) Response(responses []kyber.Scalar) (kyber.Scalar, error) {
 func (c *CoSi) Signature() []byte {
 	// Sig = C || R || bitmask
 	//TODO remove log
-	log.Lvl2("***** K COSI Sign *****")
+	log.Lvl1("*********** K Cosi SIGN **************")
 
 	lenC := c.suite.PointLen()
 	lenSig := lenC + c.suite.ScalarLen()
@@ -338,6 +346,7 @@ type mask struct {
 	publics   []kyber.Point
 	aggPublic kyber.Point
 	suite     kyber.Group
+	active    bool
 }
 
 // newMask returns a new mask to use with the cosigning with all cosigners enabled
@@ -346,10 +355,13 @@ func newMask(suite kyber.Group, publics []kyber.Point) *mask {
 	cm := &mask{
 		publics: publics,
 		suite:   suite,
+		active:  false,
 	}
 	cm.mask = make([]byte, cm.MaskLen())
 	cm.aggPublic = cm.suite.Point().Null()
-	cm.allEnabled()
+	//if cm.active{
+	//	cm.allEnabled()
+	//}
 	return cm
 
 }
@@ -357,10 +369,10 @@ func newMask(suite kyber.Group, publics []kyber.Point) *mask {
 // AllEnabled sets the pariticipation bit mask accordingly to make all
 // signers participating.
 func (cm *mask) allEnabled() {
-	for i := range cm.mask {
-		cm.mask[i] = 0xff // all disabled
-	}
-	cm.SetMask(make([]byte, len(cm.mask)))
+	//for i := range cm.mask {
+	//	cm.mask[i] = 0xff // all disabled
+	//}
+	//cm.SetMask(make([]byte, len(cm.mask)))
 }
 
 // Set the entire participation bitmask according to the provided
@@ -374,29 +386,34 @@ func (cm *mask) allEnabled() {
 // SetMask conservatively interprets the bits of the missing bytes
 // to be 0, or Enabled.
 func (cm *mask) SetMask(mask []byte) error {
-	if cm.MaskLen() != len(mask) {
-		err := fmt.Errorf("CosiMask.MaskLen() is %d but is given %d bytes)", cm.MaskLen(), len(mask))
-		return err
-	}
-	masklen := len(mask)
-	for i := range cm.publics {
-		byt := i >> 3
-		bit := byte(1) << uint(i&7)
-		if (byt < masklen) && (mask[byt]&bit != 0) {
-			// Participant i disabled in new mask.
-			if cm.mask[byt]&bit == 0 {
-				cm.mask[byt] |= bit // disable it
-				cm.aggPublic.Sub(cm.aggPublic, cm.publics[i])
-			}
-		} else {
-			// Participant i enabled in new mask.
-			if cm.mask[byt]&bit != 0 {
-				cm.mask[byt] &^= bit // enable it
-				cm.aggPublic.Add(cm.aggPublic, cm.publics[i])
-			}
-		}
-	}
 	return nil
+	//cm.active = true
+	//
+	//log.Lvl3("******* K COSI compute aggregate from mask")
+	//
+	//if cm.MaskLen() != len(mask) {
+	//	err := fmt.Errorf("CosiMask.MaskLen() is %d but is given %d bytes)", cm.MaskLen(), len(mask))
+	//	return err
+	//}
+	//masklen := len(mask)
+	//for i := range cm.publics {
+	//	byt := i >> 3
+	//	bit := byte(1) << uint(i&7)
+	//	if (byt < masklen) && (mask[byt]&bit != 0) {
+	//		// Participant i disabled in new mask.
+	//		if cm.mask[byt]&bit == 0 {
+	//			cm.mask[byt] |= bit // disable it
+	//			cm.aggPublic.Sub(cm.aggPublic, cm.publics[i])
+	//		}
+	//	} else {
+	//		// Participant i enabled in new mask.
+	//		if cm.mask[byt]&bit != 0 {
+	//			cm.mask[byt] &^= bit // enable it
+	//			cm.aggPublic.Add(cm.aggPublic, cm.publics[i])
+	//		}
+	//	}
+	//}
+	//return nil
 }
 
 // MaskLen returns the length in bytes
@@ -406,24 +423,25 @@ func (cm *mask) MaskLen() int {
 }
 
 // SetMaskBit enables or disables the mask bit for an individual cosigner.
-func (cm *mask) SetMaskBit(signer int, enabled bool) {
-	if signer > len(cm.publics) {
-		panic("SetMaskBit range out of index")
-	}
-	byt := signer >> 3
-	bit := byte(1) << uint(signer&7)
-	if !enabled {
-		if cm.mask[byt]&bit == 0 { // was enabled
-			cm.mask[byt] |= bit // disable it
-			cm.aggPublic.Sub(cm.aggPublic, cm.publics[signer])
-		}
-	} else { // enable
-		if cm.mask[byt]&bit != 0 { // was disabled
-			cm.mask[byt] &^= bit
-			cm.aggPublic.Add(cm.aggPublic, cm.publics[signer])
-		}
-	}
-}
+//func (cm *mask) SetMaskBit(signer int, enabled bool) {
+	//log.Lvl1("----------------- set mask bit -----------------------")
+	//if signer > len(cm.publics) {
+	//	panic("SetMaskBit range out of index")
+	//}
+	//byt := signer >> 3
+	//bit := byte(1) << uint(signer&7)
+	//if !enabled {
+	//	if cm.mask[byt]&bit == 0 { // was enabled
+	//		cm.mask[byt] |= bit // disable it
+	//		cm.aggPublic.Sub(cm.aggPublic, cm.publics[signer])
+	//	}
+	//} else { // enable
+	//	if cm.mask[byt]&bit != 0 { // was disabled
+	//		cm.mask[byt] &^= bit
+	//		cm.aggPublic.Add(cm.aggPublic, cm.publics[signer])
+	//	}
+	//}
+//}
 
 // MaskBit returns a boolean value indicating whether
 // the indicated signer is enabled (true) or disabled (false)
@@ -448,7 +466,22 @@ func (cm *mask) bytes() []byte {
 	return clone
 }
 
+func (cm *mask)computeFullAggregate(){
+
+	cm.aggPublic = cm.suite.Point().Null()
+	for _,p := range cm.publics{
+		cm.aggPublic.Add(cm.aggPublic,p)
+	}
+}
+
 // Aggregate returns the aggregate public key of all *participating* signers
 func (cm *mask) Aggregate() kyber.Point {
+	log.Lvl1("******* K COSI reading aggregate from mask active:", cm.active)
+	//if cm.active == false{
+	//	cm.active=true
+	//	cm.allEnabled()
+	//}
+	log.Lvl1("compute full aggregate")
+	cm.computeFullAggregate()
 	return cm.aggPublic
 }

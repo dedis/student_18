@@ -1,10 +1,10 @@
 Simulation = "CoSimul"
-Servers = 16
-Rounds = 5
-Hosts = 4096
+Servers = 32
+Rounds = 10
 Suite = "Ed25519"
 
-
-Depth
-3
-
+Hosts, Depth
+128, 3
+8192, 3
+16384, 3
+32768, 3

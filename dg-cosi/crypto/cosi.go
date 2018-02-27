@@ -39,7 +39,7 @@ import (
 	"crypto/cipher"
 	"crypto/sha512"
 	"errors"
-	"fmt"
+	_ "fmt"
 
 	"github.com/dedis/kyber"
 	"github.com/dedis/onet/log"
@@ -238,6 +238,7 @@ func (c *CoSi) Response(responses []DgScalar) (DgScalar, error) {
 // *NOTE*: Signature() is only intended to be called by the root since only the
 // root knows the aggregate response.
 func (c *CoSi) Signature() []byte {
+	log.LLvl1("*********** K DG SIGN **************")
 	// Sig = C || R || bitmask
 	lenC := c.suite.PointLen()
 	lenSigMid := lenC + c.suite.ScalarLen()
@@ -292,7 +293,19 @@ func (c *CoSi) Signature() []byte {
 // struct. Publics is the WHOLE list of publics keys, the mask at the end of the
 // signature will take care of removing the indivual public keys that did not
 // participate
-func VerifySignature(suite kyber.Group, publics []kyber.Point, message, sig []byte) error {
+func VerifySignature(suite kyber.Group, publics []kyber.Point, message, sig []byte) error{
+	return errors.New("DISABLED MASK")
+	lenC := suite.PointLen()
+	lenSig    := lenC + 2*suite.ScalarLen()
+
+	maskBuff := sig[lenSig:]
+	mask := newMask(suite, publics)
+	mask.SetMask(maskBuff)
+	//aggPublic := mask.Aggregate()
+	return nil
+}
+func VerifySignatureWithAgg(suite kyber.Group, aggPublic kyber.Point, message, sig []byte) error {
+	log.Lvl2("**** Crypto verify signature with aggregate ***********")
 	lenC := suite.PointLen()
 	lenSigMid := lenC + suite.ScalarLen()
 	lenSig    := lenC + 2*suite.ScalarLen()
@@ -307,10 +320,6 @@ func VerifySignature(suite kyber.Group, publics []kyber.Point, message, sig []by
 	sigBuffY := sig[lenSigMid:lenSig]
 	sigIntY := suite.Scalar().SetBytes(sigBuffY)
 
-	maskBuff := sig[lenSig:]
-	mask := newMask(suite, publics)
-	mask.SetMask(maskBuff)
-	aggPublic := mask.Aggregate()
 	aggPublicMarshal, err := aggPublic.MarshalBinary()
 	if err != nil {
 		return err
@@ -324,7 +333,6 @@ func VerifySignature(suite kyber.Group, publics []kyber.Point, message, sig []by
 	hash.Write(message)
 	buff := hash.Sum(nil)
 	k := suite.Scalar().SetBytes(buff)
-	log.Lvl2("**** cosi sign challenge ", buff)
 
 	// c = Hash(sig, g^s1*h^s2 * PK^-c, PK, m)
 	// k * -aggPublic + s * B = k*-A + s*B
@@ -400,6 +408,7 @@ func (c *CoSi) genResponse() error {
 }
 
 func (c *CoSi)GetAggregatePublicKey() (kyber.Point , error){
+	log.Lvl3("***** K DG reading GetAggregatePublicKey")
 	if c.enablePubKeyAggregationInTree == false{
 		return nil, errors.New("disabled enablePubKeyAggregationInTree")
 	}
@@ -451,28 +460,28 @@ func (cm *mask) allEnabled() {
 // SetMask conservatively interprets the bits of the missing bytes
 // to be 0, or Enabled.
 func (cm *mask) SetMask(mask []byte) error {
-	if cm.MaskLen() != len(mask) {
-		err := fmt.Errorf("CosiMask.MaskLen() is %d but is given %d bytes)", cm.MaskLen(), len(mask))
-		return err
-	}
-	masklen := len(mask)
-	for i := range cm.publics {
-		byt := i >> 3
-		bit := byte(1) << uint(i&7)
-		if (byt < masklen) && (mask[byt]&bit != 0) {
-			// Participant i disabled in new mask.
-			if cm.mask[byt]&bit == 0 {
-				cm.mask[byt] |= bit // disable it
-				cm.aggPublic.Sub(cm.aggPublic, cm.publics[i])
-			}
-		} else {
-			// Participant i enabled in new mask.
-			if cm.mask[byt]&bit != 0 {
-				cm.mask[byt] &^= bit // enable it
-				cm.aggPublic.Add(cm.aggPublic, cm.publics[i])
-			}
-		}
-	}
+	//if cm.MaskLen() != len(mask) {
+	//	err := fmt.Errorf("CosiMask.MaskLen() is %d but is given %d bytes)", cm.MaskLen(), len(mask))
+	//	return err
+	//}
+	//masklen := len(mask)
+	//for i := range cm.publics {
+	//	byt := i >> 3
+	//	bit := byte(1) << uint(i&7)
+	//	if (byt < masklen) && (mask[byt]&bit != 0) {
+	//		// Participant i disabled in new mask.
+	//		if cm.mask[byt]&bit == 0 {
+	//			cm.mask[byt] |= bit // disable it
+	//			cm.aggPublic.Sub(cm.aggPublic, cm.publics[i])
+	//		}
+	//	} else {
+	//		// Participant i enabled in new mask.
+	//		if cm.mask[byt]&bit != 0 {
+	//			cm.mask[byt] &^= bit // enable it
+	//			cm.aggPublic.Add(cm.aggPublic, cm.publics[i])
+	//		}
+	//	}
+	//}
 	return nil
 }
 
@@ -484,22 +493,22 @@ func (cm *mask) MaskLen() int {
 
 // SetMaskBit enables or disables the mask bit for an individual cosigner.
 func (cm *mask) SetMaskBit(signer int, enabled bool) {
-	if signer > len(cm.publics) {
-		panic("SetMaskBit range out of index")
-	}
-	byt := signer >> 3
-	bit := byte(1) << uint(signer&7)
-	if !enabled {
-		if cm.mask[byt]&bit == 0 { // was enabled
-			cm.mask[byt] |= bit // disable it
-			cm.aggPublic.Sub(cm.aggPublic, cm.publics[signer])
-		}
-	} else { // enable
-		if cm.mask[byt]&bit != 0 { // was disabled
-			cm.mask[byt] &^= bit
-			cm.aggPublic.Add(cm.aggPublic, cm.publics[signer])
-		}
-	}
+	//if signer > len(cm.publics) {
+	//	panic("SetMaskBit range out of index")
+	//}
+	//byt := signer >> 3
+	//bit := byte(1) << uint(signer&7)
+	//if !enabled {
+	//	if cm.mask[byt]&bit == 0 { // was enabled
+	//		cm.mask[byt] |= bit // disable it
+	//		cm.aggPublic.Sub(cm.aggPublic, cm.publics[signer])
+	//	}
+	//} else { // enable
+	//	if cm.mask[byt]&bit != 0 { // was disabled
+	//		cm.mask[byt] &^= bit
+	//		cm.aggPublic.Add(cm.aggPublic, cm.publics[signer])
+	//	}
+	//}
 }
 
 // MaskBit returns a boolean value indicating whether
@@ -526,6 +535,6 @@ func (cm *mask) bytes() []byte {
 }
 
  //Aggregate returns the aggregate public key of all *participating* signers
-func (cm *mask) Aggregate() kyber.Point {
-	return cm.aggPublic
-}
+//func (cm *mask) Aggregate() kyber.Point {
+//	return cm.aggPublic
+//}

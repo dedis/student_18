@@ -40,6 +40,7 @@ func (cs *Simulation) Setup(dir string, hosts []string) (*onet.SimulationConfig,
 
 // Node implements onet.Simulation.
 func (cs *Simulation) Node(sc *onet.SimulationConfig) error {
+	//log.Lvl1(" **************** this is starting node")
 	err := cs.SimulationBFTree.Node(sc)
 	if err != nil {
 		return err
@@ -62,6 +63,7 @@ func (cs *Simulation) Run(config *onet.SimulationConfig) error {
 		}
 		// the protocol itself
 		proto := node.(*CoSimul)
+		//log.Lvl1(proto.ServerIdentity().Address," **************** this is root")
 		// give the message to sign
 		proto.SigningMessage(msg)
 		proto.VerifyResponse = cs.Checking

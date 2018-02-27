@@ -9,6 +9,8 @@ import (
 	"github.com/dedis/onet"
 	"github.com/dedis/onet/log"
 	"github.com/dedis/kyber/suites"
+	"time"
+	"errors"
 )
 
 func WasteTime(t int) {
@@ -26,8 +28,6 @@ func WasteTime(t int) {
 var Name = "CoSi"
 
 func init() {
-	// FIXME remove log
-	log.Lvl2("******************  K DG COSI **********************")
 	onet.GlobalProtocolRegister(Name, NewProtocol)
 }
 
@@ -151,14 +151,21 @@ func (c *CoSi) Dispatch() error {
 		}
 	}
 	if !c.IsLeaf() {
-		for n, commit := range <-c.commit {
-			log.Lvlf3("%s Handling commitment %d/%d",
-				c.Name(), n+1, nbrChild)
-			err := c.handleCommitment(&commit.Commitment)
-			if err != nil {
-				return err
+		select {
+		case cis := <-c.commit:
+			for n, commit := range cis {
+				log.Lvlf3("%s Handling commitment %d/%d",
+					c.Name(), n+1, nbrChild)
+				err := c.handleCommitment(&commit.Commitment)
+				if err != nil {
+					return err
+				}
 			}
+		case <-time.After(time.Second * 10):
+			log.Error(c.ServerIdentity().Address, "did not receive all commitments after 10 seconds")
+			return errors.New("Commit timeout")
 		}
+
 	}
 	if !c.IsRoot() {
 		log.Lvl3(c.Name(), "Waiting for Challenge")
@@ -169,13 +176,20 @@ func (c *CoSi) Dispatch() error {
 		}
 	}
 	if !c.IsLeaf() {
-		for n, response := range <-c.response {
-			log.Lvlf3("%s Handling response of child %d/%d", c.Name(), n+1, nbrChild)
-			err := c.handleResponse(&response.Response)
-			if err != nil {
-				return err
+		select {
+		case resps := <-c.response:
+			for n, response := range resps {
+				log.Lvlf3("%s Handling response of child %d/%d", c.Name(), n+1, nbrChild)
+				err := c.handleResponse(&response.Response)
+				if err != nil {
+					return err
+				}
 			}
+		case <-time.After(time.Second * 10):
+				log.Error(c.ServerIdentity().Address, "did not receive all responses after 10 seconds")
+				return errors.New("Response timeout")
 		}
+
 	}
 	<-c.done
 	return nil
@@ -210,8 +224,13 @@ func (c *CoSi) handleAnnouncement(in *Announcement) error {
 	if c.IsLeaf() {
 		return c.handleCommitment(nil)
 	}
+
+	lerr := c.SendToChildrenInParallel(in)
+	if len(lerr) > 0 {
+		return lerr[0]
+	}
 	// send to children
-	return c.SendToChildren(in)
+	return nil
 }
 
 // handleAllCommitment relay the commitments up in the tree
@@ -235,14 +254,6 @@ func (c *CoSi) handleCommitment(in *Commitment) error {
 		return c.commitmentHook(c.tempCommitment)
 	}
 
-	// FIXME remove log
-	//log.Lvl1("******************  K COSI start node wait 1 sec **********************")
-	//time.Sleep(time.Millisecond*1000)
-	//log.Lvl1("******************  K COSI start node wait end **********************")
-	//log.Lvl1("******************  K COSI start node work 1 sec **********************")
-	//WasteTime(14000)
-	//log.Lvl1("******************  K COSI start node work end **********************")
-	////////////////////////////
 
 	// go to Commit()
 	out := c.cosi.Commit(c.Suite().RandomStream(), c.tempCommitment)
@@ -262,15 +273,6 @@ func (c *CoSi) handleCommitment(in *Commitment) error {
 // StartChallenge starts the challenge phase. Typically called by the Root ;)
 func (c *CoSi) startChallenge() error {
 
-
-	// FIXME remove log
-	//log.Lvl1("******************  K COSI start root wait 1 sec **********************")
-	//time.Sleep(time.Second)
-	//log.Lvl1("******************  K COSI start root wait end **********************")
-	//log.Lvl1("******************  K COSI start root work 1 sec **********************")
-	//WasteTime(14000)
-	//log.Lvl1("******************  K COSI start root work end **********************")
-	////////////////////////////
 
 	challenge, err := c.cosi.CreateChallenge(c.Message)
 	if err != nil {
@@ -301,7 +303,13 @@ func (c *CoSi) handleChallenge(in *Challenge) error {
 	}
 
 	// otherwise send it to children
-	return c.SendToChildren(in)
+
+	lerr := c.SendToChildrenInParallel(in)
+	if len(lerr) > 0 {
+		return lerr[0]
+	}
+	// send to children
+	return nil
 }
 
 // handleResponse brings up the response of each node in the tree to the root.

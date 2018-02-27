@@ -32,6 +32,7 @@ func NewSimulation(config string) (onet.Simulation, error) {
 
 // Setup implements onet.Simulation.
 func (cs *Simulation) Setup(dir string, hosts []string) (*onet.SimulationConfig, error) {
+	onet.DGENABLE = true
 	sim := new(onet.SimulationConfig)
 	cs.CreateRoster(sim, hosts, 2000)
 	err := cs.CreateTree(sim)
@@ -69,8 +70,14 @@ func (cs *Simulation) Run(config *onet.SimulationConfig) error {
 		done := make(chan bool)
 		fn := func(sig []byte) {
 			roundM.Record()
-			publics := proto.Publics()
-			if err := crypto.VerifySignature(proto.Suite(), publics, msg, sig); err != nil {
+			//publics := proto.Publics()
+			//if err := crypto.VerifySignature(proto.Suite(), publics, msg, sig); err != nil {
+			//	log.Lvl1("Round", round, " => fail verification")
+			//} else {
+			//	log.Lvl2("Round", round, " => success")
+			//}
+			aggPub := proto.GetGroupAggregateKey()
+			if err := crypto.VerifySignatureWithAgg(proto.Suite(), aggPub, msg, sig); err != nil {
 				log.Lvl1("Round", round, " => fail verification")
 			} else {
 				log.Lvl2("Round", round, " => success")

@@ -9,6 +9,8 @@ import (
 	"github.com/dedis/onet"
 	"github.com/dedis/onet/log"
 	"github.com/dedis/kyber/suites"
+	"time"
+	"errors"
 )
 
 func WasteTime(t int) {
@@ -63,6 +65,7 @@ type CoSi struct {
 	tempCommitment []kyber.Point
 	// temporary buffer of commitment public key messages
 	tempCommitmentPub []kyber.Point
+	groupPub kyber.Point
 	// lock associated
 	tempCommitLock *sync.Mutex
 	// temporary buffer of Response messages
@@ -97,6 +100,10 @@ type ResponseHook func(in []kyber.Scalar)
 
 // SignatureHook allows registering a handler when the signature is done
 type SignatureHook func(sig []byte)
+
+func (c *CoSi)GetGroupAggregateKey() kyber.Point {
+	return c.groupPub
+}
 
 // NewProtocol returns a ProtocolCosi with the node set with the right channels.
 // Use this function like this:
@@ -155,13 +162,19 @@ func (c *CoSi) Dispatch() error {
 		}
 	}
 	if !c.IsLeaf() {
-		for n, commit := range <-c.commit {
-			log.Lvlf3("%s Handling commitment %d/%d",
-				c.Name(), n+1, nbrChild)
-			err := c.handleCommitment(&commit.Commitment)
-			if err != nil {
-				return err
+		select {
+		case cis := <-c.commit:
+			for n, commit := range cis {
+				log.Lvlf3("%s Handling commitment %d/%d",
+					c.Name(), n+1, nbrChild)
+				err := c.handleCommitment(&commit.Commitment)
+				if err != nil {
+					return err
+				}
 			}
+		case <-time.After(time.Second * 10):
+			log.Error(c.ServerIdentity().Address, "did not receive all commitments after 10 seconds")
+			return errors.New("Commit timeout")
 		}
 	}
 	if !c.IsRoot() {
@@ -173,12 +186,18 @@ func (c *CoSi) Dispatch() error {
 		}
 	}
 	if !c.IsLeaf() {
-		for n, response := range <-c.response {
-			log.Lvlf3("%s Handling response of child %d/%d", c.Name(), n+1, nbrChild)
-			err := c.handleResponse(&response.Response)
-			if err != nil {
-				return err
+		select {
+		case resps := <-c.response:
+			for n, response := range resps {
+				log.Lvlf3("%s Handling response of child %d/%d", c.Name(), n+1, nbrChild)
+				err := c.handleResponse(&response.Response)
+				if err != nil {
+					return err
+				}
 			}
+		case <-time.After(time.Second * 10):
+			log.Error(c.ServerIdentity().Address, "did not receive all responses after 10 seconds")
+			return errors.New("Response timeout")
 		}
 	}
 	<-c.done
@@ -197,6 +216,7 @@ func (c *CoSi) Start() error {
 // This is copied from cosi, so that you don't need to include both lib/cosi
 // and protocols/cosi
 func VerifySignature(suite kyber.Group, publics []kyber.Point, msg, sig []byte) error {
+	log.LLvl2("*************     Protocol VerifySignature        **************")
 	return crypto.VerifySignature(suite, publics, msg, sig)
 }
 
@@ -278,6 +298,7 @@ func (c *CoSi) startChallenge() error {
 	////////////////////////////
 	rootAggr := c.cosi.RootAggregateCommit(nil)
 	aggPub, err := c.cosi.GetAggregatePublicKey()
+	c.groupPub = aggPub
 	if err != nil {
 		return err
 	}

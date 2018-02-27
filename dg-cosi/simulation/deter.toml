@@ -1,11 +1,11 @@
 Login = "kedalat"
 Host = "users.deterlab.net"
 Project = "SAFER"
-Experiment = "Dissent-CS"
+Experiment = "DgCosi"
 ProxyAddress = "localhost"
 MonitorAddress = "users.isi.deterlab.net"
-MonitorPort = 10000
-Servers = 16
+MonitorPort = 30000
+Servers = 32
 Simulation = "CoSimul"
 Hosts = 0
 Debug = 0
