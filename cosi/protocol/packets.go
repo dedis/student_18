@@ -4,8 +4,8 @@ import (
 	"errors"
 
 	"github.com/dedis/kyber"
-	"github.com/dedis/onet"
-	"github.com/dedis/onet/network"
+	"github.com/dedis/student_18_dgcosi/onet"
+	"github.com/dedis/student_18_dgcosi/onet/network"
 )
 
 func init() {

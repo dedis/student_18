@@ -42,7 +42,7 @@ import (
 	_ "fmt"
 
 	"github.com/dedis/kyber"
-	"github.com/dedis/onet/log"
+	"github.com/dedis/student_18_dgcosi/onet/log"
 )
 
 // CoSi is the struct that implements one round of a CoSi protocol.

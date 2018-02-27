@@ -15,9 +15,9 @@ import (
 	"github.com/dedis/student_18_dgcosi/cosi/crypto"
 	s "github.com/dedis/student_18_dgcosi/cosi/service"
 	"github.com/dedis/kyber"
-	"github.com/dedis/onet"
-	"github.com/dedis/onet/app"
-	"github.com/dedis/onet/log"
+	"github.com/dedis/student_18_dgcosi/onet"
+	"github.com/dedis/student_18_dgcosi/onet/app"
+	"github.com/dedis/student_18_dgcosi/onet/log"
 	"gopkg.in/urfave/cli.v1"
 )
 

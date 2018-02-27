@@ -8,7 +8,7 @@ import (
 
 	_ "github.com/dedis/student_18_dgcosi/cosi/protocol"
 	_ "github.com/dedis/student_18_dgcosi/cosi/service"
-	"github.com/dedis/onet/app"
+	"github.com/dedis/student_18_dgcosi/onet/app"
 )
 
 func runServer(ctx *cli.Context) {

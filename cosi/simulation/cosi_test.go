@@ -6,8 +6,8 @@ import (
 
 	"github.com/dedis/cothority"
 	"github.com/dedis/student_18_dgcosi/cosi/crypto"
-	"github.com/dedis/onet"
-	"github.com/dedis/onet/log"
+	"github.com/dedis/student_18_dgcosi/onet"
+	"github.com/dedis/student_18_dgcosi/onet/log"
 )
 
 var tSuite = cothority.Suite

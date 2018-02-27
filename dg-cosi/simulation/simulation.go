@@ -3,9 +3,9 @@ package main
 import (
 	"github.com/BurntSushi/toml"
 	"github.com/dedis/student_18_dgcosi/dg-cosi/crypto"
-	"github.com/dedis/onet"
-	"github.com/dedis/onet/log"
-	"github.com/dedis/onet/simul/monitor"
+	"github.com/dedis/student_18_dgcosi/onet"
+	"github.com/dedis/student_18_dgcosi/onet/log"
+	"github.com/dedis/student_18_dgcosi/onet/simul/monitor"
 )
 
 func init() {

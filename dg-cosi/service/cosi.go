@@ -7,9 +7,9 @@ import (
 
 	"github.com/dedis/student_18_dgcosi/cosi/protocol"
 	"github.com/dedis/kyber"
-	"github.com/dedis/onet"
-	"github.com/dedis/onet/log"
-	"github.com/dedis/onet/network"
+	"github.com/dedis/student_18_dgcosi/onet"
+	"github.com/dedis/student_18_dgcosi/onet/log"
+	"github.com/dedis/student_18_dgcosi/onet/network"
 	"gopkg.in/satori/go.uuid.v1"
 )
 

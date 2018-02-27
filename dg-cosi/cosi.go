@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/dedis/cothority"
-	"github.com/dedis/onet/app"
-	"github.com/dedis/onet/cfgpath"
-	"github.com/dedis/onet/log"
+	"github.com/dedis/student_18_dgcosi/onet/app"
+	"github.com/dedis/student_18_dgcosi/onet/cfgpath"
+	"github.com/dedis/student_18_dgcosi/onet/log"
 	"gopkg.in/urfave/cli.v1"
 )
 

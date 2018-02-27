@@ -4,8 +4,8 @@ import (
 	"errors"
 
 	"github.com/dedis/cothority"
-	"github.com/dedis/onet"
-	"github.com/dedis/onet/log"
+	"github.com/dedis/student_18_dgcosi/onet"
+	"github.com/dedis/student_18_dgcosi/onet/log"
 )
 
 // Client is a structure to communicate with the CoSi

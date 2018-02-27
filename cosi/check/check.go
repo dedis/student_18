@@ -12,10 +12,10 @@ import (
 	"time"
 
 	"github.com/dedis/kyber"
-	"github.com/dedis/onet"
-	"github.com/dedis/onet/app"
-	"github.com/dedis/onet/log"
-	"github.com/dedis/onet/network"
+	"github.com/dedis/student_18_dgcosi/onet"
+	"github.com/dedis/student_18_dgcosi/onet/app"
+	"github.com/dedis/student_18_dgcosi/onet/log"
+	"github.com/dedis/student_18_dgcosi/onet/network"
 
 	"github.com/dedis/student_18_dgcosi/cosi/crypto"
 	"github.com/dedis/student_18_dgcosi/cosi/service"

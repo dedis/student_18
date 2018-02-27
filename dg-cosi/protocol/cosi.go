@@ -6,8 +6,8 @@ import (
 
 	"github.com/dedis/student_18_dgcosi/dg-cosi/crypto"
 	"github.com/dedis/kyber"
-	"github.com/dedis/onet"
-	"github.com/dedis/onet/log"
+	"github.com/dedis/student_18_dgcosi/onet"
+	"github.com/dedis/student_18_dgcosi/onet/log"
 	"github.com/dedis/kyber/suites"
 	"time"
 	"errors"
