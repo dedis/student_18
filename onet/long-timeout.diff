@@ -1,0 +1,46 @@
+diff --git a/simul/manage/close_all.go b/simul/manage/close_all.go
+index 1da43c6..6bd526c 100644
+--- a/simul/manage/close_all.go
++++ b/simul/manage/close_all.go
+@@ -76,8 +76,10 @@ func (p *ProtocolCloseAll) FuncPrepareClose(pc PrepareCloseMsg) error {
+ 	log.Lvl3(pc.ServerIdentity.Address, "sent PrepClose to", p.ServerIdentity().Address)
+ 	if !p.IsLeaf() {
+ 		for _, c := range p.Children() {
+-			err := p.SendTo(c, &PrepareClose{})
+-			log.Lvl3(p.ServerIdentity().Address, "sends to", c.ServerIdentity.Address, "(err=", err, ")")
++			go func(tn *onet.TreeNode) {
++				err := p.SendTo(tn, &PrepareClose{})
++				log.Lvl3(p.ServerIdentity().Address, "sends to", tn.ServerIdentity.Address, "(err=", err, ")")
++			}(c)
+ 		}
+ 	} else {
+ 		p.FuncClose(nil)
+diff --git a/simul/platform/runsimul.go b/simul/platform/runsimul.go
+index 9f1f3ba..e0ca5fa 100644
+--- a/simul/platform/runsimul.go
++++ b/simul/platform/runsimul.go
+@@ -103,9 +103,9 @@ func Simulate(serverAddress, simul, monitorAddress string) error {
+ 		// First count the number of available children
+ 		childrenWait := monitor.NewTimeMeasure("ChildrenWait")
+ 		wait := true
+-		// The timeout starts with 1 second, which is the time of response between
++		// The timeout starts with 1 minute, which is the time of response between
+ 		// each level of the tree.
+-		timeout := 1000
++		timeout := 60000
+ 		for wait {
+ 			p, err := rootSC.Overlay.CreateProtocol("Count", rootSC.Tree, onet.NilServiceID)
+ 			if err != nil {
+diff --git a/treenode.go b/treenode.go
+index 1bb53eb..7f7b7ff 100644
+--- a/treenode.go
++++ b/treenode.go
+@@ -63,7 +63,7 @@ const (
+ 
+ 	// DefaultChannelLength is the default number of messages that can wait
+ 	// in a channel.
+-	DefaultChannelLength = 100
++	DefaultChannelLength = 1000
+ )
+ 
+ // MsgHandler is called upon reception of a certain message-type
