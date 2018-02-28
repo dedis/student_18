@@ -112,7 +112,10 @@ type Point interface {
 	Mul(s Scalar, p Point) Point
 
 
-	// P = aA + bBASE
+	// Multiply point A by the scalar a, Multiply base Point Base() by b,
+	// and adds them together.
+	// Supports multi-exponentiation. faster than two multiplication
+	// FIXME add panic to non ed25519
 	DoubleMul(a Scalar, A Point, b Scalar) Point
 }
 

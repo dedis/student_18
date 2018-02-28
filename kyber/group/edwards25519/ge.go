@@ -523,15 +523,15 @@ func geScalarMult(h *extendedGroupElement, a *[32]byte,
 //   a[31] <= 127
 func geDoubleScalarMult(h *extendedGroupElement, a *[32]byte,
 	A *extendedGroupElement, b *[32]byte) {
-	var Gst extendedGroupElement
+	//var Gst extendedGroupElement
 	var t completedGroupElement
 	var u extendedGroupElement
 	var r projectiveGroupElement
 	var c cachedGroupElement
 	var i int
 
-	Gst = baseext
-	G := &Gst
+	//Gst = baseext
+	//G := &Gst
 	// Break the exponent into 4-bit nybbles.
 	var eA [64]int8
 	for i, v := range a {
@@ -572,20 +572,20 @@ func geDoubleScalarMult(h *extendedGroupElement, a *[32]byte,
 		t.ToExtended(&u)
 		u.ToCached(&Ai[i+1])
 	}
-	var Gi [8]cachedGroupElement
-	G.ToCached(&Gi[0])
-	for i := 0; i < 7; i++ {
-		t.Add(G, &Gi[i])
-		t.ToExtended(&u)
-		u.ToCached(&Gi[i+1])
-	}
+	//var Gi [8]cachedGroupElement
+	//G.ToCached(&Gi[0])
+	//for i := 0; i < 7; i++ {
+	//	t.Add(G, &Gi[i])
+	//	t.ToExtended(&u)
+	//	u.ToCached(&Gi[i+1])
+	//}
 
 	// special case for exponent nybble i == 63
 	u.Zero()
 	selectCached(&c, &Ai, int32(eA[63]))
 	t.Add(&u, &c)
 	t.ToExtended(&u)
-	selectCached(&c, &Gi, int32(eG[63]))
+	selectCached(&c, &cachedGi, int32(eG[63]))
 	t.Add(&u, &c)
 
 
@@ -606,7 +606,7 @@ func geDoubleScalarMult(h *extendedGroupElement, a *[32]byte,
 		selectCached(&c, &Ai, int32(eA[i]))
 		t.Add(&u, &c)
 		t.ToExtended(&u)
-		selectCached(&c, &Gi, int32(eG[i]))
+		selectCached(&c, &cachedGi, int32(eG[i]))
 		t.Add(&u, &c)
 
 		if i > 60{
