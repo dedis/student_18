@@ -10,7 +10,7 @@ import (
 	"testing"
 
 	bolt "github.com/coreos/bbolt"
-	"github.com/dedis/kyber/util/key"
+	"github.com/dedis/student_18_dgcosi/kyber/util/key"
 	"github.com/dedis/student_18_dgcosi/onet/log"
 	"github.com/dedis/student_18_dgcosi/onet/network"
 	"github.com/stretchr/testify/require"

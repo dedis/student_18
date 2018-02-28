@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/dedis/kyber/suites"
+	"github.com/dedis/student_18_dgcosi/kyber/suites"
 	"github.com/dedis/student_18_dgcosi/onet/log"
 )
 

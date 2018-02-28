@@ -3,7 +3,7 @@ index 0a8bd01..9aa0f44 100644
 --- a/simulation.go
 +++ b/simulation.go
 @@ -15,8 +15,11 @@ import (
- 	"github.com/dedis/kyber/util/key"
+ 	"github.com/dedis/student_18_dgcosi/kyber/util/key"
  	"github.com/dedis/student_18_dgcosi/onet/log"
  	"github.com/dedis/student_18_dgcosi/onet/network"
 +	"github.com/dedis/student_18_dgcosi/dg-cosi/crypto"

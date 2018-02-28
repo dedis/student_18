@@ -2,8 +2,8 @@ package crypto
 
 import (
 	"testing"
-	"github.com/dedis/kyber/suites"
-	"github.com/dedis/kyber"
+	"github.com/dedis/student_18_dgcosi/kyber/suites"
+	"github.com/dedis/student_18_dgcosi/kyber"
 	"fmt"
 )
 

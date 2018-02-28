@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/dedis/kyber"
+	"github.com/dedis/student_18_dgcosi/kyber"
 	"github.com/dedis/student_18_dgcosi/onet/cfgpath"
 	"github.com/dedis/student_18_dgcosi/onet/log"
 	"github.com/dedis/student_18_dgcosi/onet/network"

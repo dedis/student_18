@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dedis/kyber"
+	"github.com/dedis/student_18_dgcosi/kyber"
 	"github.com/dedis/student_18_dgcosi/onet"
 	"github.com/dedis/student_18_dgcosi/onet/app"
 	"github.com/dedis/student_18_dgcosi/onet/log"

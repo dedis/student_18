@@ -1,9 +1,9 @@
 package crypto
 
 import (
-	"github.com/dedis/kyber"
-	"github.com/dedis/kyber/suites"
-	"github.com/dedis/kyber/util/key"
+	"github.com/dedis/student_18_dgcosi/kyber"
+	"github.com/dedis/student_18_dgcosi/kyber/suites"
+	"github.com/dedis/student_18_dgcosi/kyber/util/key"
 )
 
 // GetHDirty is the discrete logarithm of H
@@ -58,9 +58,11 @@ func (priv *DgScalar)Clone() DgScalar{
 // TODO OPTIMIZE combine getH and privY into 1 Mul
 //Compute public dg key from private dg key
 func (priv *DgScalar)ComputePublic(suit kyber.Group) kyber.Point {
-	G, H := suit.Point().Base(), GetH(suit)
+	H :=  GetH(suit)
+	// G := suit.Point().Base()
 	// pub = xG + yH
-	return suit.Point().Add( suit.Point().Mul(priv.X, G), suit.Point().Mul(priv.Y,H))
+	//return suit.Point().Add( suit.Point().Mul(priv.X, G), suit.Point().Mul(priv.Y,H))
+	return suit.Point().DoubleMul(priv.Y, H, priv.X)
 }
 
 

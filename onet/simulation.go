@@ -10,9 +10,9 @@ import (
 	"time"
 
 	"github.com/BurntSushi/toml"
-	"github.com/dedis/kyber"
-	"github.com/dedis/kyber/suites"
-	"github.com/dedis/kyber/util/key"
+	"github.com/dedis/student_18_dgcosi/kyber"
+	"github.com/dedis/student_18_dgcosi/kyber/suites"
+	"github.com/dedis/student_18_dgcosi/kyber/util/key"
 	"github.com/dedis/student_18_dgcosi/onet/log"
 	"github.com/dedis/student_18_dgcosi/onet/network"
 	"github.com/dedis/student_18_dgcosi/dg-cosi/crypto"

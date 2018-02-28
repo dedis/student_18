@@ -41,7 +41,7 @@ import (
 	"errors"
 	_ "fmt"
 
-	"github.com/dedis/kyber"
+	"github.com/dedis/student_18_dgcosi/kyber"
 	"github.com/dedis/student_18_dgcosi/onet/log"
 )
 

@@ -7,8 +7,8 @@ import (
 	"errors"
 	"time"
 
-	"github.com/dedis/kyber"
-	"github.com/dedis/kyber/suites"
+	"github.com/dedis/student_18_dgcosi/kyber"
+	"github.com/dedis/student_18_dgcosi/kyber/suites"
 	"github.com/dedis/student_18_dgcosi/dg-cosi/crypto"
 	"github.com/dedis/student_18_dgcosi/onet"
 	"github.com/dedis/student_18_dgcosi/onet/log"

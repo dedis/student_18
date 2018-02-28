@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dedis/kyber/util/key"
+	"github.com/dedis/student_18_dgcosi/kyber/util/key"
 	"github.com/dedis/student_18_dgcosi/onet/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

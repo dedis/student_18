@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/dedis/student_18_dgcosi/cosi/protocol"
-	"github.com/dedis/kyber"
+	"github.com/dedis/student_18_dgcosi/kyber"
 	"github.com/dedis/student_18_dgcosi/onet"
 	"github.com/dedis/student_18_dgcosi/onet/log"
 	"github.com/dedis/student_18_dgcosi/onet/network"

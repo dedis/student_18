@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/dedis/kyber"
+	"github.com/dedis/student_18_dgcosi/kyber"
 	"github.com/dedis/student_18_dgcosi/onet/log"
 	"github.com/dedis/student_18_dgcosi/onet/network"
 )
@@ -615,9 +615,10 @@ func (n *TreeNodeInstance) Multicast(msg interface{}, nodes ...*TreeNode) []erro
 	return errs
 }
 
+const rtd = time.Millisecond * 200
 // SendToParent sends a given message to the parent of the calling node (unless it is the root)
 func (n *TreeNodeInstance) SendToParent(msg interface{}) error {
-	time.Sleep(time.Millisecond * 100)
+	time.Sleep(rtd)
 	if n.IsRoot() {
 		return nil
 	}
@@ -632,7 +633,7 @@ func (n *TreeNodeInstance) SendToChildren(msg interface{}) error {
 	if n.IsLeaf() {
 		return nil
 	}
-	time.Sleep(time.Millisecond * 100)
+	time.Sleep(rtd)
 	for _, node := range n.Children() {
 		if err := n.SendTo(node, msg); err != nil {
 			return err
@@ -652,6 +653,7 @@ func (n *TreeNodeInstance) SendToChildrenInParallel(msg interface{}) []error {
 	if n.IsLeaf() {
 		return nil
 	}
+	time.Sleep(rtd)
 	children := n.Children()
 	var errs []error
 	eMut := sync.Mutex{}

@@ -3,7 +3,7 @@ package onet
 import (
 	"testing"
 
-	"github.com/dedis/kyber/suites"
+	"github.com/dedis/student_18_dgcosi/kyber/suites"
 	"github.com/dedis/student_18_dgcosi/onet/log"
 	"github.com/dedis/student_18_dgcosi/onet/network"
 	"github.com/stretchr/testify/require"

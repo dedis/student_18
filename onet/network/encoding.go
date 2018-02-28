@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"sync"
 
-	"github.com/dedis/kyber"
+	"github.com/dedis/student_18_dgcosi/kyber"
 	"github.com/dedis/student_18_dgcosi/onet/log"
 	"github.com/dedis/protobuf"
 	"gopkg.in/satori/go.uuid.v1"
