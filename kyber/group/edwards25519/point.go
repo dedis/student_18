@@ -350,24 +350,24 @@ func TestMultiexpo()  {
 
 
 
-	var t completedGroupElement
-	var u extendedGroupElement
-	var Gst extendedGroupElement
-	Gst = baseext
-	G := &Gst
-
-	var Gi [8]cachedGroupElement
-	G.ToCached(&Gi[0])
-	for i := 0; i < 7; i++ {
-		t.Add(G, &Gi[i])
-		t.ToExtended(&u)
-		u.ToCached(&Gi[i+1])
-	}
-	for i := 0; i < 7; i++ {
-		//fmt.Println("Gi[",i,"]: " , Gi[i])
-		//fmt.Println("cG[",i,"]: " , cachedGi[i])
-		fmt.Print(Gi[i] == cachedGi[i], ", ")
-	}
+	//var t completedGroupElement
+	//var u extendedGroupElement
+	//var Gst extendedGroupElement
+	//Gst = baseext
+	//G := &Gst
+	//
+	//var Gi [8]cachedGroupElement
+	//G.ToCached(&Gi[0])
+	//for i := 0; i < 7; i++ {
+	//	t.Add(G, &Gi[i])
+	//	t.ToExtended(&u)
+	//	u.ToCached(&Gi[i+1])
+	//}
+	//for i := 0; i < 7; i++ {
+	//	//fmt.Println("Gi[",i,"]: " , Gi[i])
+	//	//fmt.Println("cG[",i,"]: " , cachedGi[i])
+	//	fmt.Print(Gi[i] == cachedGi[i], ", ")
+	//}
 
 	//fmt.Println("cG[0]   : " , cachedGi[0])
 	//fmt.Println("cached G: " , G.ToCached)

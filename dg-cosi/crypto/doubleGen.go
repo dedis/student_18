@@ -61,8 +61,14 @@ func (priv *DgScalar)ComputePublic(suit kyber.Group) kyber.Point {
 	H :=  GetH(suit)
 	// G := suit.Point().Base()
 	// pub = xG + yH
-	//return suit.Point().Add( suit.Point().Mul(priv.X, G), suit.Point().Mul(priv.Y,H))
 	return suit.Point().DoubleMul(priv.Y, H, priv.X)
+	//return suit.Point().Add( suit.Point().Mul(priv.X, G), suit.Point().Mul(priv.Y,H))
+}
+
+
+func (priv *DgScalar)ComputePublicCHEAT(suit kyber.Group) kyber.Point {
+	return suit.Point().Mul(suit.Scalar().Add(priv.X, suit.Scalar().Mul(priv.Y, suit.Scalar().SetInt64(hBase))),
+		nil)
 }
 
 

@@ -534,6 +534,28 @@ func checkCachedEq(a,b []cachedGroupElement)  bool{
 	return true
 }
 
+//func selectDoubleCachedVar(c *cachedGroupElement, Ai, AGi *[8]cachedGroupElement, a,g int32) {
+//	aNegative := negative(a)
+//	aAbs := a - (((-aNegative) & a) << 1)
+//	gNegative := negative(g)
+//	gAbs := g - (((-gNegative) & g) << 1)
+//
+//	// in constant-time pick cached multiplier for exponent 0 through 8
+//	c.Zero()
+//	for i := int32(0); i < 8; i++ {
+//		if equal(gAbs, i+1) == 1{
+//			c.CMove(&Ai[i], equal(aAbs, i+1))
+//
+//		} else{
+//			c.CMove(&Ai[i], equal(aAbs, i+1))
+//		}
+//	}
+//
+//	// in constant-time compute negated version, conditionally use it
+//	var minusC cachedGroupElement
+//	minusC.Neg(c)
+//	c.CMove(&minusC, bNegative)
+//}
 // geDoubleScalarMult computes h = a*A + b*G, where
 //   a = a[0]+256*a[1]+...+256^31 a[31]
 //   G is the Ed25519 base point (x,4/5) with x positive.
@@ -592,16 +614,23 @@ func geDoubleScalarMult(h *extendedGroupElement, a *[32]byte,
 		t.ToExtended(&u)
 		u.ToCached(&Ai[i+1])
 	}
-	//var Gi [8]cachedGroupElement
-	//G.ToCached(&Gi[0])
+
+	// for var time
+	//var AG = &extendedGroupElement{}
+	//t.Add(A, &cachedGi[0])
+	//t.ToExtended(AG)
+	//var AGi [8]cachedGroupElement
+	//AG.ToCached(&AGi[0])
 	//for i := 0; i < 7; i++ {
-	//	t.Add(G, &Gi[i])
+	//	t.Add(AG, &AGi[i])
 	//	t.ToExtended(&u)
-	//	u.ToCached(&Gi[i+1])
+	//	u.ToCached(&AGi[i+1])
 	//}
 
 
 	////////////////////////////////////////////
+	// NOTE: We can combine two selectCache for speed up but it would make the
+	// the multi-exponentiation variable time
 	// special case for exponent nybble i == 63
 	u.Zero()
 	selectCached(&c, &Ai, int32(eA[63]))
@@ -630,7 +659,6 @@ func geDoubleScalarMult(h *extendedGroupElement, a *[32]byte,
 		selectCached(&c, &Ai, int32(eA[i]))
 		t.Add(&u, &c)
 		t.ToExtended(&u)
-		//fmt.Println("cached Gi ?= Gi ", checkCachedEq(cachedGi[:],Gi[:]) )
 		selectCached(&c, &cachedGi, int32(eG[i]))
 		t.Add(&u, &c)
 
