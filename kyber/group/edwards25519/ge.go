@@ -4,7 +4,10 @@
 
 package edwards25519
 
-import _ "fmt"
+import (
+	_ "fmt"
+	"fmt"
+)
 
 // Group elements are members of the elliptic curve -x^2 + y^2 = 1 + d * x^2 *
 // y^2 where d = -121665/121666.
@@ -515,6 +518,22 @@ func geScalarMult(h *extendedGroupElement, a *[32]byte,
 //	c.CMove(&minusC, aNegative)
 //}
 
+func checkCachedEq(a,b []cachedGroupElement)  bool{
+	if len(a) != len(b){
+		fmt.Println("checkCachedEq False -->  different length")
+		return false
+	}
+	for i := range a{
+		if a[i] != b[i] {
+			fmt.Println("checkCachedEq False -->  diff[",i,"] -> ", a[i] == b[i])
+			fmt.Println("X: ", a[i])
+			fmt.Println("Y: ", b[i])
+			return false
+		}
+	}
+	return true
+}
+
 // geDoubleScalarMult computes h = a*A + b*G, where
 //   a = a[0]+256*a[1]+...+256^31 a[31]
 //   G is the Ed25519 base point (x,4/5) with x positive.
@@ -523,15 +542,16 @@ func geScalarMult(h *extendedGroupElement, a *[32]byte,
 //   a[31] <= 127
 func geDoubleScalarMult(h *extendedGroupElement, a *[32]byte,
 	A *extendedGroupElement, b *[32]byte) {
-	//var Gst extendedGroupElement
 	var t completedGroupElement
 	var u extendedGroupElement
 	var r projectiveGroupElement
 	var c cachedGroupElement
 	var i int
 
+	//var Gst extendedGroupElement
 	//Gst = baseext
 	//G := &Gst
+
 	// Break the exponent into 4-bit nybbles.
 	var eA [64]int8
 	for i, v := range a {
@@ -580,6 +600,8 @@ func geDoubleScalarMult(h *extendedGroupElement, a *[32]byte,
 	//	u.ToCached(&Gi[i+1])
 	//}
 
+
+	////////////////////////////////////////////
 	// special case for exponent nybble i == 63
 	u.Zero()
 	selectCached(&c, &Ai, int32(eA[63]))
@@ -587,6 +609,8 @@ func geDoubleScalarMult(h *extendedGroupElement, a *[32]byte,
 	t.ToExtended(&u)
 	selectCached(&c, &cachedGi, int32(eG[63]))
 	t.Add(&u, &c)
+
+	//fmt.Println("cached Gi ?= Gi ", checkCachedEq(cachedGi[:],Gi[:]) )
 
 
 	for i = 62; i >= 0; i-- {
@@ -606,14 +630,14 @@ func geDoubleScalarMult(h *extendedGroupElement, a *[32]byte,
 		selectCached(&c, &Ai, int32(eA[i]))
 		t.Add(&u, &c)
 		t.ToExtended(&u)
+		//fmt.Println("cached Gi ?= Gi ", checkCachedEq(cachedGi[:],Gi[:]) )
 		selectCached(&c, &cachedGi, int32(eG[i]))
 		t.Add(&u, &c)
 
-		if i > 60{
-
-			//fmt.Println("ge.go 610: i: ", i, " t: ", t)
-			//fmt.Println("ge.go 611: i: ", i, " u: ", u)
-		}
+		//if i > 60{
+		//	fmt.Println("ge.go 610: i: ", i, " t: ", t)
+		//	fmt.Println("ge.go 611: i: ", i, " u: ", u)
+		//}
 	}
 
 	t.ToExtended(h)

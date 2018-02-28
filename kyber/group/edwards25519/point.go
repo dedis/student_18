@@ -271,7 +271,13 @@ func newScalar()*scalar{
 func TestMultiexpo()  {
 	rand.Seed( time.Now().UnixNano())
 	base := newPoint().Base()
-	a,h,b := newScalar().SetInt64(rand.Int63()),newScalar().SetInt64(rand.Int63()),newScalar().SetInt64(rand.Int63())//newScalar().SetInt64(255+256+1024+4096)
+
+	ar,br,hr := rand.Int63(),rand.Int63(),rand.Int63()
+	//
+	//ar,br,hr = 1491042876136373899, 9091797985825801395, 8382404976228838794
+	//
+	a,b,h := newScalar().SetInt64(ar),newScalar().SetInt64(br),newScalar().SetInt64(hr)
+	//,newScalar().SetInt64(rand.Int63()),newScalar().SetInt64(rand.Int63())//newScalar().SetInt64(255+256+1024+4096)
 
 	//X := newPoint().Mul(newScalar().SetInt64(4161312),base)
 
@@ -287,6 +293,9 @@ func TestMultiexpo()  {
 
 	//proj := &projectiveGroupElement{}
 	//dom := GeDoubleScalarMultVartime
+	fmt.Println("ar: ", ar)
+	fmt.Println("br: ",br)
+	fmt.Println("hr: ",hr)
 	fmt.Println("base: ", base)
 	fmt.Println("H: ", H)
 	fmt.Println("A: ",A)
@@ -341,23 +350,24 @@ func TestMultiexpo()  {
 
 
 
-	//var Gst extendedGroupElement
-	//var t completedGroupElement
-	//var u extendedGroupElement
-	//Gst = baseext
-	//G := &Gst
-	//
-	//var Gi [8]cachedGroupElement
-	//G.ToCached(&Gi[0])
-	//for i := 0; i < 7; i++ {
-	//	t.Add(G, &Gi[i])
-	//	t.ToExtended(&u)
-	//	u.ToCached(&Gi[i+1])
-	//}
-	//for i := 0; i < 7; i++ {
-	//	fmt.Println("Gi[",i,"]: " , Gi[i])
-	//	fmt.Println("cG[",i,"]: " , cachedGi[i])
-	//}
+	var t completedGroupElement
+	var u extendedGroupElement
+	var Gst extendedGroupElement
+	Gst = baseext
+	G := &Gst
+
+	var Gi [8]cachedGroupElement
+	G.ToCached(&Gi[0])
+	for i := 0; i < 7; i++ {
+		t.Add(G, &Gi[i])
+		t.ToExtended(&u)
+		u.ToCached(&Gi[i+1])
+	}
+	for i := 0; i < 7; i++ {
+		//fmt.Println("Gi[",i,"]: " , Gi[i])
+		//fmt.Println("cG[",i,"]: " , cachedGi[i])
+		fmt.Print(Gi[i] == cachedGi[i], ", ")
+	}
 
 	//fmt.Println("cG[0]   : " , cachedGi[0])
 	//fmt.Println("cached G: " , G.ToCached)

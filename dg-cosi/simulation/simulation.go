@@ -78,7 +78,11 @@ func (cs *Simulation) Run(config *onet.SimulationConfig) error {
 			//}
 			aggPub := proto.GetGroupAggregateKey()
 			if err := crypto.VerifySignatureWithAgg(proto.Suite(), aggPub, msg, sig); err != nil {
-				log.Lvl1("Round", round, " => fail verification")
+				log.Lvl1("#############################################################")
+				log.Lvl1("#############################################################")
+				log.Lvl1("######      Round", round, " => fail verification      ######")
+				log.Lvl1("#############################################################")
+				log.Lvl1("#############################################################")
 			} else {
 				log.Lvl2("Round", round, " => success")
 			}
