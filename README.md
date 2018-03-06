@@ -11,9 +11,10 @@ be included in this repo and the original repos will be deleted.
 - [Web frontend](https://github.com/dedis/student_18_web)
 - [Collective Certificate Management](https://github.com/dedis/student_18_ccm_pages)
 - [Cross Platform Mobile App](https://github.com/dedis/student_18_xplatform)
-- [Decentralized Web Archive](https://github.com/dedis/student_18_decenar)
 - [DG CoSi](https://github.com/dedis/student_18_dgcosi)
 
 ## PhD and Master Thesis Students
+
+- [Decentralized Web Archive](https://github.com/dedis/student_18_decenar)
 
 ## Interns
