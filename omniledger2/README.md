@@ -1,5 +1,5 @@
 Navigation: [DEDIS](https://github.com/dedis/doc) ::
-[Student 2018](../README) ::
+[Student 2018](../README.md) ::
 Raphael Dunant - Omniledger
 
 # Raphael Dunant - Omniledger
