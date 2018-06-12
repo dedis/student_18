@@ -14,7 +14,7 @@ be included in this repo and the original repos will be deleted.
 |[Raphael Dunant](mailto:raphael.dunant@epfl.ch)     | [Omniledger 2](omniledger2) |
 |[Claudio Loureiro](mailto:claudio.loureiro@epfl.ch) | [Collective Certificate Management](ccm_pages) |
 |[Sacha Kozma](mailto:sacha.kozma@gmail.com)         | [Cross Platform Mobile App](xplatform) |
-|[Kopiga Rasiah](mailto:kopiga.rasiah@epfl.ch)       | [DG CoSi](dgcosi) |
+|[Kopiga Rasiah](mailto:kopiga.rasiah@epfl.ch)       | [Distributed Key Generation](dgcosi) |
 
 ## PhD and Master Thesis Students
 
