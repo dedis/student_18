@@ -10,11 +10,11 @@ be included in this repo and the original repos will be deleted.
 
 | Name | Project|
 |--|--|
-|[Pablo Lorenceau](pablo.lorenceau@epfl.ch)   | [Omniledger 1](omniledger1) |
-|[Raphael Dunant](raphael.dunant@epfl.ch)     | [Omniledger 2](omniledger2) |
-|[Claudio Loureiro](claudio.loureiro@epfl.ch) | [Collective Certificate Management](ccm_pages) |
-|[Sacha Kozma](sacha.kozma@gmail.com)         | [Cross Platform Mobile App](xplatform) |
-|[Kopiga Rasiah](kopiga.rasiah@epfl.ch)       | [DG CoSi](dgcosi) |
+|[Pablo Lorenceau](mailto:pablo.lorenceau@epfl.ch)   | [Omniledger 1](omniledger1) |
+|[Raphael Dunant](mailto:raphael.dunant@epfl.ch)     | [Omniledger 2](omniledger2) |
+|[Claudio Loureiro](mailto:claudio.loureiro@epfl.ch) | [Collective Certificate Management](ccm_pages) |
+|[Sacha Kozma](mailto:sacha.kozma@gmail.com)         | [Cross Platform Mobile App](xplatform) |
+|[Kopiga Rasiah](mailto:kopiga.rasiah@epfl.ch)       | [DG CoSi](dgcosi) |
 
 ## PhD and Master Thesis Students
 

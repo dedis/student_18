@@ -1,0 +1,113 @@
+@TECHREPORT{CoSi,
+  AUTHOR =        {E. Syta and I. Tamas and D. Visher and D. I- Wolinsky and P. Jovanovic and L. Gasser and N. Gailly and I. Khoffi and B. Ford},
+  TITLE =         {\textit{Keeping Authorities "Honest or Bust" with Decentralized Witness Cosigning}},
+  NUMBER =        {arXiv:1503.08768},
+  INSTITUTION =   {Yale University and \'Ecole Polytechnique F\'ed\'erale de Lausanne},
+  ADDRESS =       {New Haven, CT, USA and Lausanne, Switzerland},
+  ABSTRACT =      {The secret keys of critical network authorities – such as time, name, certificate, and software update services – represent high-value targets for hackers, criminals, and spy agencies wishing to use these keys secretly to compromise other hosts. To protect authorities and their clients proactively from undetected exploits and misuse, we introduce CoSi, a scalable witness cosigning protocol ensuring that every authoritative statement is validated and publicly logged by a diverse group of witnesses before any client will accept it. A statement S collectively signed by W witnesses assures clients that S has been seen, and not immediately found erroneous, by those W observers. Even if S is compromised in a fashion not readily detectable by the witnesses, CoSi still guarantees S’s exposure to public scrutiny, forcing secrecy-minded attackers to risk that the compromise will soon be detected by one of the W witnesses. Because clients can verify collective signatures efficiently without communication, CoSi protects clients’ privacy, and offers the first transparency mechanism effective against persistent man-in-the-middle attackers who control a victim’s Internet access, the authority’s secret key, and several witnesses’ secret keys. CoSi builds on existing cryptographic multisignature methods, scaling them to support thousands of witnesses via signature aggregation over efficient communication trees. A working prototype demonstrates CoSi in the context of timestamping and logging authorities, enabling groups of over 8,000 distributed witnesses to cosign authoritative statements in under two seconds.},
+  MONTH =         {May},
+  YEAR  =         {2016},
+  PAGES =         {20},
+  URL   =         {https://arxiv.org/pdf/1503.08768.pdf}
+}
+@TECHREPORT{Merkle_tree,
+  AUTHOR =        {R. Merkle},
+  TITLE =         {\textit{A digital signature based on a conventional encryption function}},
+  NUMBER =        {doi:10.1007/3-540-48184-2\_3, ISBN 978-3-540-18796-7},
+  YEAR  =         {1988},
+  PAGES =         {10},
+  URL   =         {http://people.eecs.berkeley.edu/~raluca/cs261-f15/readings/merkle.pdf}
+}
+@TECHREPORT{CoSi_implementation,
+  AUTHOR =        {R. Dunant and L. Gasser and E. Kokoris-Kogias and B. Ford},
+  TITLE =         {\textit{Implementation of a robust and scalable consensus protocol for blockchain}},
+INSTITUTION =   {\'Ecole Polytechnique F\'ed\'erale de Lausanne},
+  ADDRESS =       {Lausanne, Switzerland},
+  MONTH =         {January},
+  YEAR  =         {2018},
+  PAGES =         {15}
+}
+@TECHREPORT{Byzcoin,
+  AUTHOR =        {E. Kokoris-Kogias and P. Jovanovic and N. Gailly and I. Khoffi and L. Gasser and B. Ford},
+  TITLE =         {\textit{Enhancing Bitcoin Security and Performance with Strong Consistency via Collective Signing}},
+  NUMBER =        {ISBN 978-1-931971-32-4},
+  INSTITUTION =   {\'Ecole Polytechnique F\'ed\'erale de Lausanne},
+  ADDRESS =       {Lausanne, Switzerland},
+  ABSTRACT =      {While showing great promise, Bitcoin requires users to wait tens of minutes for transactions to commit, and even then, offering only probabilistic guarantees. This paper introduces ByzCoin, a novel Byzantine consensus protocol that leverages scalable collective signing to commit Bitcoin transactions irreversibly within seconds. ByzCoin achieves Byzantine consensus while preserving Bitcoin’s open membership by dynamically forming hash power-proportionate consensus groups that represent recently-successful block miners. ByzCoin employs communication trees to optimize transaction commitment and verification under normal operation while guaranteeing safety and liveness under Byzantine faults, up to a near-optimal tolerance of f faulty group members among 3f +2 total. ByzCoin mitigates double spending and selfish mining attacks by producing collectively signed transaction blocks within one minute of transaction submission. Tree-structured communication further reduces this latency to less than 30 seconds. Due to these optimizations, ByzCoin achieves a throughput higher than Paypal currently handles, with a confirmation latency of 15-20 seconds.},
+  MONTH =         {August},
+  YEAR  =         {2016},
+  PAGES =         {17},
+  URL   =         {https://www.usenix.org/system/files/conference/usenixsecurity16/sec16_paper_kokoris-kogias.pdf}
+}
+
+@TECHREPORT{Omniledger,
+  AUTHOR =        {E. Kokoris-Kogias and P. Jovanovic and L. Gasser and N. Gailly and E. Syta and B. Ford},
+  TITLE =         {\textit{OmniLedger: A Secure, Scale-Out, Decentralized Ledger via Sharding}},
+  NUMBER =        {2017:406},
+  INSTITUTION =   {\'Ecole Polytechnique F\'ed\'erale de Lausanne and Trinity College},
+  ADDRESS =       {Lausanne, Switzerland and USA},
+  ABSTRACT =      {Designing a secure permissionless distributed ledger that performs on par with centralized payment processors such as Visa is challenging. Most existing distributed ledgers are unable to “scale-out” – growing total processing capacity with number of  participants  –  and  those  that  do  compromise  security  or decentralization. This work presents OmniLedger, the first scale- out distributed ledger that can preserve long-term security under permissionless operation. OmniLedger ensures strong correctness and security by using a bias-resistant public randomness protocol to choose large statistically representative shards to process trans- actions, and by introducing an efficient cross-shard commit pro- tocol to handle transactions affecting multiple shards atomically. In  addition,  OmniLedger  optimizes  performance  via  scalable intra-shard  parallel  transaction  processing,  ledger  pruning  via collectively-signed state blocks, and optional low-latency “trust- but-verify”  validation  of  low-value  transactions.  Evaluation  of our  working  experimental  prototype  shows  that  OmniLedger’s throughput scales linearly in the number of validators available, supporting  Visa-level  workloads  and  beyond,  while  confirming typical transactions in under two seconds.},
+  MONTH =         {October},
+  YEAR  =         {2017},
+  PAGES =         {17},
+  URL   =         {https://www.usenix.org/system/files/conference/usenixsecurity16/sec16_paper_kokoris-kogias.pdf}
+}
+
+@Inbook{Schnorr,
+author="Schnorr, C. P.",
+editor="Brassard, Gilles",
+title="Efficient Identification and Signatures for Smart Cards",
+bookTitle="Advances in Cryptology --- CRYPTO' 89 Proceedings",
+year="1990",
+publisher="Springer New York",
+address="New York, NY",
+pages="239--252",
+abstract="We present an efficient interactive identification scheme and a related signature scheme that are based on discrete logarithms and which are particularly suited for smart cards. Previous cryptoschemes, based on the discrete logarithm, have been proposed by El Gamal (1985), Chaum, Evertse, Graaf (1988), Beth (1988) and G{\"u}nter (1989). The new scheme comprises the following novel features.",
+isbn="978-0-387-34805-6",
+doi="10.1007/0-387-34805-0_22",
+url="https://doi.org/10.1007/0-387-34805-0_22"
+}
+
+
+
+@misc{ONet,
+  key = "Onet",
+  title = {ONet: Cothority network library},
+  howpublished = {\url{https://github.com/dedis/onet}},
+  note = {Accessed: 2017-11-01}
+}
+
+@misc{Kyber,
+  key = "Kyber",
+  title = {Kyber: Advanced crypto library for the Go language},
+  howpublished = {\url{https://github.com/dedis/kyber}},
+  note = {Accessed: 2017-11-01}
+}
+
+@misc{Golint,
+  key = "Golint",
+  title = {Golint: linter for Go source code},
+  howpublished = {\url{https://github.com/golang/lint}},
+  note = {Accessed: 2018-06-06}
+}
+
+@misc{gofmt,
+  key = "Command gofmt",
+  title = {Gofmt: automatic formatting of Go programs},
+  howpublished = {\url{https://golang.org/cmd/gofmt/}},
+  note = {Accessed: 2018-06-06}
+}
+
+@misc{protobuf,
+  key = "Protobuf",
+  title = {Protobuf: Reflection-based Protocol Buffers for Go},
+  howpublished = {\url{https://github.com/dedis/protobuf}},
+  note = {Accessed: 2018-06-06}
+}
+
+@misc{trie,
+  key = "trie",
+  title = {Modified Merkle Patricia Trie Specification (also Merkle Patricia Tree)},
+  howpublished = {\url{https://github.com/ethereum/wiki/wiki/Patricia-Tree}},
+  note = {Accessed: 2018-06-08}
+}
