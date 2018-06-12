@@ -8,5 +8,5 @@ In this report, I will present the work that has been done on the CP- MAC cross-
 
 ## Files
 
-- [Report](report-2018_1-sacha_kozma-xploatform.pdf)
-- [Presentation](presentation-2018_1-sacha_kozma-xploatform.pdf)
+- [Report](report-2018_1-sacha_kozma-xplatform.pdf)
+- [Presentation](presentation-2018_1-sacha_kozma-xplatform.pdf)
