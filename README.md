@@ -8,13 +8,18 @@ be included in this repo and the original repos will be deleted.
 
 ## Semester students (bachelor and master)
 
-- [Web frontend](https://github.com/dedis/student_18_web)
-- [Collective Certificate Management](https://github.com/dedis/student_18_ccm_pages)
-- [Cross Platform Mobile App](https://github.com/dedis/student_18_xplatform)
-- [DG CoSi](https://github.com/dedis/student_18_dgcosi)
+| Name | Project|
+|--|--|
+|[Pablo Lorenceau](pablo.lorenceau@epfl.ch)   | [Omniledger 1](omniledger1) |
+|[Raphael Dunant](raphael.dunant@epfl.ch)     | [Omniledger 2](omniledger2) |
+|[Claudio Loureiro](claudio.loureiro@epfl.ch) | [Collective Certificate Management](ccm_pages) |
+|[Sacha Kozma](sacha.kozma@gmail.com)         | [Cross Platform Mobile App](xplatform) |
+|[Kopiga Rasiah](kopiga.rasiah@epfl.ch)       | [DG CoSi](dgcosi) |
 
 ## PhD and Master Thesis Students
 
-- [Decentralized Web Archive](https://github.com/dedis/student_18_decenar)
+| Name | Project |
+| -- | -- |
+| | [Decentralized Web Archive](https://github.com/dedis/student_18_decenar) |
 
 ## Interns
