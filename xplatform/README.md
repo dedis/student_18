@@ -10,4 +10,4 @@ In this report, I will present the work that has been done on the CP- MAC cross-
 
 - [Report](report-2018_1-sacha_kozma-xplatform.pdf)
 - [Presentation](presentation-2018_1-sacha_kozma-xplatform.pdf)
-- [Code](code)
+- [Code](cpmac)
