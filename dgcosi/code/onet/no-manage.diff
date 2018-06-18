@@ -1,0 +1,191 @@
+diff --git a/simul/platform/runsimul.go b/simul/platform/runsimul.go
+index 9f1f3ba..de14c49 100644
+--- a/simul/platform/runsimul.go
++++ b/simul/platform/runsimul.go
+@@ -2,13 +2,13 @@ package platform
+ 
+ import (
+ 	"sync"
++	"time"
+ 
+ 	"gopkg.in/dedis/onet.v1"
+ 	"gopkg.in/dedis/onet.v1/log"
+ 
+ 	"github.com/BurntSushi/toml"
+ 	"gopkg.in/dedis/onet.v1/network"
+-	"gopkg.in/dedis/onet.v1/simul/manage"
+ 	"gopkg.in/dedis/onet.v1/simul/monitor"
+ )
+ 
+@@ -39,7 +39,7 @@ func Simulate(serverAddress, simul, monitorAddress string) error {
+ 	// having a waitgroup so the binary stops when all servers are closed
+ 	var wgServer, wgSimulInit sync.WaitGroup
+ 	var ready = make(chan bool)
+-	measureNodeBW := true
++	measureNodeBW := false
+ 	if len(scs) > 0 {
+ 		cfg := &conf{}
+ 		_, err := toml.Decode(scs[0].Config, cfg)
+@@ -66,7 +66,7 @@ func Simulate(serverAddress, simul, monitorAddress string) error {
+ 			if measureNodeBW {
+ 				m.Record()
+ 			}
+-			log.Lvl3(serverAddress, "Simulation closed server", c.ServerIdentity)
++			log.LLvl3(serverAddress, "Simulation closed server", c.ServerIdentity)
+ 		}(server, measures[i])
+ 		// wait to be sure the goroutine started
+ 		<-ready
+@@ -95,6 +95,7 @@ func Simulate(serverAddress, simul, monitorAddress string) error {
+ 			rootSC = sc
+ 		}
+ 	}
++	log.Print("setup completed")
+ 	if rootSim != nil {
+ 		// If this cothority has the root-server, it will start the simulation
+ 		log.Lvl2("Starting protocol", simul, "on server", rootSC.Server.ServerIdentity.Address)
+@@ -102,31 +103,39 @@ func Simulate(serverAddress, simul, monitorAddress string) error {
+ 
+ 		// First count the number of available children
+ 		childrenWait := monitor.NewTimeMeasure("ChildrenWait")
+-		wait := true
+-		// The timeout starts with 1 second, which is the time of response between
+-		// each level of the tree.
+-		timeout := 1000
+-		for wait {
+-			p, err := rootSC.Overlay.CreateProtocol("Count", rootSC.Tree, onet.NilServiceID)
+-			if err != nil {
+-				return err
+-			}
+-			proto := p.(*manage.ProtocolCount)
+-			proto.SetTimeout(timeout)
+-			proto.Start()
+-			log.Lvl1("Started counting children with timeout of", timeout)
+-			select {
+-			case count := <-proto.Count:
+-				if count == rootSC.Tree.Size() {
+-					log.Lvl1("Found all", count, "children")
+-					wait = false
+-				} else {
+-					log.Lvl1("Found only", count, "children, counting again")
++
++		// instead of counting, we wait for a minute for all nodes to come up
++		// and then broadcast the initialisation message
++		time.Sleep(time.Minute)
++		/*
++			wait := true
++			// The timeout starts with 1 second, which is the time of response between
++			// each level of the tree.
++			timeout := 20000
++			for wait {
++				log.Print(len(rootSC.Tree.List()), "nodes in tree")
++				p, err := rootSC.Overlay.CreateProtocol("Count", rootSC.Tree, onet.NilServiceID)
++				if err != nil {
++					return err
++				}
++				proto := p.(*manage.ProtocolCount)
++				proto.SetTimeout(timeout)
++				log.Print("number of children: ", len(proto.Root().Children))
++				proto.Start()
++				log.Lvl1("Started counting children with timeout of", timeout)
++				select {
++				case count := <-proto.Count:
++					if count == rootSC.Tree.Size() {
++						log.Lvl1("Found all", count, "children")
++						wait = false
++					} else {
++						log.Lvl1("Found only", count, "children, counting again")
++					}
+ 				}
++				// Double the timeout and try again if not successful.
++				timeout *= 2
+ 			}
+-			// Double the timeout and try again if not successful.
+-			timeout *= 2
+-		}
++		*/
+ 		childrenWait.Record()
+ 		log.Lvl2("Broadcasting start")
+ 		syncWait := monitor.NewTimeMeasure("SimulSyncWait")
+@@ -144,25 +153,52 @@ func Simulate(serverAddress, simul, monitorAddress string) error {
+ 		}
+ 		measureNet.Record()
+ 
+-		// Test if all ServerIdentities are used in the tree, else we'll run into
+-		// troubles with CloseAll
+-		if !rootSC.Tree.UsesList() {
+-			log.Error("The tree doesn't use all ServerIdentities from the list!\n" +
+-				"This means that the CloseAll will fail and the experiment never ends!")
+-		}
+-		// Recreate a tree out of the original roster, to be sure all nodes are included and
+-		// that the tree is easy to close.
+-		closeTree := rootSC.Roster.GenerateBinaryTree()
+-		pi, err := rootSC.Overlay.CreateProtocol("CloseAll", closeTree, onet.NilServiceID)
+-		pi.Start()
+-		if err != nil {
+-			return err
+-		}
++		/*
++			// Test if all ServerIdentities are used in the tree, else we'll run into
++			// troubles with CloseAll
++			if !rootSC.Tree.UsesList() {
++				log.Error("The tree doesn't use all ServerIdentities from the list!\n" +
++					"This means that the CloseAll will fail and the experiment never ends!")
++			}
++			// Recreate a tree out of the original roster, to be sure all nodes are included and
++			// that the tree is easy to close.
++			closeTree := rootSC.Roster.GenerateBinaryTree()
++			pi, err := rootSC.Overlay.CreateProtocol("CloseAll", closeTree, onet.NilServiceID)
++			if err != nil {
++				return err
++			}
++			closeProto := pi.(*manage.ProtocolCloseAll)
++			closeProto.Start()
++		*/
++	}
++	// log.Lvl3(serverAddress, scs[0].Server.ServerIdentity, "is waiting for all servers to close")
++	// wgServer.Wait()
++
++	// wait for 5 minutes for simulation to complete and close all the servers
++	simulTime := time.Minute * 5
++	time.Sleep(simulTime)
++	var closeServerWg sync.WaitGroup
++	closeServerWg.Add(len(scs))
++	for _, sc := range scs {
++		go func(s *onet.Server) {
++			defer closeServerWg.Done()
++			if err := s.Close(); err != nil {
++				log.Error(err)
++			}
++		}(sc.Server)
++	}
++	closedChan := make(chan bool, 1)
++	go func() {
++		closeServerWg.Wait()
++		closedChan <- true
++	}()
++	select {
++	case <-closedChan:
++		log.LLvl2(serverAddress, "has all servers closed")
++	case <-time.After(simulTime):
++		log.Error(serverAddress, "Did not manage to close all servers")
+ 	}
+ 
+-	log.Lvl3(serverAddress, scs[0].Server.ServerIdentity, "is waiting for all servers to close")
+-	wgServer.Wait()
+-	log.Lvl2(serverAddress, "has all servers closed")
+ 	if monitorAddress != "" {
+ 		monitor.EndAndCleanup()
+ 	}
+diff --git a/treenode.go b/treenode.go
+index 1bb53eb..7f7b7ff 100644
+--- a/treenode.go
++++ b/treenode.go
+@@ -63,7 +63,7 @@ const (
+ 
+ 	// DefaultChannelLength is the default number of messages that can wait
+ 	// in a channel.
+-	DefaultChannelLength = 100
++	DefaultChannelLength = 1000
+ )
+ 
+ // MsgHandler is called upon reception of a certain message-type
