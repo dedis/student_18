@@ -1,0 +1,32 @@
+<Page
+        class="page"
+        loaded="onLoaded"
+        xmlns:nsListView="nativescript-ui-listview">
+
+    <ActionBar class="action-bar">
+        <NavigationButton text="Go Back" android:icon="res://ic_arrow_back" tap="goBack"/>
+        <Label class="action-bar-title" text="Order history"/>
+        <ActionItem tap="clear"
+                    ios.systemIcon="16" ios.position="right"
+                    android:icon="res://ic_delete_white" android.position="actionBar"/>
+    </ActionBar>
+
+    <GridLayout class="page-content" rows="*, auto" columns="*">
+        <nsListView:RadListView items="{{ dates }}" row="0" id="listView">
+
+            <nsListView:RadListView.itemTemplate>
+                <GridLayout rows="auto" columns="*" backgroundColor="white"
+                            class="basic-list">
+                    <Label class="list-title" text="{{ date }}" row="0" col="0"
+                           textWrap="true"/>
+                </GridLayout>
+            </nsListView:RadListView.itemTemplate>
+        </nsListView:RadListView>
+
+        <Label id="count" text="{{ dates.length, 'Total : ' + dates.length + ' beer(s)' }}" tap="registerKeys" row="1"
+               col="1"/>
+
+    </GridLayout>
+
+
+</Page>

@@ -1,0 +1,10 @@
+@import 'MyDrawer';
+
+// Place any CSS rules you want to apply only on iOS here
+$sidedrawer-header-height: 64.5;
+
+.sidedrawer {
+  .sidedrawer-header {
+    height: $sidedrawer-header-height;
+  }
+}

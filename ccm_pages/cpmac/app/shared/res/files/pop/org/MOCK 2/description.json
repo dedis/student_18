@@ -1,0 +1,29 @@
+{
+  "name": "Sacha's Gang",
+  "dateTime": "Thu, 30 Nov 2017 11:12:00 GMT",
+  "location": "CO 1, Lausanne",
+  "roster": {
+    "id": "AAAAAAAAAAAAAAAAAAAAAA==",
+    "list": [
+      {
+        "public": "TiQ6VSm5I1IbxDaQcZQVaC5tiQbSG7jMyLd0cE/5BUU=",
+        "id": "z6kCTQ77Xna9yfgKka5lNQ==",
+        "address": "tls://10.211.55.23:7002",
+        "description": "Conode_1"
+      },
+      {
+        "public": "Jed1mbNmOIlgTWReyp5sYwjRDwNcTqsCf6HWavVC718=",
+        "id": "Qd8XkrUlVEeClO9I95nklQ==",
+        "address": "tls://10.211.55.23:7004",
+        "description": "Conode_2"
+      },
+      {
+        "public": "m32+s+NkYhwVjMBpKuxJdIitDhQ0GEmSUkRQE7WoZ4Q=",
+        "id": "tUq+0651WRaAI4aTQC0d8w==",
+        "address": "tls://10.211.55.23:7006",
+        "description": "Conode_3"
+      }
+    ],
+    "aggregate": "q+G+7n6FXsY7hpxK3m119GuDHnchS6wqTE0sZE/fOKg="
+  }
+}

@@ -1,0 +1,46 @@
+\section{CP-MAC installation}
+The following section will describe the installation steps to get CP-MAC up and running on your computer. Note that even if NativeScript is compatible with Linux, Windows and macOS, only macOS can run the application on the iOS simulators, due to Apple limitations. However, a new desktop application called NativeScript Sidekick allows running cloud-based builds of iOS applications on Windows and Linux.
+
+\begin{enumerate}
+	\item Install NativeScript
+	
+	As NativeScript has a relatively high update frequency and a complete up-to-date guide about its installation\footnote{\url{https://docs.nativescript.org/start/quick-setup}}, the entire description of the steps needed to install NativeScript won't be copied here. However, here are the main steps to follow :
+	\begin{enumerate}
+		\item Install Node.js\footnote{\url{https://nodejs.org/}} 
+		\item Install the NativeScript command-line interface, which is in fact a simple Node application, using
+		\begin{lstlisting}[language=bash]
+$ npm install -g nativescript
+		\end{lstlisting}
+		\item Install iOS and Android requirements using the NativeScript automatic dependences installer available on the installation guide page.
+		\item Verify the installation using
+		\begin{lstlisting}[language=bash]
+$ tns doctor
+		\end{lstlisting}
+		It should output \textit{"No issues were detected"}. If it's not the case, the next installation instructions won't work.
+		
+		\item Optionally, NativeScript provides plugins for the editor Visual Studio Code\footnote{\url{https://www.nativescript.org/nativescript-for-visual-studio-code}} or WebStorm\footnote{\url{https://plugins.jetbrains.com/plugin/8588-nativescript}}. These are not mandatory, but they can help by adding code assistance or templates.
+	\end{enumerate}
+
+	\item Clone CP-MAC repository
+	
+	The following command will take care of this step :
+	\begin{lstlisting}[language=bash]
+$ git clone https://github.com/dedis/student_18_xplatform
+	\end{lstlisting}
+	
+	\item Install CP-MAC dependencies
+	
+	A Makefile is available and will install the necessary components, as well as applying some patches to ensure that CP-MAC compiles and runs correctly.
+	\begin{lstlisting}
+$ cd student_18_xplatform/cpmac
+$ make clean-install
+	\end{lstlisting}
+	
+	\item Run CP-MAC
+	
+	The application can now be started with one of the following commands, depending on the desired platform :
+	\begin{lstlisting}[language=bash]
+$ make run-ios
+$ make run-android
+	\end{lstlisting}
+\end{enumerate}

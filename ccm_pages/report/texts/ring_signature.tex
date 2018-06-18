@@ -1,0 +1,50 @@
+\section{Linkable Ring Signatures}
+\label{sec:linkable_ring_signature}
+Linkable ring signatures are the missing link in CP-MAC to make the PoP-Tokens useful. As stated before, they're necessary to sign data, but they are also required for the verification.  As this type of digital signatures is not available in KyberJS, it has been necessary to implement it directly in CP-MAC.
+
+\subsection{Implementation}
+The sign and verify algorithms are implemented in \textbf{RingSig.js}. It contains also every required auxiliary methods. The execution of the algorithm strictly follows the one implemented in the Kyber Go version and described in \cite{cryptoeprint:2004:027}.  However, as there are major differences between the Go language and JavaScript, some inner mechanisms had to be adapted.
+
+First, as we saw in the BLAKE2 introduction at point \ref{subsubsec:blake2}, BLAKE2Xb is used by Kyber ring signature algorithm but is not available in KyberJS. Two approaches were considered, each one having their drawbacks :
+
+\begin{description}[style=nextline]
+	\item[Implement BLAKE2Xb for CP-MAC] As there are several modules in JavaScript that implement BLAKE2b, it is possible to create an instance of BLAKE2Xb without coding the complete algorithm, as a BLAKE2X function can be derived from any BLAKE2 instance (be it BLAKE2b or BLAKE2s). The procedure is described in \cite{aumasson2016blake2x}. This would have assured a complete compliance with the Kyber implementation. However, the remaining time available to complete this project wouldn't have allowed imple\-menting and testing it thoroughly, on top of adding the ring signatures feature.
+	\item[Use another hash function] The nearest hash function that I could find is an implementation of BLAKE2Xs implemented in the StableLib\footnote{\url{https://github.com/StableLib/stablelib/tree/master/packages/blake2xs}}. As it provides the same capabilities than BLAKE2Xb, it can be used in ring signature as a replacement. However, the drawback of this solution is that it breaks the compatibility with the Go (reference) version of Kyber. Note that this drawback can be highly moderated by parameterizing the hash function in Kyber and KyberJS, as stated at point \ref{subsec:ring_sig_future_work}. Due to the lack of time, this solution has been chosen. 
+\end{description}
+
+The second change that had to be operated concerns the way Kyber marshals its data. This happens during the conversion of the cryptographic elements (points, scalars) to standard byte arrays. Kyber uses a DEDIS library called \textbf{fixbuf}\footnote{\url{https://github.com/dedis/fixbuf}} that allows a fixed length binary encoding of arbitrary Go structures. As there isn't an equivalent library from DEDIS for JavaScript, I implemented a method that reproduces the behavior of \textbf{fixbuf} specifically for ring signature structure. Effectively, here is the Go structure representing an unlinkable ring signature :
+
+\begin{center}
+\begin{lstlisting}[language=Golang, caption={Unlinkable ring signature structure}, label={code:ustruct}]
+type uSig struct {
+	C0 kyber.Scalar 	// generated during the signing process
+	S  []kyber.Scalar 	// the length of S equals the number
+						// of public keys in the anonymity set
+}
+\end{lstlisting}
+\end{center}
+and the one representing a linkable ring signature :
+\begin{center}
+\begin{lstlisting}[language=Golang, caption={Linkable ring signature structure}, label={code:lstruct}]
+type lSig struct {
+	C0  kyber.Scalar 	// generated during the signing process
+	S  []kyber.Scalar 	// the length of S equals the number
+						// of public keys in the anonymity set
+	Tag kyber.Point 	// the tag, unique to the signer under 
+						// the given scope
+}
+\end{lstlisting}
+\end{center}
+According to \textbf{fixbuf}, those elements will be marshaled and concatenated. This can be reproduced in CP-MAC, as KyberJS (like Kyber) allows mar\-shaling cryptographic elements and those structures only contains points or scalar. It's then sufficient to concatenate the resulting byte array of each element, in the right order.
+
+With these changes in mind, the implementation has been done following these steps : first, a specific development version of Kyber for which the hash function is replaced by BLAKE2Xs has been compiled. Also, Kyber and KyberJS have been configured to use a deterministic random function, this way the results between each implementation of the ring signature algorithm can be compared. This facilitated the work as it allowed to verify at each step the coherence of the results.
+\subsection{Unit testing}
+The tests used to verifiy the \textbf{RingSig.js} implementation are the same as in the Go version, available in the \textbf{sig\_test.go} test suite. Particularly, three scenarios are tested. In each case, signature are tested against the correct and the wrong message, plus the tags are verified (length and validity) when applicable. Here are the different scenarios :
+\begin{itemize}
+	\item A trivial unlinkable signing process with a single member anonymity set is tested.
+	\item An unlinkable signing process with a small anonymity set of three members is also tested. 
+	\item  For linkable signatures, an anonymity set of three members is created and a scope is defined. The tags generated when verifying against the good message and a wrong one are then verified.
+\end{itemize}
+\subsection{Future work}
+\label{subsec:ring_sig_future_work}
+The most important goal for a future improvement is to make KyberJS fully compatible with Kyber, either by implementing BLAKE2Xb in JavaScript or by parameterizing the hash function. The latter would give a high degree of freedom: for example, it could be possible to create a new suite in Kyber that uses BLAKE2Xs as the hash function. KyberJS would then have to support parameterization of the hash function for a suite, which is currently not the case. However, the former solution have the advantage of being more efficient, as BLAKE2Xb is optimized for 64 bits processor, which begin to be the standard in today smartphones. Of course, by combining the two solutions, we get the best of both world.

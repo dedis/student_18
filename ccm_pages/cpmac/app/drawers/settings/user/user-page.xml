@@ -1,0 +1,48 @@
+<Page
+        class="page"
+        loaded="onLoaded">
+
+    <ActionBar class="action-bar">
+        <Label class="action-bar-title" text="User - Settings"/>
+    </ActionBar>
+
+    <GridLayout class="page-content" rows="auto,auto,auto,auto,auto,*,auto" columns="*,auto,auto,*">
+        <Label class="label-title" text="Key Pair" row="0" colSpan="4"/>
+
+        <Label class="label-text" text="Public" row="1" col="0"/>
+        <Label class="label-space" text=" - " row="1" col="1" colSpan="2"/>
+        <TextField class="text-field" text="{{ publicKey }}" hint="public" editable="false"
+                   row="1"
+                   col="3"
+                   id="text-field-public"/>
+
+        <Label class="label-text" text="Private" row="2" col="0"/>
+        <Label class="label-space" text=" - " row="2" col="1" colSpan="2"/>
+        <TextField class="text-field" text="{{ privateKey }}" hint="private" editable="false"
+                   row="2"
+                   col="3"
+                   id="text-field-private"/>
+
+        <Label class="label-text" text="Public Complete" row="3" col="0"/>
+        <Label class="label-space" text=" - " row="3" col="1" colSpan="2"/>
+        <TextField class="text-field" text="{{ publicCompleteKey }}" hint="public complete" editable="false"
+                   row="3"
+                   col="3"
+                   id="text-field-public-complete"/>
+
+        <Button text="Generate" row="4" col="0" colSpan="2" tap="generateKeyPair"/>
+        <Button text="QR" tap="displayQrOfPublicKey" row="4" col="2" colSpan="2"/>
+
+        <StackLayout row="5" col="0">
+         <TextField text="{{ nameModule }}" hint="UserName" editable="true" id="text-field-username"/>
+        </StackLayout>
+
+        <StackLayout row="5" col="2" colSpan="2">
+         <Button text="Change name" tap="changeUserName"/>
+        </StackLayout>
+
+
+        <Button text="Reset User" tap="resetUser" row="6" col="0" colSpan="4"/>
+    </GridLayout>
+
+</Page>

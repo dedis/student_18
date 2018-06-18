@@ -1,0 +1,20 @@
+\begin{tikzpicture}[->,>=stealth',shorten >=1pt,node distance=7cm,
+scale = 0.6,transform shape, state/.style={circle, draw, minimum size=+75pt}]
+
+\node[state] (Organizer 1) {\textit{Organizer 1}};
+\node[state] (Conode 1) [right of=Organizer 1] {\textit{Conode 1}};
+\node[state] (Organizer 2) [below of=Organizer 1, yshift=1.7cm] {\textit{Organizer 2}};
+\node[state] (Conode 2) [right of=Organizer 2] {\textit{Conode 2}};
+
+\path (Organizer 1) edge [bend left=35]              node [above] {1) \texttt{PinRequest}} (Conode 1)
+(Organizer 1) edge [bend left=10]             node [above] {4) \texttt{StoreConfig}} (Conode 1)
+(Organizer 1) edge [bend right=10]             node [below] {8) \texttt{Finalize}} (Conode 1)
+(Organizer 1) edge [bend right=35]             node [below] {10) \texttt{FetchFinal}} (Conode 1)
+(Organizer 2) edge             node [left]{2) QR Code \{Conode 2\}} (Organizer 1)
+(Organizer 2) edge [bend left=35]              node [above] {1) \texttt{PinRequest}} (Conode 2)
+(Organizer 2) edge [bend left=10]              node [above] {6) \texttt{GetProposals}} (Conode 2)
+(Organizer 2) edge  [bend right=10]           node [below] {7) \texttt{StoreConfig}} (Conode 2)
+(Organizer 2) edge [bend right=35]             node [below] {9) \texttt{Finalize}} (Conode 2)
+(Conode 1) edge              node [right] {5) Party propagation} (Conode 2);
+
+\end{tikzpicture}

@@ -1,0 +1,5 @@
+<Page
+        class="page"
+        navigatingTo="onNavigatingTo">
+    <WebView id="webweb" src="{{ html }}" />
+</Page>

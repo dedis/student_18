@@ -1,0 +1,14 @@
+<Page
+        class="page"
+        loaded="onLoaded"
+        shownModally="onShownModally">
+
+
+    <GridLayout class="page-content" rows="auto, *" columns="*">
+        <Label id="page-name" text="{{ title }}"/>
+        <Label vertical-align="center" tap="onDone" class="nav-buttons" text="&#xf060;" color="white" font-weight="light" row="0" column="0"/>
+        <Image id="image" stretch="aspectFit" tap="copyToClipboard" row="1" column="0" />
+        <Label id="scan-me" text="SCAN ME" row="1" column="0"/>
+    </GridLayout>
+
+</Page>

@@ -1,0 +1,95 @@
+\documentclass[11pt, a4paper, twoside]{article} %draft
+
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{babel,csquotes,xpatch}
+\usepackage[backend=bibtex8]{biblatex}
+\usepackage{nameref}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata}
+\usepackage{dirtree}
+\usepackage{listings}
+\usepackage{packages/listings-golang}
+\usepackage{enumitem}
+
+\lstset{
+	frame=tb,
+	tabsize=4,
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	basicstyle=\footnotesize
+}
+
+%define Javascript language
+\lstdefinelanguage{JavaScript}{
+	keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+	keywordstyle=\color{blue}\bfseries,
+	ndkeywords={class, export, boolean, throw, implements, import, this, require},
+	ndkeywordstyle=\color{darkgray}\bfseries,
+	identifierstyle=\color{black},
+	sensitive=false,
+	comment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	commentstyle=\color{purple}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	morestring=[b]',
+	morestring=[b]"
+}
+
+
+
+%main colors of CP-MAC app
+\definecolor{accent-light}{RGB}{192, 204, 217}
+\definecolor{accent-dark}{RGB}{129, 144, 164}
+
+% used to create a square of 0.3cm x 0.3cm to show solor palettes
+\newcommand\crule[1][black]{\textcolor{#1}{\rule{0.3cm}{0.3cm}}}
+
+
+\addbibresource{resources/bibliography.bib}
+
+
+
+\begin{document}
+\input{cover}
+
+\clearpage
+
+\thispagestyle{empty}
+\input{texts/acknowledgment}
+
+\clearpage
+
+\tableofcontents{\protect\thispagestyle{empty}
+
+\clearpage
+
+
+% Start page count
+\setcounter{page}{1}
+
+\input{texts/introduction}
+
+\input{texts/background}
+
+\input{texts/improvements}
+
+\input{texts/interface}
+
+\input{texts/pop}
+
+\input{texts/ring_signature}
+
+\input{texts/beercoin}
+
+\input{texts/installation}
+
+\input{texts/bugs}
+
+\clearpage
+\printbibliography
+
+\end{document}

@@ -1,0 +1,60 @@
+\section{BeerCoin Part}
+\label{sec:beercoin}
+With the different primitives that are now available on CP-MAC, it is possible to create a real use-case. Here, it has been decided to realize a long-running joke at the DEDIS: the creation of a BeerCoin.
+
+\subsection{Description}
+The idea behind BeerCoin is that a group of people could each benefit from a free beer every month, week, or day at the expense of someone else. It's also important to preserve the anonymity of the members of the group. For example, it should not be possible to recognize a user from his signature, as well as deducing information about users between two periods. 
+
+Concerning CP-MAC, it should be possible to create a bar from the application, with the possibility to define which group is allowed to get these BeerCoins, and the period before renewal. The bartender could then verify from CP-MAC if a user is allowed to have a beer, and the order history should be kept to allow the BeerCoin supplier to later pay his bill.
+
+\subsection{Implementation}
+To implement the BeerCoin, the PoP-Tokens have been used, because, combined with the linkable ring signature, they fulfill all the above require\-ments. Here is the way BeerCoin works in CP-MAC: at first, a user has to create a bar. He can select the group of people which will get the BeerCoins. To simplify this process, CP-MAC will present every group of people from the PoP-Parties in which the user was involved. In fact, when a party gets finalized (let it be an attendee party or an organizer party), the final statement is added to a \textit{bank}\footnote{This \textit{bank} of final statements is in fact the singleton defined in \textbf{PoP.js}, which was already implemented.} of final statements. This way, the user can easily choose for which group he wants to pay the beers. He then chooses a time period and a name for his bar, which concludes the configuration of the bar.
+
+Right after the creation, the directory structure for a bar follows this schema :
+
+\begin{center}
+	\begin{minipage}[c]{0.5\textwidth}
+		\dirtree{%
+			.1 beercoin.
+			.2 RANDOM\_UUID\_1.
+			.3 bar\_config.json.
+			.3 final\_statements.json.
+			.3 checked\_clients.json.
+			.3 order\_history.json.
+			.2 RANDOM\_UUID\_2.
+			.3 ....
+		}
+	\end{minipage}
+\end{center}
+As we can tell from the \texttt{RANDOM\_UUID} entries, the structure follows the same name generation than a \textbf{Party}\footnote{please refer to point \ref{subsec:pop_mult_parties} for more details.}. Also, here is the usage of each file :
+\begin{description}
+	\item[bar\_config.json] stores the bar information described above. It also stores the beginning date of the last period. If the difference between the current date and the last reset date is bigger than the defined period for this bar, the list of already seen clients should be reset, and the beginning date updated to reflect the current period.
+	\item [final\_statements.json] stores the final statement linked to the party re\-presenting the group of people enjoying the BeerCoins. It will be used to verify the signatures of the clients.
+	\item[checked\_clients.json] contains the list of the already seen clients. Their tags are saved in this list (see point \ref{subsubsec:bar_client_verif} for detailed explanations).
+	\item[order\_history.json] contains the date of each order that still has to be paid. It can be emptied from the user interface, when all the beers have been paid.
+\end{description}
+
+\subsubsection{Client verification}
+\label{subsubsec:bar_client_verif}
+Once the bar is set up, the verification of a client is pretty straightforward: he first has to scan a QR Code containing the bar information, composed of a nonce and a linkage scope. The linkage scope must be unique for that period, as it will allow the bar to recognize if a client came twice in the same period. Hence, the linkage scope is generated as follows :
+\begin{gather}
+scope = bar\_name \Vert frequency \Vert year \Vert month \Vert day \\
+frequency \in \lbrace daily, weekly, monthly \rbrace \nonumber
+\end{gather}
+For example, a bar called Satellite that offers a free beer every day for its members would generate the linkage scope \textit{Satellitedaily201868}, assuming the current date is June 8th 2018. The client now signs the nonce with his private key and the linkage scope. The bartender scans a QR Code containing the signature, which is then verified using the final statement public keys as the group of anonymity. If the resulting tag is already in the list of checked clients or if the signature is not valid, the bar refuses the order. Otherwise, the tag is added to the checked clients list, and a new order is logged in the history.
+
+\subsection{Drawbacks and future work}
+One of the drawback of this system is the combination of ring signatures with QR Code. Indeed, as we have seen in the listing \ref{code:lstruct} (page \pageref{code:ustruct}), one of the array size in the signature is proportional to the number of public keys in the anonymity set. However, QR Code maximal capacity is $2954$ bytes\footnote{\url{http://www.qrcode.com/en/about/version.html}}, which could be exceeded depending on the number of member in the group.
+
+But is this limit really constraining ? Let's consider a real-world case: CP-MAC bar implementation use the \texttt{edwards25519} curve of KyberJS for the ring signatures. On it, points and scalars are marshaled to 32 bytes long arrays. Again, by referring to listing \ref{code:lstruct}, we can deduce the following inequality :
+
+\begin{align}
+	\label{eq:max_qr_pk}
+	32 + 32 + 32*n = 32 * n + 64 &\leq 2954 \\
+	\implies n &\leq 90.3125
+\end{align}
+where $n$ is the number of member in the anonymity set. 
+
+From (3) we get that the maximum size of an anonymity set is 90. In CP-MAC, this wouldn't really be an annoying boundary, however, in a real-world situation, this could cause troubles.
+
+A lot of new features could be thought for future work, such as integrating an in-app payment method, or even by allowing people to exchange BeerCoins as any other decentralized token. It could also be possible to work on the drawback explained above, for example by modifying the protocol and integrating a conode as intermediary. CP-MAC would then just serves as a control board, while all the signing processes and signature exchanges are done directly between the client and the conode.

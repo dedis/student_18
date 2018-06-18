@@ -1,0 +1,28 @@
+<Page
+        class="page"
+        loaded="onLoaded"
+        xmlns:nsListView="nativescript-ui-listview">
+
+    <ActionBar class="action-bar">
+        <NavigationButton text="Go Back" android:icon="res://ic_arrow_back" tap="goBack"/>
+        <Label class="action-bar-title" text="Proposals"/>
+    </ActionBar>
+
+    <GridLayout class="page-content" rows="*" columns="*">
+        <nsListView:RadListView items="{{ proposals }}" itemTap="proposalTapped" row="0" colSpan="3"
+                                id="listView">
+
+            <nsListView:RadListView.itemTemplate>
+                <GridLayout rows="auto, auto, auto" columns="*" backgroundColor="white"
+                            class="basic-list">
+                    <Label class="list-title" text="{{ name }}" row="0" col="0"
+                           textWrap="true"/>
+                    <Label text="{{ location }}" row="1" col="0" textWrap="true"/>
+                    <Label text="{{ dateTime }}" row="2" col="0" textWrap="true"/>
+                </GridLayout>
+            </nsListView:RadListView.itemTemplate>
+        </nsListView:RadListView>
+
+    </GridLayout>
+
+</Page>

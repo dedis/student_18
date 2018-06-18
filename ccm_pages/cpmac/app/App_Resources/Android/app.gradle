@@ -1,0 +1,27 @@
+// Add your native dependencies here:
+
+// Uncomment to add recyclerview-v7 dependency
+dependencies {
+  compile 'com.android.support:recyclerview-v7:22.2.0'
+}
+
+android {
+  defaultConfig {
+    generatedDensities = []
+    applicationId = "org.nativescript.cpmac"
+
+    //override supported platforms
+    // ndk {
+    //       abiFilters.clear()
+    //   		abiFilters "armeabi-v7a"
+ 		// }
+
+  }
+  aaptOptions {
+    additionalParameters "--no-version-vectors"
+  }
+}
+
+configurations {
+    compile.exclude group: 'com.google.zxing'
+}

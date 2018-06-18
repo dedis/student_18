@@ -1,0 +1,17 @@
+{
+  "list": [
+    {
+      "public": "yUZ3HWYGTCHjAayEloE8hH6OA70WvAv8otmqbqq4Np0=",
+      "id": "n9PVfg7aVduq4bGckJPBFQ==",
+      "address": "tls://cothority.net:7002",
+      "description": "Conode_1"
+    },
+    {
+      "public": "hwXtb0R2U5saFEIYD59A1iSPKflpLQuMHiBgp8snL6Q=",
+      "id": "Xwg8BRsHWjmW7xk8KXr1mQ==",
+      "address": "tls://cothority.net:7004",
+      "description": "Conode_2"
+    }
+  ],
+  "aggregate": "q+G+7n6FXsY7hpxK3m119GuDHnchS6wqTE0sZE/fOKg="
+}

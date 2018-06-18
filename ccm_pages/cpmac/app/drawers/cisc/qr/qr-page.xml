@@ -1,0 +1,17 @@
+<Page
+        class="page"
+        loaded="onLoaded">
+
+    <ActionBar class="action-bar">
+        <Label class="action-bar-title" text="Organizer"/>
+    </ActionBar>
+
+    <StackLayout class="page-content" orientation="vertical">
+        <GridLayout class="page-content" rows="*,*,auto" columns="*">
+            <Image id="image" stretch="aspectFit" row="0" visibility="{{ isConnected ? 'visible' : 'collapsed' }}"/>
+            <Label class="label-title" id="label" row="1" textWrap="true" visibility="{{ isConnected ? 'visible' : 'collapsed' }}"/>
+            <Button text="reload image" tap="updateImage" row="2"/>
+        </GridLayout>
+    </StackLayout>
+
+</Page>

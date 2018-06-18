@@ -1,0 +1,35 @@
+*.DS_Store
+.idea/
+.vscode/
+node_modules/
+cpmac/.vscode/
+cpmac/.nsbuildinfo
+cpmac/hooks/
+cpmac/platforms/
+cpmac/package-lock.json
+## Core latex/pdflatex auxiliary files:
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+.*.lb
+## Intermediate documents:
+*.dvi
+*.xdv
+*-converted-to.*
+## Bibliography auxiliary files (bibtex/biblatex/biber):
+*.bbl
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+*.run.xml
+# listings
+*.lol
