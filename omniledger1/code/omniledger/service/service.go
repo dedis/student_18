@@ -244,7 +244,7 @@ func (s *Service) verifyClientTx(scID skipchain.SkipBlockID, tx ClientTransactio
 func (s *Service) verifyInstruction(scID skipchain.SkipBlockID, instr Instruction) error {
 	d, err := s.loadLatestDarc(scID, instr.ObjectID.DarcID)
 	if err != nil {
-		return err
+		return errors.New("darc not found: " + err.Error())
 	}
 	req, err := instr.ToDarcRequest()
 	if err != nil {

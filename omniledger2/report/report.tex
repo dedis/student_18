@@ -100,7 +100,7 @@ More specifically, the protocol uses four messages in two round-trip, starting a
 \end{enumerate}
 Lastly, the aggregated responses and the aggregated commitments are used to sign the proposal.
 
-This protocol therefore returns a global signature, insuring that a certain number of nodes have validated a proposal.
+This protocol returns a global signature, insuring that a certain number of nodes have validated a proposal.
 
 \subsubsection{ByzcoinX}
 \label{ByzcoinX}
@@ -112,7 +112,7 @@ The first task, once the collection structure was understood and its inner worki
 
 Then the code was cleaned by making it compliant to Go Lint\cite{Golint}, Go fmt\cite{gofmt} and using a standardised naming convention. Those operations are detailed in the next paragraph.
 
-Golint is a linter for the Go language that flags potential errors of coding style. It is used by most of DEDIS projects. Golint flagged numerous coding style errors in the code. The most common ones were putting \textit{else} keyword after a terminating \textit{if} condition, use of reserved keywords and incorrect formatting of error messages. Go fmt automatically formatted the code to use the canonical Go style. Finally, names were modified to use camel case and some variables names were simplified. All those changes insured a greater readability of the code therefore facilitating review and work of other persons on the code.
+Golint is a linter for the Go language that flags potential errors of coding style. It is used by most of DEDIS projects. Golint flagged numerous coding style errors in the code. The most common ones were putting \textit{else} keyword after a terminating \textit{if} condition, use of reserved keywords and incorrect formatting of error messages. Go fmt automatically formatted the code to use the canonical Go style. Finally, names were modified to use camel case and some variables names were simplified. All those changes insured a greater readability of the code facilitating review and work of other persons on the code.
 
 \subsubsection{Hashing}
 The collection library, before the project, was using its own implementation of concatenation and hashing, using around 400 lines of code. The decision was made to use known libraries instead. Most precisely Protobuf \cite{protobuf} and sha256 libraries. This decision was made because:
@@ -164,7 +164,7 @@ The second added protection is insuring that the ByzcoinX protocol is now launch
 Finally, multiple additional checks are done all along the ByzcoinX process to insure that a faulty state does not propagate further. For example, the number of commitment and refusals received is checked to insure that it is always below the number of witnesses a nodes is responsible for. Another example is the threshold that is checked in every step to insure a correct quick answer behaviour, and adversary node or interception protection.
 
 \subsection{Unit tests and documentation}
-Since the purpose of the whole project was to have a code base that is easily reusable, the whole project was made with a strong emphasis on documentation, unit testing and code readability. Therefore, every public method was documented with the latest changes and unit tests were updated.
+Since the purpose of the whole project was to have a code base that is easily reusable, the whole project was made with a strong emphasis on documentation, unit testing and code readability. Every public method was documented with the latest changes and unit tests were updated.
 
 We should note that even though unit testing can be quite extensive, unit tests can always be added. Moreover, having lots of unit tests does not guarantee a bug-free code as real-life conditions can be quite different than planned scenarios. Nevertheless, Unit tests allowed a big reduction in the number of bugs in the code.
 
@@ -172,7 +172,7 @@ We should note that even though unit testing can be quite extensive, unit tests 
 
 To analyse the performance gained by using the quick answer paradigm for ByzcoinX, a performance test was created. The simulation was launched with a basis of 50 nodes and 6 subtrees (6 subleaders), using the Omniledger default leafs timeout of 417ms. We intentionally keep the number of machines to 50 to avoid any overhead by the testbed limitation. The threshold used is the default Omniledger threshold of two thirds, which implies a threshold of $ {\lceil 50 \cdot 2/3\rceil} = 34$ nodes. To get a better approximation, the result is the average of 10 tests. The network delay are of 0ms. Adding a network delay will add a constant time to every value as the number of network link is always the same. 
 
-We then vary the number of failing nodes between $0, 1, 2, 5, 10, 11 \text{ and } 16$ (16 being the maximum allowing us to reach the threshold). The running time is measured from the start signal of ByzcoinX to the final signature sending.
+We then vary the number of failing nodes between $0 \text{ to } 16$ (16 being the maximum still allowing us to reach the threshold). The running time is measured from the start signal of ByzcoinX to the final signature sending.
 \begin{figure}
  \centering
   \includegraphics[width=\textwidth]{time_ByzcoinX.png}
@@ -180,11 +180,19 @@ We then vary the number of failing nodes between $0, 1, 2, 5, 10, 11 \text{ and 
   \label{fig:performance}
 \end{figure}
 
-We can see in Figure~\ref{fig:performance}, that in the naive ByzcoinX, as soon as one node is failing, the whole process is capped by the leafs timeout. Then, no matter how many failing nodes there is, the time is always similar, that is limited by the timeout. This is consistent with the result obtained in the CoSi implementation paper\cite{CoSi_implementation}.
+We can see in Figure~\ref{fig:performance} that in the naive ByzcoinX, as soon as one node is failing, the whole process is capped by the leafs timeout. Then, no matter how many failing nodes there is, the time is always similar, that is limited by the timeout. This is consistent with the result obtained in the CoSi implementation paper\cite{CoSi_implementation}.
 
-The optimised ByzcoinX has approximately the same running time as the naive version when every node is succeeding. However, if one node fails, the performances are not impacted. Indeed, the threshold is reached before getting a timeout from the failing node. This short running time is present until approximately $20\%$ of nodes are failing. At that point, the quick answers are barely not able to reach the threshold anymore. Therefore the algorithm waits for the timeout.
+The optimised ByzcoinX protocol was analysed using two different way of selecting the failing nodes. "Fixed Optimised ByzcoinX" represents the case where failing nodes are chosen deterministically, that is always the same throughout the runs. "Random Optimised ByzcoinX" represents nodes chosen randomly at each run.
 
-The switching point between short running time and long running time for the optimised version is not exactly at the threshold. That is because the failing nodes are not spread evenly among branches. Therefore, we will almost never be in the optimal case where every subleader just reaches the threshold. That is why the switching point will in practice always be a little less than the threshold.
+The optimised ByzcoinX has approximately the same running time as the naive version when every node is succeeding. However, if one node fails, the performances are not impacted. Indeed, the threshold is reached before getting a timeout from the failing node.
+
+When the failing nodes are fixed, this short running time is present until approximately $20\%$ of nodes are failing. At that point, the quick answers are barely not able to reach the threshold anymore, making the algorithm wait for the timeout. The switching point between short running time and long running time for the optimised version is not exactly at the threshold. That is because, as in the real case, the failing nodes are not spread evenly among branches. Therefore, we will almost never be in the optimal case where every subleader just reaches the threshold. That is why the switching point will in practise always be a little less than the threshold.
+
+Every individual runtime of the simulation was either in the range $[55,85]$ or in the range $[425,480]$. In "Random Optimised ByzcoinX", some points are in-between. Those points are an average of both those cases on multiple runs. Note that because of this, the simulation was run 70 times for this version, to average the randomness.
+
+The "Random Optimised ByzcoinX" graph represents the expected time of the optimised algorithm. We observe that already at $12\%$ of failing nodes, the process sometimes fails to reach the threshold. Those failing cases are the rare cases where almost every failing nodes are on the same branch, making one branch fail to reach the quick threshold. The chance of not reaching the threshold then increase up to around $25\%$ of failing nodes, where we are almost sure to fail to reach the threshold every time.
+
+Since, in the practical case with thousands of nodes, we can expect between $2\%$ and $10\%$ of failing nodes, the quick answer optimisation brings a significant time reduction to the ByzcoinX running time.
 
 \section{Future work}
 \label{future_works}
