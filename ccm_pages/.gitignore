@@ -23,7 +23,6 @@ cpmac/package-lock.json
 ## Intermediate documents:
 *.dvi
 *.xdv
-*-converted-to.*
 ## Bibliography auxiliary files (bibtex/biblatex/biber):
 *.bbl
 *.bcf
