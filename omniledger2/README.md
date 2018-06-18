@@ -15,5 +15,5 @@ The next section will present Omniledger, the blockchain for which all of those 
 - [Report](report-2018_1-raphael_dunant-omniledger.pdf)
 - [Presentation](presentation-2018_1-raphael_dunant-omniledger.pdf)
 - Code
-  - [Collection](../omniledger1/code/omniledger)
+  - [Collection](../omniledger1/code/omniledger/collection)
   - [FTCoSi](https://github.com/dedis/cothority/tree/master/ftcosi)
