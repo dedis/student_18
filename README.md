@@ -21,5 +21,6 @@ be included in this repo and the original repos will be deleted.
 | Name | Project |
 | -- | -- |
 | | [Decentralized Web Archive](https://github.com/dedis/student_18_decenar) |
+| [Christopher Benz](mailto:christopher.benz@epfl.ch) | [BLS ByzCoin](bls_byzcoin) |
 
 ## Interns
