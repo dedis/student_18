@@ -1,0 +1,194 @@
+{
+  "array": [
+    {
+      "desc": {
+        "name": "Ced's Gang",
+        "datetime": "Thu, 30 Nov 2017 11:12:00 GMT",
+        "location": "INM, Lausanne",
+        "roster": {
+          "id": "AAAAAAAAAAAAAAAAAAAAAA==",
+          "list": [
+            {
+              "public": "HkDzpR5Imd7WNx8kl2lJcIVRVn8gfDByJnmlfrYh/zU=",
+              "id": "z6kCTQ77Xna9yfgKka5lNQ==",
+              "address": "tls://127.0.0.1:7002",
+              "description": "Conode_1"
+            },
+            {
+              "public": "Fx6zzvJM6VzxfByLY2+uArGPtd2lHKPVmoXGMhdaFCA=",
+              "id": "Qd8XkrUlVEeClO9I95nklQ==",
+              "address": "tls://127.0.0.1:7004",
+              "description": "Conode_2"
+            },
+            {
+              "public": "j53MMKZNdtLlglcK9Ct1YYtkbbEOfq3R8ZoJOFIu6tE=",
+              "id": "tUq+0651WRaAI4aTQC0d8w==",
+              "address": "tls://127.0.0.1:7006",
+              "description": "Conode_3"
+            }
+          ],
+          "aggregate": "q+G+7n6FXsY7hpxK3m119GuDHnchS6wqTE0sZE/fOKg="
+        }
+      },
+      "attendees": [
+        "HkDzpR5Imd7WNx8kl2lJcIVRVn8gfDByJnmlfrYh/zU=",
+        "Fx6zzvJM6VzxfByLY2+uArGPtd2lHKPVmoXGMhdaFCA=",
+        "j53MMKZNdtLlglcK9Ct1YYtkbbEOfq3R8ZoJOFIu6tE="
+      ],
+      "signature": "0b5LNb0LyiEZXHIwEnbpHAVzNh5mqe3utaXtTrYePAUSj4KfwZ6Chp7T9p7qLvxRnjWkGUJZvUUQ+dORw1AsAg==",
+      "merged": false
+    },
+    {
+      "desc": {
+        "name": "Ced's Gang",
+        "datetime": "Thu, 30 Nov 2017 11:12:00 GMT",
+        "location": "INM, Lausanne",
+        "roster": {
+          "id": "AAAAAAAAAAAAAAAAAAAAAA==",
+          "list": [
+            {
+              "public": "HkDzpR5Imd7WNx8kl2lJcIVRVn8gfDByJnmlfrYh/zU=",
+              "id": "z6kCTQ77Xna9yfgKka5lNQ==",
+              "address": "tls://127.0.0.1:7002",
+              "description": "Conode_1"
+            },
+            {
+              "public": "Fx6zzvJM6VzxfByLY2+uArGPtd2lHKPVmoXGMhdaFCA=",
+              "id": "Qd8XkrUlVEeClO9I95nklQ==",
+              "address": "tls://127.0.0.1:7004",
+              "description": "Conode_2"
+            },
+            {
+              "public": "j53MMKZNdtLlglcK9Ct1YYtkbbEOfq3R8ZoJOFIu6tE=",
+              "id": "tUq+0651WRaAI4aTQC0d8w==",
+              "address": "tls://127.0.0.1:7006",
+              "description": "Conode_3"
+            }
+          ],
+          "aggregate": "q+G+7n6FXsY7hpxK3m119GuDHnchS6wqTE0sZE/fOKg="
+        }
+      },
+      "attendees": [
+        "HkDzpR5Imd7WNx8kl2lJcIVRVn8gfDByJnmlfrYh/zU=",
+        "Fx6zzvJM6VzxfByLY2+uArGPtd2lHKPVmoXGMhdaFCA=",
+        "j53MMKZNdtLlglcK9Ct1YYtkbbEOfq3R8ZoJOFIu6tE="
+      ],
+      "signature": "0b5LNb0LyiEZXHIwEnbpHAVzNh5mqe3utaXtTrYePAUSj4KfwZ6Chp7T9p7qLvxRnjWkGUJZvUUQ+dORw1AsAg==",
+      "merged": false
+    },
+    {
+      "desc": {
+        "name": "Ced's Gang",
+        "datetime": "Thu, 30 Nov 2017 11:12:00 GMT",
+        "location": "INM, Lausanne",
+        "roster": {
+          "id": "AAAAAAAAAAAAAAAAAAAAAA==",
+          "list": [
+            {
+              "public": "HkDzpR5Imd7WNx8kl2lJcIVRVn8gfDByJnmlfrYh/zU=",
+              "id": "z6kCTQ77Xna9yfgKka5lNQ==",
+              "address": "tls://127.0.0.1:7002",
+              "description": "Conode_1"
+            },
+            {
+              "public": "Fx6zzvJM6VzxfByLY2+uArGPtd2lHKPVmoXGMhdaFCA=",
+              "id": "Qd8XkrUlVEeClO9I95nklQ==",
+              "address": "tls://127.0.0.1:7004",
+              "description": "Conode_2"
+            },
+            {
+              "public": "j53MMKZNdtLlglcK9Ct1YYtkbbEOfq3R8ZoJOFIu6tE=",
+              "id": "tUq+0651WRaAI4aTQC0d8w==",
+              "address": "tls://127.0.0.1:7006",
+              "description": "Conode_3"
+            }
+          ],
+          "aggregate": "q+G+7n6FXsY7hpxK3m119GuDHnchS6wqTE0sZE/fOKg="
+        }
+      },
+      "attendees": [
+        "HkDzpR5Imd7WNx8kl2lJcIVRVn8gfDByJnmlfrYh/zU=",
+        "Fx6zzvJM6VzxfByLY2+uArGPtd2lHKPVmoXGMhdaFCA=",
+        "j53MMKZNdtLlglcK9Ct1YYtkbbEOfq3R8ZoJOFIu6tE="
+      ],
+      "signature": "0b5LNb0LyiEZXHIwEnbpHAVzNh5mqe3utaXtTrYePAUSj4KfwZ6Chp7T9p7qLvxRnjWkGUJZvUUQ+dORw1AsAg==",
+      "merged": false
+    },
+    {
+      "desc": {
+        "name": "Ced's Gang",
+        "datetime": "Thu, 30 Nov 2017 11:12:00 GMT",
+        "location": "INM, Lausanne",
+        "roster": {
+          "id": "AAAAAAAAAAAAAAAAAAAAAA==",
+          "list": [
+            {
+              "public": "HkDzpR5Imd7WNx8kl2lJcIVRVn8gfDByJnmlfrYh/zU=",
+              "id": "z6kCTQ77Xna9yfgKka5lNQ==",
+              "address": "tls://127.0.0.1:7002",
+              "description": "Conode_1"
+            },
+            {
+              "public": "Fx6zzvJM6VzxfByLY2+uArGPtd2lHKPVmoXGMhdaFCA=",
+              "id": "Qd8XkrUlVEeClO9I95nklQ==",
+              "address": "tls://127.0.0.1:7004",
+              "description": "Conode_2"
+            },
+            {
+              "public": "j53MMKZNdtLlglcK9Ct1YYtkbbEOfq3R8ZoJOFIu6tE=",
+              "id": "tUq+0651WRaAI4aTQC0d8w==",
+              "address": "tls://127.0.0.1:7006",
+              "description": "Conode_3"
+            }
+          ],
+          "aggregate": "q+G+7n6FXsY7hpxK3m119GuDHnchS6wqTE0sZE/fOKg="
+        }
+      },
+      "attendees": [
+        "HkDzpR5Imd7WNx8kl2lJcIVRVn8gfDByJnmlfrYh/zU=",
+        "Fx6zzvJM6VzxfByLY2+uArGPtd2lHKPVmoXGMhdaFCA=",
+        "j53MMKZNdtLlglcK9Ct1YYtkbbEOfq3R8ZoJOFIu6tE="
+      ],
+      "signature": "0b5LNb0LyiEZXHIwEnbpHAVzNh5mqe3utaXtTrYePAUSj4KfwZ6Chp7T9p7qLvxRnjWkGUJZvUUQ+dORw1AsAg==",
+      "merged": false
+    },
+    {
+      "desc": {
+        "name": "Ced's Gang",
+        "datetime": "Thu, 30 Nov 2017 11:12:00 GMT",
+        "location": "INM, Lausanne",
+        "roster": {
+          "id": "AAAAAAAAAAAAAAAAAAAAAA==",
+          "list": [
+            {
+              "public": "HkDzpR5Imd7WNx8kl2lJcIVRVn8gfDByJnmlfrYh/zU=",
+              "id": "z6kCTQ77Xna9yfgKka5lNQ==",
+              "address": "tls://127.0.0.1:7002",
+              "description": "Conode_1"
+            },
+            {
+              "public": "Fx6zzvJM6VzxfByLY2+uArGPtd2lHKPVmoXGMhdaFCA=",
+              "id": "Qd8XkrUlVEeClO9I95nklQ==",
+              "address": "tls://127.0.0.1:7004",
+              "description": "Conode_2"
+            },
+            {
+              "public": "j53MMKZNdtLlglcK9Ct1YYtkbbEOfq3R8ZoJOFIu6tE=",
+              "id": "tUq+0651WRaAI4aTQC0d8w==",
+              "address": "tls://127.0.0.1:7006",
+              "description": "Conode_3"
+            }
+          ],
+          "aggregate": "q+G+7n6FXsY7hpxK3m119GuDHnchS6wqTE0sZE/fOKg="
+        }
+      },
+      "attendees": [
+        "HkDzpR5Imd7WNx8kl2lJcIVRVn8gfDByJnmlfrYh/zU=",
+        "Fx6zzvJM6VzxfByLY2+uArGPtd2lHKPVmoXGMhdaFCA=",
+        "j53MMKZNdtLlglcK9Ct1YYtkbbEOfq3R8ZoJOFIu6tE="
+      ],
+      "signature": "0b5LNb0LyiEZXHIwEnbpHAVzNh5mqe3utaXtTrYePAUSj4KfwZ6Chp7T9p7qLvxRnjWkGUJZvUUQ+dORw1AsAg==",
+      "merged": false
+    }
+  ]
+}

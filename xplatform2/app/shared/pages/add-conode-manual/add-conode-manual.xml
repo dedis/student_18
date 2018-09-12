@@ -1,0 +1,37 @@
+<Page
+        class="page"
+        loaded="onLoaded"
+        shownModally="onShownModally">
+
+    <ActionBar class="action-bar">
+        <Label class="action-bar-title" text="Add Conode Manually"/>
+    </ActionBar>
+
+    <GridLayout class="page-content" rows="*" columns="*"
+                backgroundColor="{{ isLoading ?  'black' : ''}}"
+                opacity="{{ isLoading ? '0.5' : '1' }}">
+        <GridLayout rows="*, auto,auto,*,auto" columns="*,*" visibility="{{ isLoading ? 'hidden' : 'visible' }}">
+
+            <Label row="0" colSpan="2"/>
+
+            <Label class="label-title" text="Conode Address" row="1" colSpan="2"/>
+            <TextField class="text-field" hint="127.0.0.1:7002" autocorrect="false"
+                       autocapitalizationType="none"
+                       returnKeyType="next"
+                       row="2"
+                       colSpan="2"
+                       id="text-view-conode-address"/>
+
+            <Label row="3" colSpan="2"/>
+
+            <Button text="Add" tap="addManual" row="4" col="0"/>
+            <Button text="Cancel" tap="onCancel" row="4" col="1"/>
+        </GridLayout>
+
+        <StackLayout width="50" height="50">
+            <ActivityIndicator busy="{{ isLoading }}" verticalAlignment="center" width="50" height="50"/>
+        </StackLayout>
+
+    </GridLayout>
+
+</Page>

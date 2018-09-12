@@ -1,0 +1,14 @@
+This patch allows to correcly run nativescript-websockets on Android. Without this patch,
+the same objects are referenced when passed to this._socket.send, thus the websocket resend
+previous messages.
+
+--- node_modules/nativescript-websockets/websockets.ios.js	2018-08-13 10:31:03.000000000 +0200
++++ node_modules/nativescript-websockets/websockets.ios.js	2018-08-13 10:31:31.000000000 +0200
+@@ -305,6 +305,7 @@
+  * @returns {boolean} - returns false if it is unable to send the message at this time, it will queue them up and try later...
+  */
+ NativeWebSockets.prototype.send = function(message) {
++    message = message.slice(0);
+     var state = this.state();
+ 
+     // If we have a queue, we need to start processing it...

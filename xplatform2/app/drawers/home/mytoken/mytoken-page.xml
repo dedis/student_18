@@ -1,0 +1,32 @@
+<Page
+        class="page"
+        loaded="onLoaded"
+        xmlns:nsListView="nativescript-ui-listview">
+
+    <ActionBar class="action-bar">
+        <Label class="action-bar-title" text="PoP"/>
+    </ActionBar>
+
+    <GridLayout class="page-content" rows="*" columns="*">
+
+        <Label text="You don't have any PoP-Tokens. Attend or organize a party to generate some !"
+               textWrap="true"
+               class="empty-list-label"
+               visibility="{{ isPopTokenEmpty ? 'visible' : 'collapsed' }}"
+        />
+
+        <nsListView:RadListView items="{{ popToken }}" itemTap="popTokenTapped"
+                                id="list-view-pop-token">
+
+            <nsListView:RadListView.itemTemplate>
+                <GridLayout id="grid-layout-pop-token" rows="*,*,*,*,auto" columns="*" class="basic-list-decorated">
+                    <Label text="{{ final.desc.name }}" class="list-title" row="0" textWrap="true"/>
+                    <Label text="{{ final.desc.datetime }}" row="1" textWrap="true"/>
+                    <Label text="{{ final.desc.location }}" row="2" textWrap="true"/>
+                </GridLayout>
+            </nsListView:RadListView.itemTemplate>
+        </nsListView:RadListView>
+
+    </GridLayout>
+
+</Page>

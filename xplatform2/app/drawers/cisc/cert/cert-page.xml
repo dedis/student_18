@@ -1,0 +1,34 @@
+<Page
+        class="page"
+        loaded="onLoaded"
+        xmlns="http://www.nativescript.org/tns.xsd"
+        xmlns:nsDrawer="nativescript-ui-sidedrawer"
+        xmlns:myDrawer="shared/my-drawer"
+        xmlns:nsListView="nativescript-ui-listview">
+
+    <ActionBar class="action-bar">
+        <Label class="action-bar-title" text="Organizer"/>
+    </ActionBar>
+
+    <StackLayout>
+        <Label class="label-title" text="Certificates stored" />
+        <GridLayout class="page-content" rows="*,auto" columns="*,*,auto">
+
+            <nsListView:RadListView items="{{ certList }}" row="0" colSpan="3" itemTap="certTapped"
+                                    itemSwipeProgressStarted="onSwipeCellStarted"
+                                    swipeActions="true"
+                                    id="listView">
+                <nsListView:RadListView.itemTemplate>
+                    <GridLayout rows="*" columns="*, auto" backgroundColor="white" class="basic-list-decorated">
+                        <Label class="list-title" text="{{ certKey }}" row="0" col="0" textWrap="true"/>
+                    </GridLayout>
+                </nsListView:RadListView.itemTemplate>
+            </nsListView:RadListView>
+
+            <StackLayout row="1" colSpan="3">
+                <Button text="Reload" tap="loadCert"/>
+            </StackLayout>
+
+        </GridLayout>
+    </StackLayout>
+</Page>

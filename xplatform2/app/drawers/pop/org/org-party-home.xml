@@ -1,0 +1,61 @@
+<Page
+        class="page"
+        loaded="onLoaded">
+
+    <ActionBar class="action-bar">
+        <Label class="action-bar-title" text="Organizer"/>
+    </ActionBar>
+
+    <GridLayout class="page-content" rows="auto,auto,auto,auto,auto,auto,auto,*,auto,auto,auto" columns="*,auto,auto,*">
+        <Label class="label-title" text="Linked Conode" row="0" colSpan="4"/>
+
+        <Label class="label-text" text="Description" row="1" col="0"/>
+        <Label class="label-space" text=" - " row="1" col="1" colSpan="2"/>
+        <TextField class="text-field" text="{{ linkedConode.description }}" hint="description" editable="false"
+                   row="1"
+                   col="3"
+                   id="text-field-description"/>
+
+        <Label class="label-text" text="Address" row="2" col="0"/>
+        <Label class="label-space" text=" - " row="2" col="1" colSpan="2"/>
+        <TextField class="text-field" text="{{ linkedConode.address }}" hint="address" editable="false"
+                   row="2"
+                   col="3"
+                   id="text-field-address"/>
+
+        <Label class="label-text" text="Id" row="3" col="0"/>
+        <Label class="label-space" text=" - " row="3" col="1" colSpan="2"/>
+        <TextField class="text-field" text="{{ toHex(linkedConode.id) }}" hint="id" editable="false"
+                   row="3"
+                   col="3"
+                   id="text-field-id"/>
+
+        <Label class="label-text" text="Public" row="4" col="0"/>
+        <Label class="label-space" text=" - " row="4" col="1" colSpan="2"/>
+        <TextField class="text-field" text="{{ toHex(linkedConode.public) }}" hint="public" editable="false"
+                   row="4"
+                   col="3"
+                   id="text-field-public"/>
+
+        <Label class="label-title" text="PoP Description Hash" row="5" colSpan="4"/>
+
+        <Label class="label-text" text="Hash" row="6" col="0"/>
+        <Label class="label-space" text=" - " row="6" col="1" colSpan="2"/>
+        <TextField class="text-field" text="{{ toHex(hash.hash) }}" hint="hash" editable="false"
+                   row="6"
+                   col="3"
+                   id="text-field-hash"/>
+
+        <StackLayout row="7"></StackLayout>
+
+        <Button text="Link to Conode" tap="linkToConode" row="8" colSpan="4"/>
+
+        <Button text="Configuration" tap="configButtonTapped" row="9" col="0" colSpan="2"/>
+        <Button text="Register Attendees" tap="registerButtonTapped" row="9" col="2" colSpan="2"/>
+
+        <Button text="Fetch PoP Party" tap="fetchButtonTapped" row="10" col="0" colSpan="2"/>
+        <Button text="Remove PoP Party" tap="removeButtonTapped" row="10" col="2" colSpan="2"/>
+
+    </GridLayout>
+
+</Page>

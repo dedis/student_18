@@ -1,0 +1,14 @@
+<Page
+        class="page"
+        loaded="onLoaded">
+
+    <ActionBar class="action-bar">
+        <Label class="action-bar-title" text="Organizer"/>
+    </ActionBar>
+
+    <StackLayout class="page-content" orientation="vertical">
+        <Label class="label-title" text="Add a key value pair"/>
+        <Button text="Add a Key Value pair" tap="addKeyValue"/>
+    </StackLayout>
+
+</Page>

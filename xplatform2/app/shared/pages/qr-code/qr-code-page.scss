@@ -1,0 +1,55 @@
+@import '../../../app-variables';
+@import '../../../app.scss';
+
+$box-height : 65%;
+$box-width : 85%;
+$box-border-radius : 40;
+$text-box-height : 10%;
+
+.nav-buttons {
+    @extend .fas;
+    font-size: 25;
+    font-weight: light;
+}
+
+.page-content {
+    background-color: $accent-light;
+}
+
+Label {
+    color: "white"
+}
+
+GridLayout {
+    padding: 10;
+    background-color: $accent-light;
+}
+
+#image {
+    background-color: white;
+    border-radius: $box-border-radius;
+    height: $box-height;
+    width: $box-width;
+}
+
+#scan-me {
+    color: white;
+    background-color: $accent-dark;
+    font-size: 36;
+    width: 85%;
+    height: $text-box-height;
+    line-height : $text-box-height;
+    border-top-left-radius: $box-border-radius;
+    border-top-right-radius: $box-border-radius;
+    text-align: center;
+    vertical-align: top;
+    margin-top: (100% - $box-height) / 4;
+}
+
+#page-name {
+    vertical-align: center;
+    color: white;
+    font-size: 20;
+    width: 100%;
+    text-align: center;
+}

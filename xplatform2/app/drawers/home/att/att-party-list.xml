@@ -1,0 +1,75 @@
+<Page
+        class="page"
+        loaded="onLoaded"
+        unloaded="onUnloaded"
+        navigatingTo="onNavigatingTo"
+        xmlns:nsListView="nativescript-ui-listview"
+        xmlns:nsFloatingButton="nativescript-floatingactionbutton"
+        xmlns="http://www.nativescript.org/tns.xsd">
+
+    <GridLayout class="page-content" rows="*" columns="*,*,auto">
+        <Label text="You don't have any party. Find an organizer to join parties !"
+               textWrap="true"
+               class="empty-list-label"
+               colSpan="3"
+               visibility="{{ isEmpty ? 'visible' : 'collapse' }}"
+        />
+
+
+
+        <nsListView:RadListView items="{{ partyListDescriptions }}" itemTap="partyTapped" row="0" colSpan="3"
+
+                                id="listView">
+
+            <nsListView:RadListView.itemTemplate>
+                <GridLayout id="grid-layout" rows="*,*,*,*,auto" columns="*, auto" backgroundColor="white" class="basic-list-decorated">
+                    <StackLayout >
+                    <Label text="{{ desc.name }}" class="list-title" row="0" col ="0" textWrap="true" textTransform="capitalize"/>
+                    <Label text="{{ desc.dateTime }}" row="1" rowSpan="2" col ="0" textWrap="true" fontSize="15%"/>
+                    <Label text="{{ desc.location }}" row="2" col ="0" textWrap="true" fontSize="15%" textTransform="capitalize"/>
+                        <Label text="Organizers :" row ="3" col="0"  textWrap="true" fontSize="15%" visibility ="{{ status.status !=='poptoken' ? 'visible' : 'collapse'}}"  />
+                        <GridLayout visibility ="{{ status.status !=='poptoken' ? 'visible' : 'collapse'}}" >
+                     <!--
+                        <nsListView:RadListView items="{{ desc.roster.list }}" id="list-view-conodes" paddingLeft="20%" >
+
+
+                            <nsListView:RadListView.itemTemplate>
+                                <GridLayout class="grid-list">
+                                    <Label class="grid-list-text" text="{{ description }}"  textWrap="false" width="20%" height="10%" stretch="aspectFill"  />
+                              </GridLayout>
+                            </nsListView:RadListView.itemTemplate>
+
+                        </nsListView:RadListView>
+                        -->
+                            <Repeater  items="{{ desc.roster.list }}" id="repeater">
+                                <Repeater.itemsLayout>
+                                    <StackLayout orientation="vertical" />
+                                </Repeater.itemsLayout>
+                                <Repeater.itemTemplate>
+                                    <Label text="{{ description }}" margin="10" visibility="visible"/>
+                                </Repeater.itemTemplate>
+                            </Repeater>
+                    </GridLayout>
+                    </StackLayout>
+                    <StackLayout class="status-text" paddingTop="100%" paddingRight="20%" >
+                    <Image src = "{{ (status.qrcode === undefined)? status.qrcode : status.qrcode }} " visibility ="{{ status.status !=='poptoken' ? 'visible' : 'collapse'}}" width="40%" height="40%" stretch="aspectFill"  />
+                    <Label text="{{ status.status }}"  visibility ="{{ status.status !=='poptoken' ? 'visible' : 'collapse'}}" row ="3" col="0"  textWrap="true" paddingLeft="30%" paddingRight="40%" stretch="aspectFill" textTransform="uppercase"/>
+                     <Label text="{{ status.status }}"  visibility ="{{ status.status =='poptoken' ? 'visible' : 'collapse'}}" row ="3" col="0"  textWrap="true" paddingTop="10%" stretch="aspectFill" textTransform="uppercase"/>
+
+                    </StackLayout>
+                </GridLayout>
+
+
+            </nsListView:RadListView.itemTemplate>
+        </nsListView:RadListView>
+
+
+        <nsFloatingButton:fab tap="addParty"
+                              row="0" col="3"
+                              icon="res://ic_add_white_48dp"
+                              rippleColor="#f1f1f1"
+                              class="fab-button"/>
+
+        <ActivityIndicator busy="{{ isLoading }}" rowSpan="1" colSpan="2"/>
+    </GridLayout>
+</Page>

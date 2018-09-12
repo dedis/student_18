@@ -1,0 +1,200 @@
+diff -r -u platforms/ios-before/Pods/Pods.xcodeproj/xcuserdata/jallen.xcuserdatad/xcschemes/MNFloatingActionButton-MNFloatingActionButton.xcscheme platforms/ios/Pods/Pods.xcodeproj/xcuserdata/jallen.xcuserdatad/xcschemes/MNFloatingActionButton-MNFloatingActionButton.xcscheme
+--- platforms/ios-before/Pods/Pods.xcodeproj/xcuserdata/jallen.xcuserdatad/xcschemes/MNFloatingActionButton-MNFloatingActionButton.xcscheme	2018-08-21 09:15:03.000000000 +0200
++++ platforms/ios/Pods/Pods.xcodeproj/xcuserdata/jallen.xcuserdatad/xcschemes/MNFloatingActionButton-MNFloatingActionButton.xcscheme	2018-08-21 09:15:10.000000000 +0200
+@@ -7,30 +7,33 @@
+       buildImplicitDependencies = "YES">
+       <BuildActionEntries>
+          <BuildActionEntry
+-            buildForAnalyzing = "YES"
+             buildForTesting = "YES"
+             buildForRunning = "YES"
+             buildForProfiling = "YES"
+-            buildForArchiving = "YES">
++            buildForArchiving = "YES"
++            buildForAnalyzing = "YES">
+             <BuildableReference
+                BuildableIdentifier = "primary"
+                BlueprintIdentifier = "39A11A976966EDC0EAB4497393EC65D5"
++               BuildableName = "MNFloatingActionButton.bundle"
+                BlueprintName = "MNFloatingActionButton-MNFloatingActionButton"
+-               ReferencedContainer = "container:Pods.xcodeproj"
+-               BuildableName = "MNFloatingActionButton-MNFloatingActionButton.bundle">
++               ReferencedContainer = "container:Pods.xcodeproj">
+             </BuildableReference>
+          </BuildActionEntry>
+       </BuildActionEntries>
+    </BuildAction>
+    <TestAction
++      buildConfiguration = "Debug"
+       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+-      shouldUseLaunchSchemeArgsEnv = "YES"
+-      buildConfiguration = "Debug">
++      shouldUseLaunchSchemeArgsEnv = "YES">
++      <Testables>
++      </Testables>
+       <AdditionalOptions>
+       </AdditionalOptions>
+    </TestAction>
+    <LaunchAction
++      buildConfiguration = "Debug"
+       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+       launchStyle = "0"
+@@ -38,17 +41,25 @@
+       ignoresPersistentStateOnLaunch = "NO"
+       debugDocumentVersioning = "YES"
+       debugServiceExtension = "internal"
+-      buildConfiguration = "Debug"
+       allowLocationSimulation = "YES">
++      <MacroExpansion>
++         <BuildableReference
++            BuildableIdentifier = "primary"
++            BlueprintIdentifier = "39A11A976966EDC0EAB4497393EC65D5"
++            BuildableName = "MNFloatingActionButton.bundle"
++            BlueprintName = "MNFloatingActionButton-MNFloatingActionButton"
++            ReferencedContainer = "container:Pods.xcodeproj">
++         </BuildableReference>
++      </MacroExpansion>
+       <AdditionalOptions>
+       </AdditionalOptions>
+    </LaunchAction>
+    <ProfileAction
++      buildConfiguration = "Release"
++      shouldUseLaunchSchemeArgsEnv = "YES"
+       savedToolIdentifier = ""
+       useCustomWorkingDirectory = "NO"
+-      debugDocumentVersioning = "YES"
+-      buildConfiguration = "Release"
+-      shouldUseLaunchSchemeArgsEnv = "YES">
++      debugDocumentVersioning = "YES">
+    </ProfileAction>
+    <AnalyzeAction
+       buildConfiguration = "Debug">
+diff -r -u platforms/ios-before/Pods/Pods.xcodeproj/xcuserdata/jallen.xcuserdatad/xcschemes/Pods-popcoin.xcscheme platforms/ios/Pods/Pods.xcodeproj/xcuserdata/jallen.xcuserdatad/xcschemes/Pods-popcoin.xcscheme
+--- platforms/ios-before/Pods/Pods.xcodeproj/xcuserdata/jallen.xcuserdatad/xcschemes/Pods-popcoin.xcscheme	2018-08-21 09:15:03.000000000 +0200
++++ platforms/ios/Pods/Pods.xcodeproj/xcuserdata/jallen.xcuserdatad/xcschemes/Pods-popcoin.xcscheme	2018-08-21 09:15:10.000000000 +0200
+@@ -7,30 +7,33 @@
+       buildImplicitDependencies = "YES">
+       <BuildActionEntries>
+          <BuildActionEntry
+-            buildForAnalyzing = "YES"
+             buildForTesting = "YES"
+             buildForRunning = "YES"
+             buildForProfiling = "YES"
+-            buildForArchiving = "YES">
++            buildForArchiving = "YES"
++            buildForAnalyzing = "YES">
+             <BuildableReference
+                BuildableIdentifier = "primary"
+                BlueprintIdentifier = "1138FF66DAFB6FAD57EA4F05B27A07C0"
++               BuildableName = "Pods_popcoin.framework"
+                BlueprintName = "Pods-popcoin"
+-               ReferencedContainer = "container:Pods.xcodeproj"
+-               BuildableName = "Pods-popcoin.framework">
++               ReferencedContainer = "container:Pods.xcodeproj">
+             </BuildableReference>
+          </BuildActionEntry>
+       </BuildActionEntries>
+    </BuildAction>
+    <TestAction
++      buildConfiguration = "Debug"
+       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+-      shouldUseLaunchSchemeArgsEnv = "YES"
+-      buildConfiguration = "Debug">
++      shouldUseLaunchSchemeArgsEnv = "YES">
++      <Testables>
++      </Testables>
+       <AdditionalOptions>
+       </AdditionalOptions>
+    </TestAction>
+    <LaunchAction
++      buildConfiguration = "Debug"
+       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+       launchStyle = "0"
+@@ -38,17 +41,25 @@
+       ignoresPersistentStateOnLaunch = "NO"
+       debugDocumentVersioning = "YES"
+       debugServiceExtension = "internal"
+-      buildConfiguration = "Debug"
+       allowLocationSimulation = "YES">
++      <MacroExpansion>
++         <BuildableReference
++            BuildableIdentifier = "primary"
++            BlueprintIdentifier = "1138FF66DAFB6FAD57EA4F05B27A07C0"
++            BuildableName = "Pods_popcoin.framework"
++            BlueprintName = "Pods-popcoin"
++            ReferencedContainer = "container:Pods.xcodeproj">
++         </BuildableReference>
++      </MacroExpansion>
+       <AdditionalOptions>
+       </AdditionalOptions>
+    </LaunchAction>
+    <ProfileAction
++      buildConfiguration = "Release"
++      shouldUseLaunchSchemeArgsEnv = "YES"
+       savedToolIdentifier = ""
+       useCustomWorkingDirectory = "NO"
+-      debugDocumentVersioning = "YES"
+-      buildConfiguration = "Release"
+-      shouldUseLaunchSchemeArgsEnv = "YES">
++      debugDocumentVersioning = "YES">
+    </ProfileAction>
+    <AnalyzeAction
+       buildConfiguration = "Debug">
+diff -r -u platforms/ios-before/popcoin.xcodeproj/project.pbxproj platforms/ios/popcoin.xcodeproj/project.pbxproj
+--- platforms/ios-before/popcoin.xcodeproj/project.pbxproj	2018-08-21 09:15:01.000000000 +0200
++++ platforms/ios/popcoin.xcodeproj/project.pbxproj	2018-08-21 09:15:56.000000000 +0200
+@@ -218,6 +218,12 @@
+ 				CLASSPREFIX = TNS;
+ 				LastUpgradeCheck = 500;
+ 				ORGANIZATIONNAME = Telerik;
++				TargetAttributes = {
++					858B83EF18CA22B800AB12DE = {
++						DevelopmentTeam = J8A6UP2TFJ;
++						ProvisioningStyle = Automatic;
++					};
++				};
+ 			};
+ 			buildConfigurationList = 858B832918CA111C00AB12DE /* Build configuration list for PBXProject "popcoin" */;
+ 			compatibilityVersion = "Xcode 3.2";
+@@ -448,6 +454,9 @@
+ 				ARCHS = "$(ARCHS_STANDARD)";
+ 				CLANG_ENABLE_MODULES = NO;
+ 				CLANG_MODULES_AUTOLINK = NO;
++				CODE_SIGN_IDENTITY = "iPhone Developer";
++				CODE_SIGN_STYLE = Automatic;
++				DEVELOPMENT_TEAM = J8A6UP2TFJ;
+ 				ENABLE_BITCODE = NO;
+ 				FRAMEWORK_SEARCH_PATHS = (
+ 					"$(inherited)",
+@@ -468,6 +477,7 @@
+ 				INFOPLIST_FILE = "$(SRCROOT)/popcoin/popcoin-Info.plist";
+ 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+ 				PRODUCT_NAME = popcoin;
++				PROVISIONING_PROFILE_SPECIFIER = "";
+ 				VALID_ARCHS = "armv7 arm64";
+ 				WRAPPER_EXTENSION = app;
+ 			};
+@@ -480,6 +490,9 @@
+ 				ARCHS = "$(ARCHS_STANDARD)";
+ 				CLANG_ENABLE_MODULES = NO;
+ 				CLANG_MODULES_AUTOLINK = NO;
++				CODE_SIGN_IDENTITY = "iPhone Developer";
++				CODE_SIGN_STYLE = Automatic;
++				DEVELOPMENT_TEAM = J8A6UP2TFJ;
+ 				ENABLE_BITCODE = NO;
+ 				FRAMEWORK_SEARCH_PATHS = (
+ 					"$(inherited)",
+@@ -496,6 +509,7 @@
+ 				INFOPLIST_FILE = "$(SRCROOT)/popcoin/popcoin-Info.plist";
+ 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+ 				PRODUCT_NAME = popcoin;
++				PROVISIONING_PROFILE_SPECIFIER = "";
+ 				VALID_ARCHS = "armv7 arm64";
+ 				WRAPPER_EXTENSION = app;
+ 			};
+Only in platforms/ios/popcoin.xcworkspace: xcshareddata
+Only in platforms/ios/popcoin.xcworkspace: xcuserdata

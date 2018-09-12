@@ -1,0 +1,56 @@
+@import '../../../app-variables';
+
+.fab-button {
+  height: 50;
+  width: 50; /// this is required on iOS - Android does not require width so you might need to adjust styles
+  margin: 15;
+  background-color: $accent_dark;
+  horizontal-align: right;
+  vertical-align: bottom;
+}
+
+
+$size: 70vw;
+$case-padding: 10;
+
+.page-content {
+  padding: 5;
+  background-color: white;
+}
+
+.grid-list {
+  color: white;
+  background-color: $accent-light;
+  text-align: center;
+
+  horizontal-align: left;
+  margin: 7vw;
+  border-radius: 20;
+}
+
+.grid-list-text {
+  margin: $case-padding;
+  margin-left:   $case-padding;
+  margin-right:  $case-padding;
+}
+
+.label-title {
+  padding-top: 10;
+  padding-bottom: 5;
+  vertical-align: center;
+}
+
+#addOrg {
+  horizontal-align: right;
+  vertical-align: center;
+  font-size: 40;
+  padding-right: 20;
+}
+
+#org-list-header {
+  vertical-align: center;
+}
+
+#org-list-header * {
+  padding-bottom: 0;
+}

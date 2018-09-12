@@ -1,0 +1,17 @@
+dependencies {
+  compile 'com.android.support:recyclerview-v7:22.2.0'
+}
+
+android {
+  defaultConfig {
+    generatedDensities = []
+    applicationId = "ch.epfl.popcoins"
+  }
+  aaptOptions {
+    additionalParameters "--no-version-vectors"
+  }
+}
+
+configurations {
+    compile.exclude group: 'com.google.zxing'
+}

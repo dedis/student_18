@@ -1,0 +1,57 @@
+<Page
+        class="page"
+        loaded="onLoaded"
+        navigatingTo="onNavigatingTo"
+        xmlns:nsListView="nativescript-ui-listview"
+        xmlns:nsFloatingButton="nativescript-floatingactionbutton"
+        xmlns="http://www.nativescript.org/tns.xsd">
+
+
+
+            <GridLayout class="page-content" rows="*" columns="*,*,auto">
+                <Label
+                        text="You don't have any services. Feel free to open one !"
+                       textWrap="true"
+                       class="empty-list-label"
+                       colSpan="3"
+
+                       visibility="{{ isEmpty ? 'visible' : 'collapsed' }}"
+                />
+
+
+                <nsListView:RadListView items="{{ barListDescriptions }}" itemTap="barTapped" row="0" colSpan="3"
+                                        itemSwipeProgressStarted="onSwipeCellStarted"
+                                        swipeActions="true"
+                                        id="listView">
+
+                   <!-- <nsListView:RadListView.itemSwipeTemplate>
+                        <GridLayout class="basic-list-decorated" rows="*" columns="*,auto">
+                            <StackLayout orientation="horizontal" col="0">
+                            </StackLayout>
+                            <StackLayout orientation="horizontal" col="1">
+                                <Button class ="bdelete" id="button-delete" text="Delete" tap="deleteBar" backgroundColor="red"/>
+                            </StackLayout>
+                        </GridLayout>
+                    </nsListView:RadListView.itemSwipeTemplate> -->
+
+                    <nsListView:RadListView.itemTemplate>
+                        <GridLayout rows="*,*" columns="*, auto" backgroundColor="white"
+                                    class="basic-list-decorated">
+                            <Label class="list-title" text="{{ desc.name }}" row="0" col="0"
+                                   textWrap="true"/>
+                            <Label text="{{ desc.frequency }}" row="1" col="0" textWrap="true" textTransform="capitalize"/>
+                            <!-- <Label class="status-text" horizontalAlignment="right" verticalAlignment="center" text="{{ status.status }}"
+                                    col="1" rowSpan="2" textWrap="true"/> -->
+                        </GridLayout>
+                    </nsListView:RadListView.itemTemplate>
+                </nsListView:RadListView>
+                <nsFloatingButton:fab tap="addBar"
+                                      row="0" col="3"
+                                      icon="res://ic_add_white_48dp"
+                                      rippleColor="#f1f1f1"
+                                      class="fab-button"/>
+
+                <ActivityIndicator busy="{{ isLoading }}" rowSpan="1" colSpan="2"/>
+            </GridLayout>
+
+</Page>

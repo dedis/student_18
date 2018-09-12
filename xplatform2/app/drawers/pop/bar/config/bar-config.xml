@@ -1,0 +1,41 @@
+<Page
+        class="page"
+        navigatingTo="onNavigatingTo"
+        xmlns:nsDataForm="nativescript-ui-dataform">
+
+    <ActionBar class="action-bar">
+        <NavigationButton text="Go Back" android:icon="res://ic_arrow_back" tap="goBack"/>
+        <Label class="action-bar-title" text="Configuration"/>
+        <ActionItem tap="save"
+                    ios.systemIcon="0" ios.position="right"
+                    android:icon="res://ic_done" android.position="actionBar"
+                    />
+    </ActionBar>
+
+    <GridLayout class="page-content" rows="auto, auto, auto,*"
+                columns="*,auto,*">
+        <Label class="label-title" text="Description" row="0" col="0" colSpan="3"/>
+
+
+        <nsDataForm:RadDataForm
+                id="data-form"
+                source="{{ dataForm }}"
+                row="1" colSpan="3">
+            <nsDataForm:RadaForm.properties>
+                <nsDataForm:EntityProperty name="name" index="0"/>
+                <nsDataForm:EntityProperty name="frequency" index="1" valuesProvider="{{ frequencies }}">
+                    <nsDataForm:PropertyEditor.editor>
+                        <nsDataForm:PropertyEditor type="SegmentedEditor"/>
+                    </nsDataForm:PropertyEditor.editor>
+                </nsDataForm:EntityProperty>
+                <nsDataForm:EntityProperty name="final_statement" displayName="Final Statement" index="2" valuesProvider="{{ finalStatements }}">
+                    <nsDataForm:PropertyEditor.editor>
+                        <nsDataForm:PropertyEditor type="Picker"/>
+                    </nsDataForm:PropertyEditor.editor>
+                </nsDataForm:EntityProperty>
+                <nsDataForm:EntityProperty name="_observers" hidden="true"/>
+                <nsDataForm:EntityProperty name="_map" hidden="true"/>
+            </nsDataForm:RadaForm.properties>
+        </nsDataForm:RadDataForm>
+    </GridLayout>
+</Page>

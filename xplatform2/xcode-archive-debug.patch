@@ -1,0 +1,12 @@
+diff -r -u platforms/ios-before2/popcoin.xcodeproj/xcshareddata/xcschemes/popcoin.xcscheme platforms/ios/popcoin.xcodeproj/xcshareddata/xcschemes/popcoin.xcscheme
+--- platforms/ios-before2/popcoin.xcodeproj/xcshareddata/xcschemes/popcoin.xcscheme	2018-08-21 09:31:48.000000000 +0200
++++ platforms/ios/popcoin.xcodeproj/xcshareddata/xcschemes/popcoin.xcscheme	2018-08-21 09:37:21.000000000 +0200
+@@ -85,7 +85,7 @@
+       buildConfiguration = "Debug">
+    </AnalyzeAction>
+    <ArchiveAction
+-      buildConfiguration = "Release"
++      buildConfiguration = "Debug"
+       revealArchiveInOrganizer = "YES">
+    </ArchiveAction>
+ </Scheme>

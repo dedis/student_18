@@ -1,0 +1,29 @@
+<Page class="page"
+      navigatingTo="onNavigatingTo">
+
+    <ActionBar class="action-bar">
+        <NavigationButton text="Go Back" android:icon="res://ic_arrow_back" tap="goBack"/>
+        <Label class="action-bar-title" text="Conode Stats"/>
+        <ActionItem tap="deleteC"
+                    android:icon="res://ic_delete_white"
+                    ios.systemIcon="16" ios.position="right"
+                    text="Delete" android.position="actionBar"/>
+        <ActionItem tap="displayQrOfConode"
+                    android:icon="res://ic_share_white"
+                    ios.systemIcon="9" ios.position="right"
+                    text="QR" android.position="actionBar"/>
+    </ActionBar>
+
+    <GridLayout rows="*,auto" columns="*">
+
+        <ListView items="{{ statsList, statsList }}" row="0">
+            <ListView.itemTemplate>
+                <GridLayout class="basic-list" rows="auto,auto" columns="*">
+                    <Label class="list-title" text="{{ info.title }}" textAlignment="left" textWrap="true" row="0"/>
+                    <Label text="{{ info.info }}" textAlignment="left" textWrap="true" row="1"/>
+                </GridLayout>
+            </ListView.itemTemplate>
+        </ListView>
+
+    </GridLayout>
+</Page>

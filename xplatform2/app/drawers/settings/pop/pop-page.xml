@@ -1,0 +1,18 @@
+<Page
+        class="page"
+        loaded="onLoaded">
+
+    <ActionBar class="action-bar">
+        <Label class="action-bar-title" text="PoP - Settings"/>
+    </ActionBar>
+
+    <GridLayout class="page-content" rows="*,auto,auto,*" columns="*">
+        <StackLayout row="0"></StackLayout>
+
+        <Button text="Reset PoP" tap="resetPop" row="1"/>
+        <Button text="Reset Organizer" tap="resetOrganizer" row="2"/>
+
+        <StackLayout row="3"></StackLayout>
+    </GridLayout>
+
+</Page>
