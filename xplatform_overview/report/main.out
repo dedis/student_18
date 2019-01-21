@@ -1,0 +1,59 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Evaluation of cross-platform frameworks}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{App requirements}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Evaluation criteria}{section.2}% 4
+\BOOKMARK [1][-]{section.3}{NativeScript}{}% 5
+\BOOKMARK [2][-]{subsection.3.1}{Implementation}{section.3}% 6
+\BOOKMARK [2][-]{subsection.3.2}{Licensing}{section.3}% 7
+\BOOKMARK [2][-]{subsection.3.3}{Ease of integration}{section.3}% 8
+\BOOKMARK [2][-]{subsection.3.4}{Debugging}{section.3}% 9
+\BOOKMARK [2][-]{subsection.3.5}{UI widgets and layouts}{section.3}% 10
+\BOOKMARK [2][-]{subsection.3.6}{Deployment}{section.3}% 11
+\BOOKMARK [2][-]{subsection.3.7}{Benchmark}{section.3}% 12
+\BOOKMARK [1][-]{section.4}{React Native}{}% 13
+\BOOKMARK [2][-]{subsection.4.1}{Implementation}{section.4}% 14
+\BOOKMARK [2][-]{subsection.4.2}{Licensing}{section.4}% 15
+\BOOKMARK [2][-]{subsection.4.3}{Ease of integration}{section.4}% 16
+\BOOKMARK [2][-]{subsection.4.4}{Debugging}{section.4}% 17
+\BOOKMARK [2][-]{subsection.4.5}{UI widgets and layouts}{section.4}% 18
+\BOOKMARK [2][-]{subsection.4.6}{Deployment}{section.4}% 19
+\BOOKMARK [2][-]{subsection.4.7}{Benchmark}{section.4}% 20
+\BOOKMARK [1][-]{section.5}{Flutter}{}% 21
+\BOOKMARK [2][-]{subsection.5.1}{Implementation}{section.5}% 22
+\BOOKMARK [2][-]{subsection.5.2}{Licensing}{section.5}% 23
+\BOOKMARK [2][-]{subsection.5.3}{Ease of integration}{section.5}% 24
+\BOOKMARK [2][-]{subsection.5.4}{Debugging}{section.5}% 25
+\BOOKMARK [2][-]{subsection.5.5}{UI widgets and layouts}{section.5}% 26
+\BOOKMARK [2][-]{subsection.5.6}{Deployment}{section.5}% 27
+\BOOKMARK [2][-]{subsection.5.7}{Benchmark}{section.5}% 28
+\BOOKMARK [1][-]{section.6}{Go Mobile}{}% 29
+\BOOKMARK [2][-]{subsection.6.1}{Implementation}{section.6}% 30
+\BOOKMARK [2][-]{subsection.6.2}{Licensing}{section.6}% 31
+\BOOKMARK [2][-]{subsection.6.3}{Ease of integration}{section.6}% 32
+\BOOKMARK [2][-]{subsection.6.4}{Debugging}{section.6}% 33
+\BOOKMARK [2][-]{subsection.6.5}{UI widgets and layouts}{section.6}% 34
+\BOOKMARK [1][-]{section.7}{Xamarin}{}% 35
+\BOOKMARK [2][-]{subsection.7.1}{Implementation}{section.7}% 36
+\BOOKMARK [2][-]{subsection.7.2}{Licensing}{section.7}% 37
+\BOOKMARK [2][-]{subsection.7.3}{Ease of integration}{section.7}% 38
+\BOOKMARK [1][-]{section.8}{Ionic}{}% 39
+\BOOKMARK [2][-]{subsection.8.1}{Implementation}{section.8}% 40
+\BOOKMARK [2][-]{subsection.8.2}{Licensing}{section.8}% 41
+\BOOKMARK [2][-]{subsection.8.3}{Ease of integration}{section.8}% 42
+\BOOKMARK [2][-]{subsection.8.4}{Debugging}{section.8}% 43
+\BOOKMARK [2][-]{subsection.8.5}{UI widgets and layouts}{section.8}% 44
+\BOOKMARK [2][-]{subsection.8.6}{Deployment}{section.8}% 45
+\BOOKMARK [2][-]{subsection.8.7}{Benchmark}{section.8}% 46
+\BOOKMARK [1][-]{section.9}{Summary}{}% 47
+\BOOKMARK [1][-]{appendix.A}{Comparing evaluated frameworks}{}% 48
+\BOOKMARK [1][-]{appendix.B}{In details: NativeScript}{}% 49
+\BOOKMARK [2][-]{subsection.B.1}{Deployment}{appendix.B}% 50
+\BOOKMARK [1][-]{appendix.C}{In details: React Native}{}% 51
+\BOOKMARK [2][-]{subsection.C.1}{Debugging issues}{appendix.C}% 52
+\BOOKMARK [2][-]{subsection.C.2}{Deployment}{appendix.C}% 53
+\BOOKMARK [1][-]{appendix.D}{In details: Flutter}{}% 54
+\BOOKMARK [2][-]{subsection.D.1}{Ease of integration}{appendix.D}% 55
+\BOOKMARK [2][-]{subsection.D.2}{UI library}{appendix.D}% 56
+\BOOKMARK [1][-]{appendix.E}{In details: Ionic}{}% 57
+\BOOKMARK [2][-]{subsection.E.1}{Debugging}{appendix.E}% 58
+\BOOKMARK [2][-]{subsection.E.2}{Deployment}{appendix.E}% 59

@@ -1,0 +1,59 @@
+\contentsline {section}{\numberline {1}Introduction}{1}{section.1}
+\contentsline {section}{\numberline {2}Evaluation of cross-platform frameworks}{2}{section.2}
+\contentsline {subsection}{\numberline {2.1}App requirements}{2}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Evaluation criteria}{2}{subsection.2.2}
+\contentsline {section}{\numberline {3}NativeScript}{4}{section.3}
+\contentsline {subsection}{\numberline {3.1}Implementation}{5}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Licensing}{5}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Ease of integration}{5}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}Debugging}{5}{subsection.3.4}
+\contentsline {subsection}{\numberline {3.5}UI widgets and layouts}{6}{subsection.3.5}
+\contentsline {subsection}{\numberline {3.6}Deployment}{6}{subsection.3.6}
+\contentsline {subsection}{\numberline {3.7}Benchmark}{6}{subsection.3.7}
+\contentsline {section}{\numberline {4}React Native}{7}{section.4}
+\contentsline {subsection}{\numberline {4.1}Implementation}{8}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}Licensing}{8}{subsection.4.2}
+\contentsline {subsection}{\numberline {4.3}Ease of integration}{8}{subsection.4.3}
+\contentsline {subsection}{\numberline {4.4}Debugging}{9}{subsection.4.4}
+\contentsline {subsection}{\numberline {4.5}UI widgets and layouts}{9}{subsection.4.5}
+\contentsline {subsection}{\numberline {4.6}Deployment}{9}{subsection.4.6}
+\contentsline {subsection}{\numberline {4.7}Benchmark}{9}{subsection.4.7}
+\contentsline {section}{\numberline {5}Flutter}{10}{section.5}
+\contentsline {subsection}{\numberline {5.1}Implementation}{11}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}Licensing}{11}{subsection.5.2}
+\contentsline {subsection}{\numberline {5.3}Ease of integration}{11}{subsection.5.3}
+\contentsline {subsection}{\numberline {5.4}Debugging}{11}{subsection.5.4}
+\contentsline {subsection}{\numberline {5.5}UI widgets and layouts}{11}{subsection.5.5}
+\contentsline {subsection}{\numberline {5.6}Deployment}{12}{subsection.5.6}
+\contentsline {subsection}{\numberline {5.7}Benchmark}{12}{subsection.5.7}
+\contentsline {section}{\numberline {6}Go Mobile}{13}{section.6}
+\contentsline {subsection}{\numberline {6.1}Implementation}{13}{subsection.6.1}
+\contentsline {subsection}{\numberline {6.2}Licensing}{13}{subsection.6.2}
+\contentsline {subsection}{\numberline {6.3}Ease of integration}{13}{subsection.6.3}
+\contentsline {subsection}{\numberline {6.4}Debugging}{13}{subsection.6.4}
+\contentsline {subsection}{\numberline {6.5}UI widgets and layouts}{14}{subsection.6.5}
+\contentsline {section}{\numberline {7}Xamarin}{15}{section.7}
+\contentsline {subsection}{\numberline {7.1}Implementation}{15}{subsection.7.1}
+\contentsline {subsection}{\numberline {7.2}Licensing}{15}{subsection.7.2}
+\contentsline {subsection}{\numberline {7.3}Ease of integration}{15}{subsection.7.3}
+\contentsline {section}{\numberline {8}Ionic}{16}{section.8}
+\contentsline {subsection}{\numberline {8.1}Implementation}{17}{subsection.8.1}
+\contentsline {subsection}{\numberline {8.2}Licensing}{17}{subsection.8.2}
+\contentsline {subsection}{\numberline {8.3}Ease of integration}{17}{subsection.8.3}
+\contentsline {subsection}{\numberline {8.4}Debugging}{17}{subsection.8.4}
+\contentsline {subsection}{\numberline {8.5}UI widgets and layouts}{17}{subsection.8.5}
+\contentsline {subsection}{\numberline {8.6}Deployment}{18}{subsection.8.6}
+\contentsline {subsection}{\numberline {8.7}Benchmark}{18}{subsection.8.7}
+\contentsline {section}{\numberline {9}Summary}{19}{section.9}
+\contentsline {section}{\numberline {A}Comparing evaluated frameworks}{21}{appendix.A}
+\contentsline {section}{\numberline {B}In details: NativeScript}{21}{appendix.B}
+\contentsline {subsection}{\numberline {B.1}Deployment}{21}{subsection.B.1}
+\contentsline {section}{\numberline {C}In details: React Native}{22}{appendix.C}
+\contentsline {subsection}{\numberline {C.1}Debugging issues}{22}{subsection.C.1}
+\contentsline {subsection}{\numberline {C.2}Deployment}{23}{subsection.C.2}
+\contentsline {section}{\numberline {D}In details: Flutter}{24}{appendix.D}
+\contentsline {subsection}{\numberline {D.1}Ease of integration}{24}{subsection.D.1}
+\contentsline {subsection}{\numberline {D.2}UI library}{25}{subsection.D.2}
+\contentsline {section}{\numberline {E}In details: Ionic}{26}{appendix.E}
+\contentsline {subsection}{\numberline {E.1}Debugging}{26}{subsection.E.1}
+\contentsline {subsection}{\numberline {E.2}Deployment}{26}{subsection.E.2}

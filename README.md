@@ -33,9 +33,14 @@ be included in this repo and the original repos will be deleted.
 | [Simone Colombo](mailto:simone.colombo@epfl.ch)| [Decentralized Web Archive](decanarch) |
 | [Christopher Benz](mailto:christopher.benz@epfl.ch) | [BLS ByzCoin](bls_byzcoin) |
 |Fall semester:||
+|Lucas Pires|Integrating DAGA in the cothority framework and using it for a login service|	
+|Marie-Jeanne Lagarde|Analyzing the security of the main Blockchain technologies|
+|Iva Najdenova|Blockchain based approach for preserving car maintenance history|
 
 ## Interns
 
 | Name | Project |
 | -- | -- |
 |[Islam Faisal](mailto:islamfm@aucegypt.edu)|[Calypso and machine learning](calypso_ml)|
+|Shaohua LI|Lattice based onet|
+|Joseph Attieh|Frontend / Java|
