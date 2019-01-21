@@ -1,0 +1,16 @@
+\section{Introduction}
+
+%%% Motivation
+
+% Should introduce why we need BLS signatures for ByzCoin
+
+Bitcoin's\cite{bitcoin} meteoric rise has paved way for thousands of crypto-currencies in the past decade. Distrust in banks and government in the wake of the 2008 financial crises fueled the need to remove third-party single guarantors through decentralizing authority. Due to the \textit{weakest-link} security of the centralized systems, various centralized internet services like certificate authorities (CA), domain name systems (DNS), software repos have routinely fallen prey to hackers on the internet. Although decentralized authority improves the security of the system, it is difficult to efficiently reach consensus among these authorities in an asynchronous environment like the internet.
+
+PBFT protocol \cite{PBFT} achieves strongly consistent consensus in a byzantine environment but is not scalable due to $O(n^2)$ communication between the participating nodes. Bitcoin  on the other hand, does offer lesser transaction latency in a large network but it only provides probabilistic guarantees. ByzCoin\cite{byzcoin} improves on Bitcoin's consistency using the principles of PBFT with proof-of-membership mechanism and scalable collective signing(CoSi) \cite{cosi}.
+
+As a naive solution, collective signing could be simply done by appending signatures of the participating authorities to a message. However as the number of signatures increase, the payload size and verification cost increases linearly, making it infeasible at scale. Therefore CoSi uses Schnorr multisignatures\cite{schnorr} to generate compact signatures from multiple cosignatures, that can be verified in constant time. Using tree-pattern communication and aggregation at every level allows CoSi to also efficiently combine cosignatures.
+
+A CoSi protocol consists of four phases- announcement, commitment, challenge and response. The two round-trip protocol requires the network structures to be stable after commitment in the first round. The $\sum$-protocol nature of CoSi can make it unusable in unstable/high churn networks. As a single round-trip protocol, the Boneh-Lynn-Shacham signature scheme \cite{bls} on pairing-based elliptic curves can eliminate this problem. It also allows for incremental aggregation in an asynchronous setting. Further, with Schnorr signatures m-of-n multisignature verification can be done with merkel trees\cite{merkel} but it grows exponentially in size. The public key aggregation with pairing-based keys allows for efficient verification for m-of-n multisignatures.
+
+In this report we present and evaluate BLS-CoSi, a collective signing protocol using BLS signature scheme with pairing-based elliptic curves. Section \ref{background} presents the background for BLS-CoSi. Section \ref{design} then presents the design and implementation of BLS-CoSi. Section \ref{eval} experimentally evaluates the protocol and Section \ref{conclusion} concludes.
+\clearpage

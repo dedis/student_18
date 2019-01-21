@@ -1,0 +1,80 @@
+\documentclass[11pt, a4paper, twoside, openright]{article} %draft
+
+\usepackage{graphicx,color}
+\usepackage{amssymb, amsmath, array}
+\usepackage{hyperref, appendix, xcolor}
+\usepackage{listings}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{
+  frame=tb,
+  language=bash,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\definecolor{accent-dark}{RGB}{58, 83, 255}
+\definecolor{night-dark}{RGB}{2, 49, 65}
+\definecolor{background-dark}{RGB}{248, 248, 248}
+
+\newcommand\crule[1][black]{\textcolor{#1}{\rule{0.3cm}{0.3cm}}}
+
+\begin{document}
+
+\input{cover}
+
+\newpage
+\thispagestyle{empty}
+\tableofcontents{\protect\thispagestyle{empty}}
+\newpage
+        
+% Start page count
+\setcounter{page}{1}
+
+\input{Text/intro.tex}
+
+\newpage
+
+\input{Text/background.tex}
+
+\newpage
+
+\input{Text/methodology.tex}
+
+\newpage
+
+\input{Text/bcadmincli.tex}
+
+\newpage
+
+\input{Text/popcoins.tex}
+
+\newpage
+
+\input{Text/limitations.tex}
+
+\newpage
+
+\input{Text/further.tex}
+
+\newpage
+
+\begin{appendices}
+    \input{Text/installation.tex}
+\end{appendices}
+
+\end{document}

@@ -1,0 +1,129 @@
+\section{BC Admin CLI}
+\label{section4}
+
+\subsection{Spawning a DARC}
+
+\subsubsection{Context}
+
+\paragraph{}
+
+Before this project, BC Admin CLI could only spawn \textit{DARC} that were evolutions of the \textit{Genesis DARC}. The \textit{darc add} command provides new options useful for \textit{ByzCoin} access rights management:
+
+\begin{itemize}
+    \item Spawning a \textit{DARC} from any \textit{DARC} the user chooses, not only the \textit{Genesis} one
+    \item Choosing the owner of the \textit{DARC}
+    \item Signing the transaction using any saved identity, not only the Admin one
+    \item Outputing information about the newly spawned \textit{DARC} in files in order to keep information and run automated tests
+\end{itemize}
+
+\subsubsection{Implementation}
+
+\paragraph{}
+
+The implementation of these new functionalities do not differ very much from the basic \textit{add} command. The program retrieves the signer's keypair from local memory, the \textit{DARC} from which we spawn a new one is retrieved from \textit{ByzCoin}. Any error during those two steps stops the execution of the command and prints an error message. The public key of the owner is not checked, as it may have been generated from a different device. All these information are used to generate a transaction which is sent to \textit{ByzCoin}.
+
+\paragraph{}
+
+The program does not directly check that that the given signer can use the given \textit{DARC} to spawn a new \textit{DARC}, as this check is performed directly by the \textit{ByzCoin} service, which will return an error message if the transaction gets refused.
+
+\subsubsection{Avoiding key conflicts}
+\label{subsection413}
+
+\paragraph{}
+
+In its current state, as described in \hyperref[subsection212]{sub-section 2.1.2}, BC Admin CLI only allows spawning a \textit{DARC} that will only have an \textit{owner}, and no other rules. This raises the issue that two \textit{DARC} created using the same public key as \textit{owner} and from the same \textit{DARC} (often the \textit{Genesis} one) will have the same \textit{BaseID} (as it is a digest of the content of the \textit{DARC}), which they will keep even if they are evolved. However, \textit{ByzCoin} cannot support multiple \textit{DARC} sharing a \textit{BaseID} if they are not evolutions of one another: it will thus reject the spawn instruction and send a "\textit{key conflict}" error message.
+
+\paragraph{}
+
+To avoid such a case happening, the \textit{DARC} are spawned with a random 32-bits integer in their description. The description being taken into account for the ID digestion, this solution allows to create multiple \textit{DARC} with the same owner and from the same \textit{DARC} while assuring a very small probability of key conflict.
+
+\subsection{Getting a DARC from ByzCoin}
+
+\paragraph{}
+
+Before this project, BC Admin CLI only was able to manipulate the \textit{Genesis DARC}, which was saved locally. In order to implement \textit{DARC} management in the program, it became necessary to be able to get other \textit{DARC}. As they have to be accessible to all users of \textit{ByzCoin} and modifiable by them, it is not possible to only keep a save locally. Instead, one has to systematically fetch \textit{DARC} information from \textit{ByzCoin} service.
+
+\paragraph{}
+
+\textit{DARC} are retrieved from \textit{ByzCoin} through a \textit{proof}. The client asks \textit{ByzCoin} with the \textit{BaseID} of the \textit{DARC}, provided by the user. \textit{ByzCoin} responds with a \textit{proof} containing all information about the \textit{DARC}, if it exists. This information is a \textit{byte[] protobuf}, that can then be translated into a Go object.
+
+\paragraph{}
+
+This addition has allowed the implementation of the simple yet useful \textit{darc show} command which prints or saves in a file all information about the \textit{DARC} the user has demanded.
+
+\subsection{Managing DARC rules}
+
+\subsubsection{Context}
+
+\paragraph{}
+
+The previous implementation of BC Admin CLI did only allow the addition of rules to the \textit{Genesis DARC}. This functionality is however not sufficient to efficiently manage \textit{DARC}. Moreover, as \textit{DARC} are created with only the rules \textit{\_sign} and \textit{invoke:evolve}, it is necessary to be able to manage rules in order to be able to grant them any other right.
+
+\paragraph{}
+
+There are three possible operations on \textit{DARC} rules: addition, edition and deletion. All of those are performed using the \textit{darc rule} command with different flags:
+
+\begin{itemize}
+    \item No flag: simple addition. If the action already exists, the command will fail
+    \item -replace: if the action already exists, overwrites the expression with the one provided by the user. If it does not exist, the command will fail
+    \item -delete: if the action exists, removes it from the \textit{Rules Map()}. This flag has priority over the other command options, which means that if this flag is provided, all other parameters will be ignored and the rule in question will be deleted
+\end{itemize}
+
+\subsubsection{Implementation}
+
+\paragraph{}
+
+Addition and edition are extremely similar: their sole difference being that addition will prevent override and edition will not be able to act on a rule that does not exist yet. Those two actions are thus performed almost the same way, with only those checks and the \textit{Map()} method used differing, and branching being determined by the presence or absence of the -replace flag.
+
+\paragraph{}
+
+Deletion is a little more different, as it is supposed to remove the rule altogether. It thus requires less parameters, as for example the expression. For this reason, it is coded inside a separate function.
+
+\paragraph{}
+
+In these three cases one part remains the same: the program will perform an evolution of the \textit{DARC} whose rules are being changed. For this, as described in \hyperref[subsection212]{sub-section 2.1.2}, it creates a copy of the \textit{DARC}, applies the change of rules to it, increments the version number, and then sends it to \textit{ByzCoin} to \textit{spawn} it. In order for it to be possible, it is absolutely necessary for the user to sign the transaction with a keypair having the \textit{invoke:evolve} right on the \textit{DARC} whose rules are being changed; otherwise, the transaction will be rejected and the program will throw an error.
+
+\subsection{Sharing a ByzCoin config}
+
+\subsubsection{Context}
+
+\paragraph{}
+
+The previous implementation of BC Admin CLI allowed to create a \textit{ByzCoin} and generate its config. It was however impossible to share this config with another user, or another device, or at least very uneasy. In order for a \textit{ByzCoin} instance to be accessible by multiple users on diverse devices, it was necessary to implement a way to share the required information.
+
+\paragraph{}
+
+Apart from this first aspect, there is also the necessity for the management of \textit{ByzCoin} instances to be able to log as the admin user on \textit{PopCoins}. It means that besides the config, it is necessary to be able to share the admin keypair to another device.
+
+\paragraph{}
+
+In order to solve these issues, the solution that has been privileged is the usage of a QR Code. This method has been chosen in particular because the \textit{PopCoins} app already implements a QR Code scanner, and because it is a very user-friendly solution, even for an inexperienced user.
+
+\subsubsection{Implementation}
+
+\paragraph{}
+
+There are two possible cases when a user requires a QR Code: he wants the config, or he wants the config together with the admin keypair in order to be logged in as the admin user. In the \textit{qr} command of BC Admin CLI, these cases are differentiated by the presence or absence of the flag -admin. If present, the QR Code will also contain the admin keypair.
+
+\paragraph{}
+
+In order to generate the QR Code, the program uses the library \textit{qrgo} by \textit{qantik}\footnote{\url{https://github.com/qantik/qrgo}}, which is already in use in \textit{CISC Identity Skipchain} (another \textit{Cothority} application developped by DEDIS). This library allows the creation of QR Codes representing a string, and its display in the terminal. This allows an user wanting to save his QR Code to simply use the command \textit{bcadmin qr $>$ myfile}", and then "\textit{cat myfile}" to print it again. (on Unix systems) 
+
+\paragraph{}
+
+The string encoded into a QR Code is a JSON representation of a struct that contains only the necessary information. If -admin is not specified, it only contains the \textit{ByzCoin} ID. If it is specified, it also contains the admin keypair. The device that scans the QR Code will then only have to read the QR Code in order to retrieve the string and parse it.
+
+\subsubsection{Limitations}
+\label{subsection443}
+
+\paragraph{}
+
+As the QR Code can only hold a limited amount of information, it cannot contain the description of the roster. As such, at the moment, the device that will be scanning the QR Code should already have been configured to use the right roster of \textit{Conodes}. This is a strong limitation as half of the configuration of the \textit{ByzCoin} instance still has to be manually performed by the user.
+
+\paragraph{}
+
+Also, in the current state of the BC Admin CLI, we transfer the admin keypair (which includes the private key) completely un-encoded through a simple QR Code. Anyone having access to the CLI where the admin is logged, or to any save or picture of the concerned QR code can take control of the \textit{Genesis DARC}, which is particularly dangerous.
+
+\paragraph{}
+
+For those reasons, the current implementation of this functionality is to be considered as temporary and work in progress. It is useful for development purposes, but cannot be kept as-is for a release version of \textit{ByzCoin}.

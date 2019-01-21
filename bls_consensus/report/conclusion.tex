@@ -1,0 +1,7 @@
+\section{Conclusion}
+\label{conclusion}
+In this report we presented and evaluated BLS-CoSi, a collective signing protocol with BLS signature scheme. The CoSi is prone to Denial-of-Service attacks and loss of availability in highly unstable networks due to its two-round-trip protocol with Schnorr signatures. As a single round-trip protocol, BLS-CoSi prevents these issue. The bilinearity property of groups used in BLS-CoSi also allows for incremental aggregation, thus allowing fast responses on satisfying some threshold. 
+
+We evaluated BLS-CoSi with different block-sizes, failure rates and tree structures. For the standard 1 MB blocks, BLS-CoSi showed latencies slightly better than the existing CoSi. The latencies were almost directly proportional to block-size and the number of nodes. But the signature generation complexity factor with elliptic curves can overshadow the communication complexity on large setups with large block-size.
+
+\clearpage

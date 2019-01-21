@@ -1,0 +1,63 @@
+\section{Appendix: Installation instructions}
+
+\subsection{BC Admin CLI}
+
+\paragraph{}
+
+BC Admin CLI requires Go: detailed installation instruction can be found on their \href{https://golang.org/doc/install}{official website (click)}.
+
+\paragraph{}
+
+Then, you will need to get the cothority framework from github:
+
+\begin{lstlisting}
+    $ go get github.com/dedis/cothority
+\end{lstlisting}
+
+\paragraph{}
+
+Go should automatically install the dependencies. In order to check that BC Admin is working correctly, try to run \textit{test.sh}.
+
+\paragraph{}
+
+You can easily update the executable \textit{bcadmin} inside the bin folder of go by running the following commands inside the \textit{bcadmin} folder:
+
+\begin{lstlisting}
+    $ go build -o bcadmin ./*.go
+    $ cp bcadmin \$(go env GOPATH)/bin/
+\end{lstlisting}
+
+\subsection{PopCoins}
+
+\paragraph{}
+
+First, you will need to install \textit{NativeScript} framework: detailed installation instruction are available on their \href{https://docs.nativescript.org/start/quick-setup}{official website (click)}.
+
+\paragraph{}
+
+Then, clone the \textit{PopCoins} repository from \href{https://github.com/dedis/popcoins}\textit{github.com}:
+
+\begin{lstlisting}
+    $ git clone https://github.com/dedis/popcoins
+\end{lstlisting}
+
+\paragraph{}
+
+Afterwards, go inside the \textit{popcoins} folder and run:
+
+\begin{lstlisting}
+    $ make start-dev
+\end{lstlisting}
+
+\paragraph{}
+
+Once this is done, you are ready to go! Plug-in your physical device or start your emulator and run one of the following:
+
+\begin{lstlisting}
+    $ tns run android
+    $ tns run ios
+\end{lstlisting}
+
+\paragraph{}
+
+The application should launch on your device/emulator

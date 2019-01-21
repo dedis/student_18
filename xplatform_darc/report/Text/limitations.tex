@@ -1,0 +1,40 @@
+\section{Limitations}
+
+\subsection{DARC rights management}
+
+\paragraph{}
+
+\textit{DARC} are designed in a form that allows them to be fully personalised by their owners. But in their actual form, not only can they be personalised, but their owner, having the right to evolve them as they see fit, can grant themselves any right they want without restriction.
+
+\paragraph{}
+
+As an example, we could imagine an admin A who wants to keep the exclusivity of the right to spawn new \textit{DARC} (e.g. \textit{spawn:darc} rule). He then creates a new \textit{DARC} for user U. User U being the \textit{owner} of his own \textit{DARC}, he has the right to evolve it (e.g. \textit{invoke:evolve}). However, in the current state of \textit{ByzCoin}, U is completely free to evolve his \textit{DARC} to add the rule \textit{spawn:darc} to it.
+
+\paragraph{}
+
+Thus, any user that owns a \textit{DARC} virtually has all rights a \textit{DARC} can grant. The only limitation is that it cannot grant access to any other \textit{DARC}.
+
+\paragraph{}
+
+In order to avoid such a scenario, there are two possibilities:
+
+\begin{itemize}
+    \item Not giving the owner of the DARC the \textit{invoke:evolve} right, but instead giving it to the couple "admin \& user". This way, the admin would have entire control on which rule he wants or not to be added to the \textit{DARC}. The main downside would be that the admin would have to check every evolution made on the \textit{DARC}, including for example minor changes to the description. Moreover, this would mean that the \textit{Distributed Access Right Controls} would be entirely centralised around the admin of the \textit{ByzCoin}, who would have to check every transaction, which would cause a big problem of scalability.
+    
+    \item Adapting the \textit{DARC} contract to limit the ability of the \textit{owner} to add any rule he wants. An avenue would be not allowing a \textit{DARC} to grant more right that his previous one (the \textit{DARC} pointed by the \textit{PrevID}), which would also assure that any \textit{DARC} the user spawns afterwards could not, in any case, have more rights than the first \textit{DARC} the user has been granted. This would allow the admin to only manage the rights of the "parent" \textit{DARC}, any \textit{DARC} below it having the impossibility to have more rights than it while still being entirely manageable by their respective owners. However, this would allow a situation in which, all users having the right to \textit{spawn:darc} (because the parent \textit{DARC} has to have it), any user could create \textit{DARC} for new users, making it impossible to control who can have access to a \textit{DARC}. Moreover, this method would be conflictual if the admin decides to remove rights to the parent \textit{DARC}: all \textit{DARC} below would have to also lose this right, but the admin does not necessarily have the right to evolve them, and it would imply to implement an efficient process to retrieve all \textit{DARC} below the parent one.
+\end{itemize}
+
+\subsection{Rapid deprecation of \textit{PopCoins} code}
+\label{subsection62}
+
+\paragraph{}
+
+\textit{PopCoins} has been developped in order to be able to communicate with the \textit{ByzCoin} service, implemented in Go inside the \textit{Cothority} framework. The \textit{Cothority} framework is itself based on multiples services coded by DEDIS lab, as for example \textit{kyber}\footnote{\url{https://github.com/dedis/kyber}} for cryptographic operations, \textit{onet}\footnote{\url{https://github.com/dedis/onet}} for networking...
+
+\paragraph{}
+
+All of those services being in development, they tend to change very regularly, sometimes influencing relatively heavily the way the services interact. Because of this, \textit{PopCoins}, as it has to interact with \textit{ByzCoin} through the network, is strongly affected by those most significant changes. As it is coded in another language and uses adaptations of the Go code in JavaScript\footnote{\url{https://github.com/dedis/cothority/tree/master/external/js}}, it requires important efforts to be kept up-to-date with the most recent implementations of the \textit{Cothority} framework.
+
+\paragraph{}
+
+Such an issue arose in the late stage of this project: important changes to \textit{cothority} and \textit{onet} rendered \textit{PopCoins} implementation incompatible with the latest version of the framework. The project being in its last days when the error has been discovered, it has not been fixed, and the application needs to be tested on an older version of the framework in order to work.

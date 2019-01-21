@@ -1,0 +1,13 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Background}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Practical Byzantine Fault Tolerance \(PBFT\)}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{BitCoin}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{Collective signing \(CoSi\)}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.4}{ByzCoin}{section.2}% 6
+\BOOKMARK [2][-]{subsection.2.5}{Boneh-Lynn-Shacham \(BLS\) signature scheme}{section.2}% 7
+\BOOKMARK [1][-]{section.3}{Design}{}% 8
+\BOOKMARK [1][-]{section.4}{Evaluation}{}% 9
+\BOOKMARK [2][-]{subsection.4.1}{Scalability}{section.4}% 10
+\BOOKMARK [2][-]{subsection.4.2}{Fault tolerance}{section.4}% 11
+\BOOKMARK [2][-]{subsection.4.3}{Comparison with CoSi}{section.4}% 12
+\BOOKMARK [1][-]{section.5}{Conclusion}{}% 13

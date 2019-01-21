@@ -1,0 +1,61 @@
+\section{Methodology}
+
+\subsection{BC Admin CLI}
+
+\paragraph{}
+
+The whole code is to be found in the \textit{bcadmin} folder of \textit{cothority/byzcoin}\footnote{\url{https://github.com/dedis/cothority/tree/master/byzcoin/bcadmin}}. Most of the changes have been made inside \textit{main.go}, but a few were also made inside \textit{lib/config.go}. Some other parts of \textit{Cothority} have also been lightly changed, like for example \textit{darc/darc.go}.
+
+\subsubsection{Testing}
+
+\paragraph{}
+
+The choice has been made not to use \textit{Go} unit tests for the testing of the code. Instead, we use a bash script implementing the \textit{Cothority} library \textit{libtest.sh} that interacts directly with the CLI. All of those tests are written inside the file \textit{test.sh}.
+
+\paragraph{DGB\_TEST} constant describes what outputs of tests will be shown: 0=none, 1=test-names, 2=all. By default keep at 1
+
+\paragraph{DBG\_SERVER} constant describes the outputs written in terminal from server responses. By default keep at 0, but in case of an error on server-side it is always useful to put it at 2 for debug purposes.
+
+\paragraph{NBR\_SERVERS and NBR\_SERVERS\_GROUP} are parameters for the tests, to be kept as-is.
+
+\paragraph{testCreateStoreRead} is a test that was implemented before this project. Most of the methods it checks are now deprecated.
+
+\paragraph{testQR} is the only non-automated test. The tester has to manually check the QR Code that is shown by \textit{BC Admin CLI}
+
+\paragraph{All other tests} are fully automated and test the different commands added during this project
+
+\paragraph{}
+
+All those tests have been run and passed at the moment of the Pull Request.
+
+\subsubsection{Documentation}
+
+\paragraph{}
+
+Detailed documentation is provided inside the \textit{readme.md}\footnote{\url{https://github.com/dedis/cothority/blob/master/byzcoin/bcadmin/README.md}} file. It describes all available commands as well as all of their optional flags. Also, documentation has been written inside the code for all new exported methods.
+
+\subsection{PopCoins}
+
+\subsubsection{Testing}
+
+\paragraph{}
+
+No unit test has been implemented for the code that has been written in the context of this project on \textit{PopCoins}. However, each new feature has been thoroughly manually tested on Android. The tests have been realised on a physical device running Android 9.
+
+\paragraph{}
+
+It is to be noted that the new implementations have not been tested on either \textit{Android Virtual Device} or iOS. Indeed, the current version having been judged stable enough, and specific equipment being required for iOS testing, the decision has been taken not to run the tests for both Android and iOS, which has lead Android to be the only tested environment.
+
+\paragraph{}
+
+In order to test network-related functionalities, the app has been tested with a test instance of \textit{ByzCoin} created on a computer, connected to the physical Android device through USB tethering. This configuration allows communication between the two devices on a local network. All tests have been realised manually to check the correct operation of the application.
+
+\paragraph{}
+
+In order to create good testing conditions, a script\footnote{\url{https://github.com/dedis/cothority/tree/master/conode/test_popcoins.sh}} has been realised in order to run a local \textit{ByzCoin} instance. It first creates the local \textit{Conodes}, creates a \textit{ByzCoin} instance and finally generates a QR Code representing its configuration.
+
+\subsubsection{Documentation}
+
+\paragraph{}
+
+No specific documentation file has been written about the changes made on \textit{PopCoins}. However, all of the methods used in logic part of the code have been commented directly inside the code. The code used for the UI has been judged verbose enough, as it is not supposed to be used elsewhere, and no specific comment has been added to it.

@@ -1,0 +1,58 @@
+This is BibTeX, Version 0.99d (TeX Live 2017/Debian)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: main.aux
+The style file: plain.bst
+Database file #1: references.bib
+Warning--to sort, need author or key in byzcoin
+Warning--to sort, need author or key in schnorr
+Name 1 in "Dan Boneh, Ben Lynn, and Hovav Shacham" has a comma at the end for entry bls
+while executing---line 1049 of file plain.bst
+Warning--to sort, need author or key in merkel
+Warning--to sort, need author or key in 51
+Warning--to sort, need author or key in deterlab
+Name 1 in "Dan Boneh, Ben Lynn, and Hovav Shacham" has a comma at the end for entry bls
+while executing---line 1090 of file plain.bst
+Warning--empty booktitle in bls
+Warning--empty journal in bitcoin
+You've used 11 entries,
+            2118 wiz_defined-function locations,
+            551 strings with 5456 characters,
+and the built_in function-call counts, 3324 in all, are:
+= -- 327
+> -- 122
+< -- 4
++ -- 52
+- -- 40
+* -- 185
+:= -- 473
+add.period$ -- 29
+call.type$ -- 11
+change.case$ -- 53
+chr.to.int$ -- 0
+cite$ -- 18
+duplicate$ -- 150
+empty$ -- 291
+format.name$ -- 40
+if$ -- 754
+int.to.chr$ -- 0
+int.to.str$ -- 11
+missing$ -- 6
+newline$ -- 53
+num.names$ -- 12
+pop$ -- 94
+preamble$ -- 1
+purify$ -- 42
+quote$ -- 0
+skip$ -- 140
+stack$ -- 0
+substring$ -- 166
+swap$ -- 57
+text.length$ -- 4
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 44
+warning$ -- 7
+while$ -- 21
+width$ -- 13
+write$ -- 104
+(There were 2 error messages)

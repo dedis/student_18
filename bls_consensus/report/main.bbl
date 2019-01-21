@@ -1,0 +1,60 @@
+\begin{thebibliography}{10}
+
+\bibitem{byzcoin}
+Poster: Bitcoin meets collective signing.
+\newblock
+  \url{http://www.ieee-security.org/TC/SP2016/poster-abstracts/16-poster_abstract.pdf}.
+
+\bibitem{merkel}
+Merkle tree, Dec 2018.
+\newblock \url{https://en.wikipedia.org/wiki/Merkle_tree}.
+
+\bibitem{51}
+Cost of a 51\% attack, Jan 2019.
+\newblock \url{https://gobitcoin.io/tools/cost-51-attack/}.
+
+\bibitem{deterlab}
+Deterlab network security testbed, Jan 2019.
+\newblock \url{http:// isi.deterlab.net/}.
+
+\bibitem{schnorr}
+Schnorr signature, Jan 2019.
+\newblock \url{https://en.wikipedia.org/wiki/Schnorr_signature}.
+
+\bibitem{PBFT}
+Miguel Castro and Barbara Liskov.
+\newblock Practical byzantine fault tolerance.
+\newblock In {\em Proceedings of the Third Symposium on Operating Systems
+  Design and Implementation. OSDI ’99. New Orleans, Louisiana, USA: USENIX
+  Association}, pages 173--186, 1999.
+
+\bibitem{bls}
+Ben~Lynn Dan~Boneh and Hovav Shacham.
+\newblock Short signatures from the weil pairing.
+\newblock pages 514--532. Springer-Verlag, 2001.
+
+\bibitem{bgp}
+Leslie Lamport, Robert Shostak, and Marshall Pease.
+\newblock The byzantine generals problem.
+\newblock {\em ACM Transactions on Programming Languages and Systems}, pages
+  382--401, July 1982.
+
+\bibitem{bn256}
+Michael Naehrig, Ruben Niederhagen, and Peter Schwabe.
+\newblock New software speed records for cryptographic pairings.
+\newblock {\em Lecture Notes in Computer Science Progress in Cryptology –
+  LATINCRYPT 2010}, page 109–123, 2010.
+
+\bibitem{bitcoin}
+Satoshi Nakamoto.
+\newblock Bitcoin: A peer-to-peer electronic cash system.
+\newblock 2009.
+
+\bibitem{cosi}
+Ewa Syta, Iulia Tamas, Dylan Visher, David~Isaac Wolinsky, Philipp Jovanovic,
+  Linus Gasser, Nicolas Gailly, Ismail Khoffi, and Bryan Ford.
+\newblock Keeping authorities "honest or bust" with decentralized witness
+  cosigning.
+\newblock {\em 2016 IEEE Symposium on Security and Privacy (SP)}, 2016.
+
+\end{thebibliography}

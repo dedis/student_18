@@ -1,0 +1,40 @@
+\documentclass[11pt, a4paper, twoside]{article} %\documentclass[11pt, a4paper, twoside, openright]{article} %draft
+
+\usepackage{graphicx,color}
+\usepackage{amssymb, amsmath, array}
+\usepackage{hyperref}
+
+
+\begin{document}
+
+\input{cover}
+\thispagestyle{empty}
+
+% Start page count
+%\setcounter{page}{1}
+
+\newpage
+
+%\input{abstract}
+%\clearpage{\pagestyle{empty}\cleardoublepage}
+
+
+\tableofcontents{\protect\thispagestyle{empty}
+
+\clearpage
+
+
+\input{intro}
+
+\input{background}
+
+\input{design}
+
+\input{eval}
+
+\input{conclusion}
+
+
+\bibliographystyle{plain}
+\bibliography{references}
+\end{document}

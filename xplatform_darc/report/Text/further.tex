@@ -1,0 +1,61 @@
+\section{Further work}
+
+\paragraph{}
+
+In this section, the future work to be done on this project is ranked from most to least critical.
+
+\subsection{Rework ByzCoin config sharing methods}
+
+\paragraph{}
+
+As described in \hyperref[subsection443]{sub-section 4.4.3}, the current solution for sharing \textit{ByzCoin} config between devices is limited in functionality and unsecure. It is relatively critical to change it as it could compromise the admin keypair, and thus the \textit{Genesis DARC}.
+
+\paragraph{}
+
+For the first issue, which is sharing roster information together with the config, an idea would be to only transmit the IP addresses of the conodes. This solution however presents the downside of being difficult to scale: if the roster is comprised of a few tens of nodes, it will quickly be too much IP addresses to put into a simple QR code. In that case, a mitigation would be to give the IP of one \textit{conode} and then retrieve the whole roster from it.
+
+\paragraph{}
+
+The second issue is harder to solve: we want to share a private key across devices, which is pretty much against the principle of a private key. There are two possible mitigations:
+
+\begin{itemize}
+    \item Encoding the private key for the transfer between the two devices. The main downside of this solution is that it is not 100\% secure, and that it will be hard to ensure both confidentiality and authenticity. Guaranteeing those security properties would necessitate repeated communication between the two devices, which would be impractical with QR codes
+    \item Creating a second keypair for the second device, and thus avoid transmitting the admin keypair. But here again, in order to be granted the rights to the \textit{Genesis DARC} with the second identity, one would have to ensure authenticity, which is difficult with QR Codes for the above-mentioned reasons. Moreover, it would imply that \textit{ByzCoin} should always check that all references to one of those two identities is linked with the other with a logical "or", which seems also really difficult to implement and scale.
+\end{itemize}
+
+\paragraph{}
+
+Those solutions being not really satisfying, the only remaining possibility would be to completely rework the process used to authenticate a same user on two different devices. In an ideal case, the user should enter manually his private key inside each of his devices; however, as \textit{ByzCoin} uses ED25519 keys, it is impossible for a human being to simply remember it, and laborious to write it manually. Sharing an identity on multiple device would thus imply to use an additional authentication system in order to securely work.
+
+\subsection{Implementing transaction management in PopCoins}
+\label{subsection72}
+
+\paragraph{}
+
+As described in \hyperref[subsection62]{sub-section 6.2}, the current implementation of \textit{PopCoins} is not up-to-date with the latest version of the \textit{Cothority} framework, and will first need to be updated in order the client to communicate with the latest implementation of \textit{ByzCoin}. Apart from that, as described in \hyperref[subsection54]{sub-section 5.4}, \textit{PopCoins} is able to create a client to interract with a \textit{ByzCoin} instance, but still cannot send transactions through it. The cause of it is the deprecation of some JavaScript networking and transaction-building modules, that are not up-to-date with the latest changes made on the framework in Go. For now, \textit{PopCoins} is thus completely unable to interact with the \textit{ByzCoin} instance it is connected to.
+
+\paragraph{}
+
+In order to solve this issue, one will have to update the code for the latest standard of \textit{ByzCoin} as it has been coded in Go, and will need to implement transactions in the relevant functions of the code.
+
+\paragraph{}
+
+Currently, transactions are only needed for two different kind of instructions: spawning a \textit{DARC} and evolving a \textit{DARC}. Functions relative to these functionalities are already implemented inside \textit{User.js}, and code comments mark where transaction management should be added in the related functions, repectively \textit{spawnDarc()} and \textit{evolveDarc()}.
+
+\subsection{Multi-signatures}
+
+\paragraph{}
+
+Expressions linked with rules, as explained in \hyperref[subsection212]{sub-section 2.1.2}, can express sets of required signatures using logical \textit{or} and logical \textit{and}. It means that in some cases, it is possible to require multiple signatures for a transaction to be accepted. However, in the current state of the project, in both BC Admin CLI and \textit{PopCoins}, it is impossible to sign a same transaction with multiple identities.
+
+\paragraph{}
+
+In BC Admin CLI, the commands do not provide any option to sign transactions multiple times. However, the program being able to handle multiple identities, it should not be too difficult to implement such a feature if all of the identities are stored locally. In \textit{PopCoins} however, the application is designed to handle a single user, and as such a single keypair.
+
+\paragraph{}
+
+In both cases, it is impossible to sign a same transaction from different devices. If we consider the base case, which would be multiple users logged in on their respective devices that need a collective signature for a transaction, such scenario is unsolvable at the moment. It is thus necessary to implement inside \textit{ByzCoin} service a protocol to share transactions between devices before sending them to \textit{ByzCoin}. An idea could be for \textit{ByzCoin} to keep pending transactions in memory, and users would regularly download transactions waiting for their signature and accept or refuse to sign them. When a transaction has enough signatures, it gets sent to \textit{ByzCoin}; if this state becomes unreachable because of too much refusals or a timeout happens, the transaction gets dumped.
+
+\paragraph{}
+
+Another issue concerning this is that Expressions still are not implemented inside \textit{PopCoins}. It would thus be necessary to implement a JavaScript program able to resolve expressions, which can be based on its Go counterpart\footnote{\url{https://github.com/dedis/cothority/tree/master/darc/expression}}.
