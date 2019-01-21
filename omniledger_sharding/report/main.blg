@@ -1,0 +1,58 @@
+This is BibTeX, Version 0.99d (TeX Live 2018/Arch Linux)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: main.aux
+The style file: plain.bst
+Database file #1: references.bib
+Warning--to sort, need author or key in dedis
+Warning--to sort, need author or key in cothority
+Warning--to sort, need author or key in onet
+Warning--to sort, need author or key in protobuf
+Warning--to sort, need author or key in cli
+Warning--to sort, need author or key in smart_contracts
+Warning--to sort, need author or key in testing
+Warning--to sort, need author or key in testify
+Warning--to sort, need author or key in libtest
+Warning--to sort, need author or key in drand
+Warning--to sort, need author or key in proof-of-stake
+You've used 15 entries,
+            2118 wiz_defined-function locations,
+            553 strings with 6090 characters,
+and the built_in function-call counts, 3671 in all, are:
+= -- 332
+> -- 153
+< -- 2
++ -- 68
+- -- 52
+* -- 211
+:= -- 503
+add.period$ -- 35
+call.type$ -- 15
+change.case$ -- 68
+chr.to.int$ -- 0
+cite$ -- 26
+duplicate$ -- 138
+empty$ -- 368
+format.name$ -- 52
+if$ -- 826
+int.to.chr$ -- 0
+int.to.str$ -- 15
+missing$ -- 3
+newline$ -- 66
+num.names$ -- 8
+pop$ -- 169
+preamble$ -- 1
+purify$ -- 56
+quote$ -- 0
+skip$ -- 114
+stack$ -- 0
+substring$ -- 132
+swap$ -- 31
+text.length$ -- 2
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 60
+warning$ -- 11
+while$ -- 14
+width$ -- 17
+write$ -- 123
+(There were 11 warnings)

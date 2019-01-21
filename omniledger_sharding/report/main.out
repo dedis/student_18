@@ -1,0 +1,24 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{OmniLedger}{section.1}% 2
+\BOOKMARK [1][-]{section.2}{Architecture}{}% 3
+\BOOKMARK [2][-]{subsection.2.1}{Cothority}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.2}{OmniLedger architecture}{section.2}% 5
+\BOOKMARK [3][-]{subsubsection.2.2.1}{Identity Ledger \046 Shard ledgers}{subsection.2.2}% 6
+\BOOKMARK [3][-]{subsubsection.2.2.2}{CLI client}{subsection.2.2}% 7
+\BOOKMARK [3][-]{subsubsection.2.2.3}{OmniLedger Client \046 Service}{subsection.2.2}% 8
+\BOOKMARK [3][-]{subsubsection.2.2.4}{OmniLedger client}{subsection.2.2}% 9
+\BOOKMARK [3][-]{subsubsection.2.2.5}{ByzCoin Client \046 Service}{subsection.2.2}% 10
+\BOOKMARK [3][-]{subsubsection.2.2.6}{Smart Contract and Instances}{subsection.2.2}% 11
+\BOOKMARK [1][-]{section.3}{Implementation}{}% 12
+\BOOKMARK [2][-]{subsection.3.1}{Sharding assignment}{section.3}% 13
+\BOOKMARK [2][-]{subsection.3.2}{Applying roster change}{section.3}% 14
+\BOOKMARK [2][-]{subsection.3.3}{Timestamps}{section.3}% 15
+\BOOKMARK [2][-]{subsection.3.4}{OmniLedger creation}{section.3}% 16
+\BOOKMARK [2][-]{subsection.3.5}{New epoch}{section.3}% 17
+\BOOKMARK [2][-]{subsection.3.6}{Get status}{section.3}% 18
+\BOOKMARK [2][-]{subsection.3.7}{Testing}{section.3}% 19
+\BOOKMARK [2][-]{subsection.3.8}{Documentation}{section.3}% 20
+\BOOKMARK [1][-]{section.4}{Challenges and Limitations}{}% 21
+\BOOKMARK [1][-]{section.5}{Future work}{}% 22
+\BOOKMARK [1][-]{section.6}{Installation}{}% 23
+\BOOKMARK [1][-]{appendix.A}{Protocol diagrams}{}% 24

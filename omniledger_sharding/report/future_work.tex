@@ -1,0 +1,22 @@
+\section{Future work}
+\begin{itemize}
+	% Sharding is in its early stages, 
+	
+	\label{secure-sharding}
+	\item Performance tests: As mentioned in section \ref{limitation}, the implementation has only been tested on a small number of nodes. Further testing is required to assess performances.
+	
+	\item Secure sharding: As mentioned in section \ref{sharding}, the current sharding algorithm implementation derives a seed from the instruction which requests a new epoch, which is not secured. In the Omniledger paper, distributed randomness protocols, such as RandHound\cite{cryptoeprint:2016:1067} or Drand\cite{drand}, are used to generate the seed. They provide a way to generate verifiable randomness in a distributed setting, while also ensuring some security properties (e.g. bias-resistance).
+	% Additionally, need to verify the consensus constraint, i.e. at least 3f+1 nodes or something
+	
+	\item Cross-sharding transaction: The current implementation does not feature cross-shard transaction processing. An improvement would be to implement Atomix\cite{kokoris-kogias_omniledger:_2018}, a Byzantine Shard Atomic Commit protocol. Atomix employs a lock-then-unlock process to atomically handle transactions across shards. The protocol starts by sending the transaction to every input shard and waits for their respective reply (accept or reject). If any shard rejects the transaction, then the input can be reclaimed, otherwise the transaction is committed to the output shards. 
+	
+	\item Optimisation: Recall that the shard roster change algorithm gradually applies changes to the roster of a shard, one change at a time (see section \ref{apply-roster-change}). While this design ensures some security and liveness properties, it is slow and does not scale well since  a transaction must be sent for each change. An improvement would be to keep gradually swapping-in new validators, however swapping-out old validators could be done in batches instead. The batch size is an important parameter since a large value implies a higher risk that the number of honest nodes remaining is too little to achieve consensus.
+	
+	\item Adding and removing nodes: Implementing new instructions to add or remove nodes from the identity byzcoin. 
+	
+	\item Sign-up scheme: Currently, only the creator of an omniledger (admin or owner) can request a new epoch (in future work, the admin would also be able to add or remove nodes from the identity byzcoin). A possible improvement would be to develop a sign-up scheme so that nodes different from the admin can change the IB roster. An main idea would be to allow admins to delegate trust to a group of nodes. Members of this group can cast their vote to any node and will decide which node will participate in the next epoch. Potential improvement on the scheme include integrating Proof-of-Personhood\cite{borge_proof--personhood:_2017} as a membership mechanism to prevent Sybil attacks or implementing a form of Proof-of-Stake\cite{proof-of-stake} in the voting process.
+	
+	\item Trust-but-Verify transaction validation: Omniledger proposes a two-level validation scheme in order to reduce validation time. The main idea is to use two groups of validators, optimistic validators and core validators. A transaction will first be sent to an optimisic validator shard for a first verification, then to a core validator shard for a second and final verification. The difference between the two lies in the shard size, an optimistic validator shard will be much smaller than a core validator shard. Smaller shards can process transactions faster but are less secure (the smaller the shard, the smaller the number of nodes in the shard an adversary needs to control). This scheme provides flexibility for clients as they can choose to wait for both validation steps for maximum security or only the first in case of low-value payments.
+	
+	\item Trust-but-Verify transaction validation: As mentioned in the introduction (see section \ref{intro}) Omniledger proposes a two-level validation scheme in order to reduce validation time where a transaction is first sent to a an optimistic validator shard before being sent to a core validator shard. Optimistic validators provide faster but less secure validation since their shard is much smaller than the core shard. This scheme provides flexibility for clients as they can choose to wait for both validation steps for maximum security or only the first in case of low-value payments.
+\end{itemize}

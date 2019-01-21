@@ -1,0 +1,77 @@
+\begin{thebibliography}{10}
+
+\bibitem{cli}
+github.com/dedis/onet/tree/master/app\#libtestsh.
+
+\bibitem{smart_contracts}
+https://github.com/dedis/cothority/blob/master/byzcoin/Contracts.md.
+
+\bibitem{libtest}
+github.com/dedis/onet/tree/master/app\#libtestsh.
+
+\bibitem{onet}
+Cothority network library.
+\newblock https://github.com/dedis/onet.
+
+\bibitem{dedis}
+{DEDIS} – {Decentralized} and {Distributed} {Systems}.
+\newblock dedis.epfl.ch/.
+
+\bibitem{cothority}
+dedis/cothority: {Scalable} collective authority.
+\newblock github.com/dedis/cothority.
+
+\bibitem{drand}
+A {Distributed} {Randomness} {Beacon} {Daemon}.
+\newblock github.com/dedis/drand.
+
+\bibitem{proof-of-stake}
+Proof-of-stake, wikipedia.
+\newblock en.wikipedia.org/wiki/Proof-of-stake.
+
+\bibitem{protobuf}
+Reflection-based {Protocol} {Buffers} for {Go}.
+\newblock github.com/dedis/protobuf.
+
+\bibitem{testify}
+stretchr/testify: {A} toolkit with common assertions and mocks that plays
+  nicely with the standard library.
+\newblock github.com/stretchr/testify.
+
+\bibitem{testing}
+testing - the go programming language.
+\newblock golang.org/pkg/testing/.
+
+\bibitem{borge_proof--personhood:_2017}
+Maria Borge, Eleftherios Kokoris-Kogias, Philipp Jovanovic, Linus Gasser,
+  Nicolas Gailly, and Bryan Ford.
+\newblock Proof-of-{Personhood}: {Redemocratizing} {Permissionless}
+  {Cryptocurrencies}.
+\newblock In {\em 2017 {IEEE} {European} {Symposium} on {Security} and
+  {Privacy} {Workshops} ({EuroS}\&{PW})}, pages 23--26, Paris, April 2017.
+  IEEE.
+
+\bibitem{kokoris-kogias_enhancing_2016}
+Eleftherios Kokoris-Kogias, Philipp Jovanovic, Nicolas Gailly, Ismail Khoffi,
+  Linus Gasser, and Bryan Ford.
+\newblock Enhancing {Bitcoin} {Security} and {Performance} with {Strong}
+  {Consistency} via {Collective} {Signing}.
+\newblock {\em arXiv:1602.06997 [cs]}, February 2016.
+\newblock arXiv: 1602.06997.
+
+\bibitem{kokoris-kogias_omniledger:_2018}
+Eleftherios Kokoris-Kogias, Philipp Jovanovic, Linus Gasser, Nicolas Gailly,
+  Ewa Syta, and Bryan Ford.
+\newblock {OmniLedger}: {A} {Secure}, {Scale}-{Out}, {Decentralized} {Ledger}
+  via {Sharding}.
+\newblock In {\em 2018 {IEEE} {Symposium} on {Security} and {Privacy} ({SP})},
+  pages 583--598, San Francisco, CA, May 2018. IEEE.
+
+\bibitem{cryptoeprint:2016:1067}
+Ewa Syta, Philipp Jovanovic, Eleftherios~Kokoris Kogias, Nicolas Gailly, Linus
+  Gasser, Ismail Khoffi, Michael~J. Fischer, and Bryan Ford.
+\newblock Scalable bias-resistant distributed randomness.
+\newblock Cryptology ePrint Archive, Report 2016/1067, 2016.
+\newblock https://eprint.iacr.org/2016/1067.
+
+\end{thebibliography}

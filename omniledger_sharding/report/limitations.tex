@@ -1,0 +1,13 @@
+\section{Challenges and Limitations} \label{limitation}
+There were three main challenges during this project. The first challenge was to get familiar with the code present in the Cothority framework, as well as other libraries written by DEDIS (e.g. ONet), in order to use them correctly in the project. In particular, understanding the global structure (client, service, contracts, etc) and the intricacies related to writing a decentralised, secure application. \\\\
+The second challenge was to regularly follow code changes made by the engineering team and re-factor the Omniledger code to be compliant with these changes. \\\\
+The third and last challenge was debugging. Due to the distributed nature of the application and the intrinsic high-coupling of this project with the rest of the framework, it was sometimes difficult to find bugs, debug them and test the code in an efficient manner without exterior help. \\\\
+Due to time constraints and the fact that these challenges slowed down progress, the original scope of the project had to be slighty reduced and a few shortcuts were taken. As a result, the sharding feature may seem basic in its current state, some components described in the Omniledger paper are not implemented yet (e.g. cross-shard transactions or distributed randomness generation). Moreover, performance has only been tested with a small numbers of shards on a local machine.
+
+% The two main challenges in this project were to understand and learn how to use the Cothority framework in additon to following code changes from the engineering team to make the project's code compliant.
+% Due to the distributed nature of the application and the fact that the project used code from previous work, integrating correctly, testing and debugging were difficult and very time-consuming
+
+% Because of these challenges and some time-constraints, a few shortcuts had to be taken, in particular, the sharding feature is rather basic in its current state, many components described in the Omniledger paper have not been integrated as part of the project (e.g. cross-shard tx, distributed randomness generation)
+
+% Due to time constraints, implementation has only been tested on a small number of  shards and locally.
+

@@ -1,0 +1,24 @@
+\contentsline {section}{\numberline {1}Introduction}{1}{section.1}
+\contentsline {subsection}{\numberline {1.1}OmniLedger}{1}{subsection.1.1}
+\contentsline {section}{\numberline {2}Architecture}{3}{section.2}
+\contentsline {subsection}{\numberline {2.1}Cothority}{3}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}OmniLedger architecture}{3}{subsection.2.2}
+\contentsline {subsubsection}{\numberline {2.2.1}Identity Ledger \& Shard ledgers}{4}{subsubsection.2.2.1}
+\contentsline {subsubsection}{\numberline {2.2.2}CLI client}{4}{subsubsection.2.2.2}
+\contentsline {subsubsection}{\numberline {2.2.3}OmniLedger Client \& Service}{5}{subsubsection.2.2.3}
+\contentsline {subsubsection}{\numberline {2.2.4}OmniLedger client}{6}{subsubsection.2.2.4}
+\contentsline {subsubsection}{\numberline {2.2.5}ByzCoin Client \& Service}{6}{subsubsection.2.2.5}
+\contentsline {subsubsection}{\numberline {2.2.6}Smart Contract and Instances}{6}{subsubsection.2.2.6}
+\contentsline {section}{\numberline {3}Implementation}{6}{section.3}
+\contentsline {subsection}{\numberline {3.1}Sharding assignment}{6}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Applying roster change}{7}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Timestamps}{9}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}OmniLedger creation}{9}{subsection.3.4}
+\contentsline {subsection}{\numberline {3.5}New epoch}{11}{subsection.3.5}
+\contentsline {subsection}{\numberline {3.6}Get status}{12}{subsection.3.6}
+\contentsline {subsection}{\numberline {3.7}Testing}{12}{subsection.3.7}
+\contentsline {subsection}{\numberline {3.8}Documentation}{13}{subsection.3.8}
+\contentsline {section}{\numberline {4}Challenges and Limitations}{13}{section.4}
+\contentsline {section}{\numberline {5}Future work}{14}{section.5}
+\contentsline {section}{\numberline {6}Installation}{15}{section.6}
+\contentsline {section}{\numberline {A}Protocol diagrams}{17}{appendix.A}
