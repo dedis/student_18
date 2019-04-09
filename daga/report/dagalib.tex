@@ -1,0 +1,99 @@
+   
+    This part builds upon the work of a previous student available on Github.\sidecite{villard_deniable_2017}
+    The library is implemented in golang\sidecite{pike_go_nodate} and uses heavily the Kyber
+    cryptography library developed at EPFL by the DEDIS team\sidecite{dedis_advanced_nodate}.\newline
+
+    The goal of this part of the project was to ultimately integrate the new DAGA library into Kyber.
+    The previous work was first ported from kyber.v0 (Crypto.v0) to kyber.v2, before being reworked to address some issues.\medskip
+
+    Since the goal was to integrate the library into Kyber and that one of the main point of Kyber is to \blockquote{
+    facilitate upgrading applications to new cryptographic algorithms or switching to alternative algorithms
+    for experimentation purposes}\footnotemark[\thefootnote]
+    we decided to try to leverage as much as possible of the facilities offered by Kyber.
+
+    The first step in this direction was the addition of a new Suite\sidenote{
+        A Suite is \blockquote{
+            an abstract interface to a full suite of (\ldots) crypto primitives chosen to be suited to
+            each other and have matching security parameters.
+        } quoted from \href{https://github.com/dedis/kyber/blob/v0/abstract/suite.go}
+    } interface for DAGA, that will notably allow future users to switch to other cryptographic building blocks if needed or wanted.
+    For instance the original paper  worked in a Schnorr group\sidenote{
+        specifically, the group of quadratic residues modulo a safe prime.
+    } (i.e.\ a large prime-order subgroup of the multiplicative group of integer modulo \(p\) where \(p\) is prime),
+    while the previous and current work implementation works with a prime-order group constructed with the twisted Edwards curve birationally equivalent to
+    Curve25519\cite{yung_curve25519:_2006}(i.e.\ the suite uses the same group that is used in Ed25519's variant of the EdDSA signature scheme).
+
+    We can see that from DAGA's perspective either implementation is fine as long as it satisfy DAGA's assumptions on the
+    algebraic group being used, which is the case.\sidenote{
+        DAGA is heavily based on discrete logarithm cryptography,
+        thus DAGA assumes a group \(\mathcal{G}\) where the decision diffie-hellman problem\cite{boneh_decision_1998}
+        is assumed to be hard (DDH assumption).
+    } But from an engineering perspective this means we need to identify the individual high-level operations that are needed by DAGA
+    and that would need to be dealt with different level of care depending on the underlying group and primitives used and their implementation in Kyber.
+    (e.g.\ for diffie-hellman key exchange, we usually need to validate the public keys.\sidecite{valenta_measuring_2017}
+    but with current EC concrete implementation we, at least in theory, don't need to care)\sidenote{
+        In the current curve if the secret keys are correctly generated to be multiple of 8 (the curve's cofactor) then
+        we don't have to check if the remote public key is in the correct subgroup, because even if it is not,
+        the DH shared secret cannot leak (by construction) any bits of the targeted secret key.
+        However in practise it is not the case, we noticed that the code generating the secret keys in Kyber is, at the time of writing, not correct,
+        still seems that it is not a big deal because I am under impression that bad Points are rejected / not representable
+        by the library. % when I think of the amount of time I dedicated to these crypto issues and that I'm just writing shit by lack of time and energy...:(
+    }\medskip % TODO if not used to make link with lowlevel crypto concerns maybe dont mention it at all
+
+    As a second major step we can mention, the rewriting of the client-side code and notably the PKClient proof\sidenote{
+        see section~\ref{subsubsec:dagaauth}
+    } related code to make use of the existing kyber.Proof framework instead of rewriting whole proof machinery by hand.
+
+    This was done for multiple reasons, readability and maintainability for a start, it lessen the bug surface, i.e.\ we only need
+    to look for proof related code at one well written, tested and documented place (the kyber.Proof package).
+    Then we can view the same rationale from another perspective, since the proof framework is part of Kyber and we eventually
+    want to integrate DAGA into Kyber, we might give a try at the "eat your own dog food" motto and use it in our own projects.
+    To expand on this topic, we had to design some API wrappers around the proof framework to interface with it in a more
+    easy and familiar way.\sidenote{
+        see the clientProverCtx, clientVerifierCtx and their methods in client\_proof.go.
+    }
+    Those wrappers could maybe be adapted into an additional reusable API/pattern for the proof framework to ease future
+    usage where, like in our case, the user needs to build interactive proofs across different machines.\sidenote{
+        they allow to synchronize easily with a running proof.Prover, to extract the commitments in order to forward them elsewhere,
+        then to continue the proof once a challenge was received from the remote end, etc.
+    }
+
+    Finally we introduced more documentation with links to original DAGA paper, better error messages and minor refactoring to
+    make the code more readable DRY and idiomatic.\newline
+    Still in our opinion the server side code is not production ready, nor of same quality level as the remaining of Kyber
+    and thus should be mostly rewritten too (including the server proofs).
+    This has not been done because the implementation was good enough for our current goal and we moved
+    on the next phases in order to not lose more time on it.
+    The library is well tested but the tests are mostly unmaintainable and it would be easy to miss some important cases.
+    They were refactored to introduce the proper usage of testify and to fix some easy things but they were ultimately left in
+    the state they were found.
+    This leaves the library in an unfinished state and for all of these reasons and the fact that I don't fully endorse it
+    in its current state the integration in Kyber was not performed.\sidenote{
+        at some point after the port to kyber.v2 a WIP pull request was made and ultimately closed for the same reasons.
+    }
+    Still the code is full of comments detailing the direction to take to resolve the situation.
+
+
+    % TODOs maybe if time and relevant => probably not
+    %    -list some of design choices, such as interfaces (client server etc..)to allow multiple concrete implementation in user code (that need other things than pure daga)
+    %      list example of benefit and usage ? favorized instead of struct to allow eaysier testing etc (functions accept interface) follow best practises
+
+
+    % conclude with the fact that I thought about lots of corner cases and implementation issues and identified things that I'd like to see be done but not time
+    % -add validations etc.. try to implement recommended practises regarding DH to try to avoid confinements and small subgroup attacks => nope i don't have the energy...
+
+
+    %-IMO not sure daga should be put in kyber (and for sure not in sign/daga...) its a thing built with kyber but..
+
+
+    %-since currently there there are no schnorr group in kyber and such schnorr group implementation is likely to be more costly
+    %maybe the whole suite idea is finally a bad idea and maybe integrating daga in kyber is a bad idea too
+
+
+    % had to go for the best given time constraints etc..
+    % at some point was told that it is not my job (not very clear from start and divergent opinion of my two supervisors)
+    % and more importantly that I won't have time to do the rest if I continue rewriting daga (which we all aggree i'd say)
+    % (already huge amount of work, sic syta etc..even if not totally acknowledged by linus that is disapointed I didnt do more (how ???)
+    % that's why the work is kinda left in an unfinished state with lots of comments and todos
+
+    % pfff :(

@@ -1,0 +1,44 @@
+\section{Apendix}
+
+\subsection{Step-by-step Guide for Installation}
+The bellow mentioned steps need to be taken into consideration when setting the system up:
+\begin{enumerate}
+    \item Download and install the Go programming language distribution
+    (\url{https://golang.org/doc/install})
+    \item Download and install Java and Maven
+    (\url{https://www.oracle.com/technetwork/java/javase/downloads/index.html})
+    \item Download and install Docker
+    \newline
+    (\url{https://runnable.com/docker/getting-started/})
+    \item Optional but recommended:
+    \newline
+    Download and install IDE for Developers that supports Go, e.g. IntelliJ IDEA
+    \newline
+    (\url{https://www.jetbrains.com/idea/download} with Go plugin)
+    \item Run the following commands in terminal to download the project and required dependencies:
+    \begin{lstlisting}[language=bash]
+    $ go get github.com/dedis/cothority 
+    (and switch to the byzgen_1810 branch)
+    
+    $ go get github.com/dedis/student_18_car
+    
+    $ go get -d ./... (in student_18_car directory)
+    \end{lstlisting}
+    
+    \item Create Docker Container for the conodes and start them with the following commands:
+    \begin{lstlisting}[language=bash]
+    $ make docker (in student_18_car directory)
+    
+    $ docker run -p 7002-7009:7002-7009 --name car
+    -ti dedis/conode_template-test
+    \end{lstlisting}
+    
+    \item Run Main.java which is located in student\_18\_car/external/java/src/
+    \newline
+    main/java/ch/epfl/dedis/template/gui/index in order to start the client application
+\end{enumerate}
+\subsection{Repository}
+\begin{itemize}
+    \item \url{https://github.com/dedis/student_18_car}
+\end{itemize}
+

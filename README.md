@@ -3,8 +3,7 @@ Student 2018
 
 # Student Projects in 2018
 
-All projects at DEDIS started in 2018. Once the projects are finished, they will
-be included in this repo and the original repos will be deleted.
+All projects at DEDIS started in 2018.
 
 ## Semester students (bachelor and master)
 
@@ -33,9 +32,9 @@ be included in this repo and the original repos will be deleted.
 | [Simone Colombo](mailto:simone.colombo@epfl.ch)| [Decentralized Web Archive](decanarch) |
 | [Christopher Benz](mailto:christopher.benz@epfl.ch) | [BLS ByzCoin](bls_byzcoin) |
 |Fall semester:||
-|Lucas Pires|Integrating DAGA in the cothority framework and using it for a login service|	
-|Marie-Jeanne Lagarde|Analyzing the security of the main Blockchain technologies|
-|Iva Najdenova|Blockchain based approach for preserving car maintenance history|
+|[Lucas Pires](mailto:lucas.pires@epfl.ch)|[Integrating DAGA in the cothority framework and using it for a login service](daga), [source code](https://github.com/dedis/student_18_daga)|	
+|[Marie-Jeanne Lagarde](mailto:marie-jeanne.lagarde@epfl.ch)|[Analyzing the security of the main Blockchain technologies](security)|
+|[Iva Najdenova](mailto:iva.najdenova@epfl.ch)|[Blockchain based approach for preserving car maintenance history](cars), [source code](https://github.com/dedis/student_18_car)|
 
 ## Interns
 

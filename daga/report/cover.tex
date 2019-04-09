@@ -1,0 +1,89 @@
+% Preamble
+\documentclass[11pt]{article}
+
+% Packages
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\newcommand{\logoepfl}[0]{
+    \begin{center}
+        \includegraphics[width=4cm]{logo_epfl_coul.eps}
+    \end{center}
+    \vspace{0.3cm}
+    \hrule
+}
+\newcommand{\project}[1]{
+    \begin{center}
+        \large{#1}
+    \end{center}
+    \vspace{1cm}
+}
+\newcommand{\department}[1]{
+    \begin{center}
+        \large{#1}
+    \end{center}
+}
+\newcommand{\lab}[1]{
+    \begin{center}
+        \large{#1}
+    \end{center}
+}
+\newcommand{\supervisor}[3]{
+    \begin{center}
+        \begin{normalsize}{
+            \textbf{#1} }\\#2\\#3
+        \end{normalsize}
+    \end{center}
+}
+\renewcommand{\author}[1]{
+    \begin{center}
+        \Large{#1}
+    \end{center}
+    \vspace{0.5cm}
+}
+\renewcommand{\title}[1]{
+    \vspace{3cm}
+    \begin{center}
+        \huge{#1}
+    \end{center}
+    \vspace{1cm}
+}
+\renewcommand{\date}[2]{
+    \begin{center}
+        \normalsize{#1 #2}
+    \end{center}
+    \vspace{0.3cm}
+}
+
+\begin{document}
+
+% begin title page
+\logoepfl
+
+\title{Integrating DAGA into the cothority framework and using it to build a login service}
+
+\author{Lucas Pires}
+\department{School of Computer and Communication Sciences}
+\lab{Decentralized and Distributed Systems Lab (DEDIS)}
+\project{Master Thesis Project}
+\date{February}{2019}
+\begin{center}
+    \noindent\makebox[\textwidth]{%
+      %Table or figure
+        \begin{tabular}{ccc}
+            \begin{tabular}{p{4.3cm}}
+                \supervisor{Responsible}{Prof. Bryan Ford}{EPFL / DEDIS}
+            \end{tabular}&
+            \begin{tabular}{p{4.3cm}}
+                \supervisor{Supervisor}{Ewa Syta}{Trinity College / DEDIS}
+            \end{tabular}&
+            \begin{tabular}{p{4.3cm}}
+                \supervisor{Supervisor}{Linus Gasser}{EPFL / DEDIS}
+            \end{tabular}
+        \end{tabular}
+    }
+\end{center}
+\end{document}
+% end title page
+

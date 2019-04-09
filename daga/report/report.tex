@@ -1,0 +1,178 @@
+%%
+%% Author: Lucas Pires
+%% 18.01.2019
+%%
+
+% Preamble
+\documentclass[nobib, a4paper]{tufte-book}
+
+% Packages
+%\usepackage[utf8]{inputenc} % maybe not needed if xelatex used
+\usepackage{amsmath, pdfpages}
+\usepackage{graphicx}
+%\usepackage{subfigure} % FIXME mess with figure numbers see, results chapter :(
+\usepackage{hyperref}
+\usepackage[english]{babel}
+\usepackage[autostyle]{csquotes}
+\usepackage[normalem]{ulem}
+\usepackage{enumitem} % used to customize lists
+
+%\usepackage{scrextend} % to use KOMA's labeling lists => ko doesn't work, errors while making
+%\addtokomafont{labelinglabel}{\sffamily}
+
+% citation and bibliography packages
+%\usepackage[backend=bibtex,
+%%natbib,
+%autocite=footnote,
+%%style=ieee
+%]
+%{biblatex} % => ko... would be far better but there is a parse bug....
+%\addbibresource{references.bib}
+\usepackage[square, numbers]{natbib}
+\usepackage{bibentry}
+\nobibliography*  % to use bibentry to print relevant cite in sidenote
+
+% commands
+% a new command to cite and add the bibentry in sidenote
+\newcommand{\sidecite}[2][0pt]{\cite{#2}\sidenote[][#1]{\bibentry{#2}}}
+\newcommand{\smalltitle}[1]{\noindent\underline{#1}\newline}
+
+%\usepackage[T1]{fontenc} % maybe not needed if xelatex used
+
+% override/tune some properties
+% minimum amount of space between sidenotes.
+\setlength\marginparpush{12pt}
+% minimum amount of space between paragraphs
+\setlength\parskip{2pt}
+% number the headings up to the subsection level and display them in TOC
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2} % FIXME choose final lvl and find way to set bookmarks depth too
+% force number same line as title
+% FIXME uncomment, commented to avoid goland latex editor misbehaving
+\titleformat{\chapter}%
+    [block]% shape
+    {\relax\ifthenelse{\NOT\boolean{@tufte@symmetric}}{\begin{fullwidth}}{}}% format applied to label+text
+    {\itshape\huge\thechapter}% label
+    {1em}% horizontal separation between label and title body
+    {\huge\rmfamily\itshape}% before the title body
+    [\ifthenelse{\NOT\boolean{@tufte@symmetric}}{\end{fullwidth}}{}]% after the title body
+
+% add subsubsection level
+\titleclass{\subsubsection}{straight}
+\titleformat{\subsubsection}%
+    [hang]% shape
+    {\normalfont\large\itshape}% format applied to label+text
+    {\thesubsubsection}% label
+    {1em}% horizontal separation between label and title body
+    {}% before the title body
+    []% after the title body
+
+% TODO color links ?
+% FIXME orders of citation numbers, WTF..
+
+% Document
+\begin{document}
+    % cover
+    \includepdf{cover.pdf}  % was not happy with input(cover) because I don't know how to format the layout/document class independently for the first page
+    \newpage
+
+    \tableofcontents
+    \newpage
+
+%    \section{Abstract} % TODO abstract => not...time.. :(
+%    % context + motivations + goals + .. previous works + status/contribution etc..
+%    \newpage
+
+    \chapter{Introduction}
+    \label{ch:introduction}
+    \input{introduction}
+
+    \chapter{Background}
+    \label{ch:background}
+    \input{background}
+
+    \chapter{Implementation}
+    \label{ch:implementation}
+    \input{implementation}
+
+    \chapter{Results}
+    \label{ch:results}
+    \input{results}
+
+
+%    \chapter{Future} %and applications and conclusion ?
+%    \label{ch:future} :((((
+
+   \chapter{Conclusion}
+
+    This project demonstrates the feasibility of the democratization of DAGA as an anonymous authentication mechanism
+    by both \begin{itemize}
+        \item allowing  every system able to speak OIDC to make the move (pretty much every system) without pain
+        \item and showing that it is possible to offer a user-friendly interface
+    \end{itemize}
+    This was done without introducing alien ideas into the DAGA library and Cothority making them easier to maintain and reuse for other purposes.
+    Nothing prevent us to tie DAGA more closely to the POP framework, everything is already usable, it lacks only the little bit
+    of boilerplate extracting the keys from a party transcript.
+
+    Still it is far from being perfect and finished, notably from a "features" point of view, we haven't yet defined ways
+    to allow 3rd-party services to evolve the authentication contexts (add / remove users, revoke context, deny authentication if user exhausted some quota of authentication etc.).
+    From a security point of view we can list the following things that would need our future attention:
+    \begin{itemize}
+        \item currently, the authentication messages can be replayed...
+        \item we would need ways such as memguard\sidenote{
+            https://github.com/awnumar/memguard
+        } to protect the storage of secrets and keys in memory.
+        \item currently the state of the service contains sensitive information
+            (per-round secrets, secret-keys of the daga servers associated with each contexts, etc.)that are persisted into bbolt...
+            We propose to make it fully stateless if possible by deriving every needed secret from the master secret key
+            of the node and other information and "storing" more state in the clients.
+        \item As already said the server-side code of the library would need some reviews too
+        \item We noticed that the deniability property as it is currently defined in the paper doesn't totally hold.
+            At the end of a successful authentication every servers obtain the list of all the NIZK proofs that state they all did their work correctly.
+            Since those proofs are verifiable by anyone and we are in an anytrust setting then for sure someone did authenticate (if not that would mean that
+            the honest server did not follow the protocol this could qualify as a dishonest behavior..).
+            hence we would need to modify the implementation to periodically add some noise, release proof transcripts that are nothing but simulations etc..
+%    this means that we weaken deniability (the NIZK proofs of the servers + anytrust ==> someone authenticated for sure)
+%    => in fact even in vanilla daga description if we don't publish the server proofs, at the end of successful auth ALL servers obtain all the proofs and tag
+%    => since we are in anytrust mean all but one server can be malicious/dishonnest => deniability doesn't hold as advertised in paper (but still)
+    \end{itemize}
+%- daga:
+%    I took some time investigating if we can keep daga properties (notably deniability) but turn PKClient into a
+%    non interactive truly zero knowledge proof or a truly zk proof with a single server.
+%    (currently the multiple servers of daga are really only there to satisfy HVZK via anytrust which is here for deniability(and for linkability via the tags..fuck..)
+%    and to reduce damages resulting of the compromission of a single server in centralized case,
+%    (we cannot tolerate subset of them being down etc..ok we are in a decentralized lab but maybe better to have centralized client server and to have a pool of servers etc..)
+%    (NIDA paper, vaudenay construction ONTAP etc..)
+%    dropped by lack of time, would be a entire thesis subject and probably very different protocol redo proofs etc..)
+%    => since deniability already weakened IMO maybe can think of more efficient ways to guarantee same things but then there are probably already constructs doing the same thing cf vaudenay etc..
+%
+%    -final goal was not clearly defined
+%    at the begining of putting things together was envisioned to use equivalent of pop parties to gather keys as part of the daga/login service
+%    (begin - join- end- context generation etc..)
+
+
+    \bibliographystyle{plainnat} % TODO would like ieeetr but no URL...
+    \bibliography{references}
+    \chapter{Annex}
+    Instructions to run the proof of concept.
+
+    Prerequisites:
+    \begin{itemize}
+        \item a working Go installation\sidecite{pike_go_nodate}
+        \item a working docker and docker-compose installation
+        \item retrieve github.com/dedis/student\_18\_daga and install the dagaclient and dagadaemon cli
+        \item add the following two aliases to /etc/hosts:\newline
+            172.18.0.1 opapp.poc\newline
+            172.18.0.1 rpapp.poc\newline
+            where 172.18.0.1 should be the IP of your host computer as seen from the future docker containers,
+            adapt if it is not the case.
+    \end{itemize}
+
+    then:
+    \begin{enumerate}
+        \item cd in the student\_18\_daga/PoC directory
+        \item \emph{make}
+        \item follow the instructions on screen
+    \end{enumerate}
+
+\end{document}

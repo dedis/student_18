@@ -1,0 +1,46 @@
+   % daga motivations and goals, anonymous authentication, privacy (summary),
+   Authentication, like every interaction involving parties with different roles and interests,
+   can be seen trough the eyes and concerns of the different protagonists.
+   In many situations, the verifying party (e.g.\ service provider) wants to hold their users accountable for their
+   actions\sidenote[][-8pt]{
+       e.g.\ in order to take actions to prevent dishonest behavior against their policies (such as vandalism, unfair usage, multiple accounts etc.) or the law.
+   } and needs to be sure that access to the service is only granted to authorized people\sidenote{
+       e.g.\ an online newspaper might want to be sure that the user is a subscriber or has purchased a plan.
+   }.
+   % TODO proportionality and corroboration example: it also sometimes need .. (e.g. whistleblowers, sybil etc..)
+   While being legitimate those concerns can be seen as somewhat incompatible (or competing) with the growing desire (or necessity) for \textbf{privacy}
+   of the proving party (user).\sidenote{
+
+      e.g.\ users might agree with the needs of the provider without wanting to blindly trust the said provider
+      won't abuse the 'functionality' and take it as an excuse to track, profile and sell their identified habits.
+      or another class of users (whistleblowers or voting citizens or just anyone \ldots) might disagree on the disclosure of any other information
+      besides "I am legitimate" from the authentication process.
+      % TODO in fact not a really good example since daga linkage tag can enable a provider to profile a user ("anonymously")
+      % and later nothing can prevent the link to an offline identity using correlation or other "side" ways ..with some confidence..
+      % => need short epoch/rounds but then .. is it still useful to the verifying side ?
+      % TODO can cite lindell on privacy etc.. and stress that DAGA offers some functionnalities that can be tuned or not etc..(context usage and lifetime etc.)
+      % ==> better in background the linkability issue too..
+      % ==> maybe introduce some privacy issues related to identity management then details DAGA properties and insert word regarding link issue
+   }
+   Hence sometimes, depending on the scenario, we would like to have authentication schemes that are more privacy aware
+   than (e.g.\ ) the traditional identifier-challenge systems, i.e.\ schemes that are built with more flexible tools and
+   that offer a better or fairer trade-off between the competing needs of both sides.
+   \textbf{D}eniable \textbf{A}nonymous \textbf{G}roup \textbf{A}uthentication (DAGA)
+   is one of such anonymous authentication protocols that was designed by Ewa Syta during her Ph.D.\ thesis\sidecite{syta_identity_2015}
+   and was first described in \sidecite{syta_deniable_2014}.
+   It "allows a user to authenticate as an anonymous member of \ldots\ a group defined by a list of public keys"\cite{syta_identity_2015},
+   is decentralized and offers a set of security features that will be detailed later (see~\ref{sec:daga}).
+
+
+   % FIXME (s): goals history ? explain not clear from start (especially POP ?) etc..
+   % give explanations why "research/accumulator" part not done ? (time, not reasonable etc..discussion with Ewa..) previous state context/labo,
+
+   The present work consists in first integrating DAGA into the \emph{cothority}\sidenote{see~\ref{subsec:cothority}} framework
+   by creating a new DAGA authentication service that aims to be easily (re)usable,
+   i.e.\ not tailored to a specific scenario and offering only vanilla DAGA authentication and context creation protocols.
+   %(TODO is it clear that challenge protocol/proof included in "authentication" ?)
+   Then using the new DAGA cothority to build a proof of concept login service consisting in an
+   OpenID Connect (OIDC) Identity Provider offering DAGA authentication as a service.
+   This allows every OIDC aware clients (or said differently: everyone) to delegates their user authentication to the DAGA cothority
+   by mean of a well proven and established standard.
+   % TODO sentence describing "report roadmap"  + cross ref

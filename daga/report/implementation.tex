@@ -1,0 +1,71 @@
+    % don't forget to see if I forgot ideas and paper see zotero, quotes etc.
+    % don't forget to see if everyhting present, see other notesfiles.txt
+    % follow the desicion processes documented in worksheet
+    % keep title in worksheet as things that worth a word in report !
+
+    %TODO see if need to add something and crossref
+    The following chapter will present the work that was done during the project the design choices and the current state of advancement.
+    We begin by describing the goals and current state before detailing the work done on the three main parts of the project individually:
+    \begin{enumerate}[leftmargin=!,itemsep=-1ex]
+        \item the DAGA library (see~\autoref{subsec:library})
+        \item the DAGA cothority service (see~\autoref{subsec:cothority})
+        \item the login service and the proof of concept (see~\autoref{subsec:loginservice})
+    \end{enumerate}
+
+    The first part uses the work from a previous student as a starting basis\sidecite{villard_report_pfs_pop.pdf_2017},
+    the second part builds on the previous to integrate DAGA into the cothority framework,
+    while the last part makes use of the previous parts and CoreOS's dex project\sidecite{noauthor_announcing_nodate}
+    to implement a login service.
+
+    \section{Overview and goals}
+    %TODO cross-ref with future/results/background/previous work
+    As already mentioned in the introduction\sidenote{\autoref{ch:introduction}}, the final goal of the project is to offer
+    \emph{DAGA authentication as a service}\sidenote{or a "login service" as put in the title}.
+    We aim at letting current and future system designers leverage easily DAGA's promises in their design and thus
+    offering them the opportunity to take more into account the privacy of their end-users whether it is critical for their mission or not.
+    As hinted we would like our solution to remain as generic as possible, i.e.\ not tailored and tied to particular uses
+    cases and deployment scenarios.
+    Naturally we will need to keep the properties\sidenote{see~\autoref{subsec:properties}} of DAGA while doing so and we will
+    try to separate as much as possible the different components and building blocks into well defined abstraction levels.\sidenote{
+        e.g.\ to build the "login service", everything from the DAGA library to the full cothority service, looks just like
+        a "simple" authentication primitive:\newline \(yes;tag|no;0 = daga(request)\)
+    } This implies too that we would like to not pollute the created lower level primitives (e.g. DAGA cothority) with the
+    requirements of the upper ones (e.g.\ login service) while implementing them, and thus offering them untouched for other
+    future usages.
+
+    \section{Current state and contributions}
+    As part of the current work the following contributions were made:
+    \begin{itemize}
+        \item the DAGA library was ported to kyber.V2, the client-side code was rewritten, issues have been identified and some fixed,
+                documentation as well as guidelines for the rewriting of the server-side code have been added.
+        \item the library was used to implement DAGA in the cothority framework, featuring:\newline
+            \begin{itemize}
+                \item a new \emph{service} allowing to build cothorities supporting DAGA authentication and the creation of DAGA contexts
+                \item three new \emph{protocols} to support the service
+                \item a CLI app to interact with it
+                \item test coverage edging 80\% for the protocols and service
+                \item boilerplate allowing to run simulations locally as well as on DETERLab's testbed facilities
+                \item compliance with the tool that generate proto files to allow future interop with other languages
+            \end{itemize}
+        \item a system allowing 3rd-party services to delegate the authentication of their users (through the well established OpenID connect standard)
+            to a running DAGA cothority was implemented.
+        \item working, reproducible and customizable proof of concept of the system mentioned above
+    \end{itemize}
+
+    \section{Building blocks / Components}
+    \label{sec:components}
+    As said, the project can be divided into three main and reasonably well separated level of implementation, or components.
+    This section will describe them in turn.
+
+    \subsection{DAGA library}
+    \label{subsec:library}
+    \input{dagalib}
+
+    \subsection{DAGA Cothority}
+    \label{subsec:cothority}
+    \input{dagacothority}
+    \newpage
+
+    \subsection{Login service}
+    \label{subsec:loginservice}
+    \input{dagalogin}

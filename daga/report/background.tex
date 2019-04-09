@@ -1,0 +1,236 @@
+    % mostly DONE exept ev. menpage, 1 figure, ev more example (whistleblower), + link / cite other authentication systems
+
+    In this chapter we will introduce various notions of interest such as authentication and identification
+    before offering an introduction to DAGA.
+
+
+    \section{Authentication, Identification and Privacy}
+    \label{sec:authentication}
+
+    % TODO add subsubsections if make more readable ?
+    Informally authentication is the act or process allowing a verifying party to ensure that a claim coming from the other party
+    is true i.e.\ the other party is indeed who or what it claims to be, while identification results in disclosing or verifying
+    an (often offline) identity.
+    The following section aims at clarifying those notions.
+    Readers interested in more complete and extensive definitions and discussions on
+    these complex and related issues can see\cite[p.~13-28]{syta_identity_2015} and\sidecite{lindell_anonymous_2011}
+    who are addressing the subject in great depth and where used to offer the following overview.
+    \subsubsection{\~Problem}
+    Traditionally, authentication mechanisms whose purpose is to verify membership in a group
+    (e.g.\ subscribers, users, moderators, citizens etc.)
+    are often strongly linked with identification mechanisms, at least it is the case for the average John Doe experience
+    who, e.g., was usually asked various information at enrollment time before being asked for its username or email
+    (identification purpose) and password or challenge (authentication purpose) every time he wants to access the service.
+    \sidenote{
+        in such systems, the membership is decided "by (first) identifying an individual,
+        then verifying that the individual is a member"\cite{goos_anonymous_1999} of the group.
+    }
+    \emph{Authentication} mechanisms are necessary when we want to implement \emph{Authorization} mechanisms, indeed we
+    need to verify the trustworthiness of someone or something's answer to the question "why should we consider your request ?"
+    before actually starting to wonder if we want to grant access to a resource or service.
+    On the other hand, there are lots of use case where \emph{identification} is not needed at all, might be undesirable or even dangerous.
+    For instance some services might require identification at enrollment time but not at authentication time\sidenote{
+        e.g.\ in voting systems, you usually have to prove your identity in order to request a ballot but the vote itself is
+        anonymous.
+    } or sometimes identification is only there as a poor attempt \blockquote{
+        to solve problems orthogonal to authentication and authorization, such as spam or misbehavior
+    }\cite{syta_identity_2015}, or for not any particularly good reason at all (legacy, "simplicity", laziness).
+    That is why, as already mentioned in the introduction, we need tools that allow service providers to build their identity managements
+    systems in ways that take more into account the privacy of their end user and are fine-tuned to the specific needs of the application,
+    systems where the trade-off between the competing interests of both side (user privacy vs provider confidence) is more balanced and sound.
+    Because privacy has always been important\sidenote{
+        Privacy preserves our "right to be let alone"\cite{warren_right_1890} and personal autonomy, while protecting us from targeted manipulation
+        and self-censorship/inhibition.
+    } and is probably more now we live in the era of big data and observe privacy breaches everywhere.
+    % TODO more/better examples (whistleblowing) ?
+
+
+    \subsection{Definitions}
+    \label{subsec:definitions}
+
+    To lift the veil on the seemingly paradoxical notions of anonymity and privacy when discussing authentication, we need to introduce
+    more formal definitions of the terms and processes being discussed.\newline
+    Authentication (and obviously identification) is closely related to the management of identities.
+    An identity need first to be established at enrollment time before being verified at authentication time and consists
+    informally of an \blockquote{ever-evolving\sidenote{%[][-2.5cm]{
+        Indeed every authenticated action can enrich the initial set of information (from enrollment time) a provider knows about a client.
+    } set of information about the client [/entity\sidenote{%[][-1.5cm]{
+        An \textbf{entity} represents a user, object or resource and can have multiple identities
+    }] the identity belongs to}\cite{syta_identity_2015}.
+
+    % TODO maybe first say we can have 2 types of identites: identities and group identities
+    More formally an \emph{identity} is defined to be a set of attributes\sidenote{%[][-1cm]{
+        %or 'group identity'
+        Attributes are properties of an entity, and a set of attributes, called a \emph{group identity}, specifies
+        a \emph{group} \blockquote{consisting of exactly those entities satisfying all attributes in the group identity}\cite{syta_identity_2015}.
+        % set of attributes = group identity = defines a possibly empty group
+    } that specify a \emph{group}\sidenote{
+        set of entities in an \emph{universe}, where an universe is a set of all entities of interests for a specific application)
+    } containing a single entity.\cite{syta_identity_2015}
+    We can see that those definitions allow us to make the distinction between attributes sets that describe a single entity (identity) and
+    attributes sets that describes multiple entities at once (group identity), and this key distinction allows us to offer
+    a more formal definition of \emph{identification} and \emph{authentication}.
+    Thus Authentication becomes the process allowing a verifier to confirm that an entity (prover) is a member of a group,
+    that is the process verifying that the entity possesses all the attributes of the group identity in question.
+    Whereas identification become a special case of authentication where the group is a singleton.
+    Hence the authentication process only needs to verify that entities possess attributes of interest to the verifying side
+    and this set of attributes may describe a sufficiently large group to yields a satisfying amount of privacy to the proving side.
+    \sidenote{concept somewhat related to k-anonymity\cite{sweeney_k-anonymity:_2002}}
+
+    % TODOs small conclusion ?, link with next section DAGA, clarify problem and solutions
+    % what is the point being made ? continue to clarify propos (already said somewhere 2times I'd say..)
+    % definition offers flexibility, e.g can estabslish an identity at enrollement time but verify only a subset of attributes /group identity at authentication time
+    % If we go back to the lifetime of identities and to service provider expectations/goals can fine tune etc..
+    % examples: etc..offer new great possibilities, example of anon chat where all participant are verified at enrollement time (not bots, not sexual harrasser etc..cite lindell)
+
+    \section{Deniable Anonymous Group Authentication (DAGA)}
+    \label{sec:daga}
+
+    Following the previously introduced definitions, this section summarize chapter 4 of~\cite{syta_identity_2015} to offer
+    a tour of DAGA. For a more complete and formal description please refer to the original material.
+    \newline
+    DAGA is an \emph{authentication} protocol run between an \emph{entity} (user)
+    at the proving side and a set of \emph{anytrust}\sidenote{
+        the servers are "collectively but not individually trusted"\cite{syta_identity_2015}, that is we assume there is at least
+        one honest server.
+    } servers at the verifying side.
+    The protocol allows the servers to verify that an entity is indeed a member of a \emph{group} specified by a list
+    of public keys\sidenote{
+        accordingly, an entity belongs to the group if it possesses/knows one of the corresponding private keys.
+    }, while preserving the entity's anonymity in a forward-secure way.
+    Moreover, authentication attempts are divided into epochs (or authentication rounds) and each successful authentication
+    results in a unique (per-round) tag that allows linking authentications of the same entity thus offering to the verifying side
+    the proportionality\sidenote{see below~\ref{def:proportionality}} property it sometimes expects/needs.
+    \subsection[Properties]{Properties\sidenote{% FIXME I suspect this is the cause of the bad numbering of citations
+        see\cite[Sect.~4.6]{syta_identity_2015} for complete and formal descriptions, assumptions and proofs.
+    }} % -what are the properties of DAGA and why useful/wanted !! intro vs description vs etc..! pay attention to not tourne en rond
+    \label{subsec:properties}
+
+    DAGA offers the following properties. % TODO under those assupmtions: list ?
+    \begin{description}%{forward anonymity}
+        \item[Completeness] \hfill \\
+            Entities that are member of the group and following correctly the protocol authenticate successfully\sidenote{
+                Unless the process is aborted upon exposure of misbehaving or dishonest server(s).
+                If nothing is done administratively to change the situation then the dishonest server(s) can prevent any
+                progress.
+            }
+        \item[Soundness] \hfill \\
+            Only entities that are member of the group can authenticate.
+        \item[Anonymity] \hfill \\
+            % ddh under random oracle model =>
+            No PPT\sidenote{
+                Probabilistic Polynomial Time, probabilistic (non deterministic) adversaries/algorithms/turing machines
+                that are polynomially bounded (in time).
+            } adversary can guess which member authenticated with probability bigger than random guessing.
+        \item[Forward Anonymity] \hfill \\
+            Once an authentication round (epoch) is ended, it is impossible to break the anonymity of any entity,
+            even if the private keys of nearly all actors are compromised\sidenote{
+                In its basic (and implemented) form, DAGA requires that the key of the honest server remains undisclosed
+                (but this requirement can be relaxed).
+            }
+        \item[Proportionality] \hfill \\\label{def:proportionality}
+            Authentication of an entity results in same final linkage tag for each authentications made during same epoch.
+            (but authentications of same entity made during different epochs are unlinkable).
+            The linkage tag act as anonymous or pseudonymous IDs of the entity during a round. % TODO corroboration whistleblowers example ? or as already mentioned..
+        \item[Deniability] \hfill \\
+            The entity can successfully deny having ever attempted to authenticate itself, in fact it is impossible to
+            prove that any entity authenticated at all.\sidenote{
+                The entity proves her membership (authenticates) by using an interactive zero-knowledge proof of knowledge, meaning that
+                the interaction transcript cannot convince anyone but the original actors and is indistinguishable from
+                a transcript obtained by running a simulator.
+                %FIXME, point to where I say that the "cannot prove any authenticated" doesn't hold IMO..
+                %(on success auth all servers obtains all the server's other proofs of correctness, those proofs are generated
+                %only if server accepted req of client, at least one server honest => someone authenticated for sure
+            }
+        \item[Forward Deniability] \hfill \\
+            The deniability property is retained even if an attacker gains additional knowledge of the private keys of all entities/users.
+    \end{description}
+
+    %\subsection{Existing Approaches}
+    % TODO short comparisoin with LRS or other schemes ? => not time + maybe not my work => maybe point to syta paper.
+    % The addition of forward-security and deniability properties (but remember of what I saw...about deniability) ... thus ..can be envisioned
+    % maybe a chart of auth. methods/crypto primitives vs properties
+    % other well known schemes such as hartemink99/lindell (not decentralized not deniable) etc..
+    % or at least ! just link to relevant parts in syta
+
+    % other attempts at resolving same issues with different properties : fdgfdfm, ONTAP, others
+
+    \subsection[Overall description]{Overall description\sidenote{
+        see\cite[Sect.~4.3]{syta_identity_2015} for complete description.
+    }}
+
+    % big picture description
+    \subsubsection{Authentication Context}
+    \label{subsubsec:dagacontext}
+    As already mentioned, DAGA divides authentication attempts into epochs or authentication rounds.
+    A client wanting to authenticate itself as a member of a group during an epoch needs such a group description
+    as well as other round specific information which are packed in a public structure called an \emph{authentication context}.
+    %\noindent\begin{minipage}{\linewidth} % prevent the thing to be breaked accross multiple pages
+    \newline
+    An authentication context \(C\) contains:
+    \begin{description}[font=\boldmath]
+        \item[\(\vec{X}\):]
+            the long-term public keys of the \(n\) entities/users\sidenote{
+                The keys used are Diffie-Hellman-Merkle (DH) key pairs.
+            }
+        \item[\(\vec{Y}\):]
+            the long-term public keys of the \(m\) servers
+        \item[\textbf{\(\vec{R} = \{R_1, \ldots, R_m\}\)}:]
+            each server's commitment \(R_i=g^{r_i}\) to its per-round secret \(r_i\)
+        \item[\(\vec{H}= \{h_1, \ldots, h_n\}\):]
+            the unique per-round generators of \(\mathcal{G}\) associated to each clients\sidenote {
+                "such that no one knows the logarithmic relationship between any \(h_i\) and \(g\) or between
+                \(h_i\) and \(h_i'\) for any pair of clients \(i \neq i'\)"\cite{syta_identity_2015}
+            }
+        \item[\(\mathcal{G}\) and \(g\):]
+            implicitly and obviously all actors know the algebraic group \(\mathcal{G}\)\sidenote{
+                see~\autoref{subsec:library}
+            } in usage and one common generator \(g\). (the same used in the above descriptions in multiplicative notation)
+    \end{description}
+    %\end{minipage}
+    %\footnotetext{ % tricks to allow a sidenote inside the minipage
+    %    "such that no one knows the logarithmic relationship between any \(H_i\) and \(g\) or between
+    %    \(H_i\) and \(H_i'\) for any pair of clients \(i \neq i'\)
+    %}
+
+    % here description of protocol and proofs
+    \subsubsection{Authentication}
+    \label{subsubsec:dagaauth}
+    Then, once in possession of the context, the \(i\)\textsuperscript{th} entity can start its authentication process
+    which consists in building an initial linkage tag \(T_0=h_i^s\) using its per-round generator\sidenote{
+        \(s=\prod_{j=1}^m s_j\), where \(sj=H(Y_j^{z_i})\) is a shared secret (with server j) derived from
+        DH key exchange using a new ephemeral DH key \(Z_i=g^{z_i}\) and a suitable hash function \(H\).
+    } as well as proving its membership and the correctness of its computation to the verifying servers.
+
+    The servers are convinced by an interactive \emph{HVZK}\sidenote{
+        Honest-Verifier Zero-Knowledge, see later~\ref{subsubsec:sigmaprotocol}
+    } proof of knowledge\sidenote{
+        designed and executed following techniques described by Camenish and Stadler in\cite{camenisch_proof_1997}
+    } for the following "OR"-predicate~:\newline\centerline{
+%        \(PK\{(x_i, s) : \vee_{k=1}^n (X_k=g^{x_k} \wedge S_m=g^s \wedge T_0=h_k^s)\}\)
+        \(PK\{(x_i, s) : \vee_{k=1}^n ("knows\ k^{th}\'s\ secret\ key" \wedge "T_0\ correct")\}\)
+    }
+    \noindent
+%    which states that he knows one private key and that it followed the protocol to build \(T_0\)\sidenote{
+%        To see what \(S_m\) corresponds to, see the complete description in\cite{syta_identity_2015}.
+%    }.
+    Once done, the entity embeds the resulting tag and proof transcript in its authentication message \(M_0\) and send it
+    to an arbitrary server.
+    Then all the servers will, in turn (ring order based on indices in context), process the request, by each~:
+    \begin{enumerate}[leftmargin=!,itemsep=-1ex]
+        \item verifying the client's proof and all the previous (if not first) server's proof (aborting the process if either of them is invalid)
+        \item scrubbing their shared secret \(s_j\) from the tag being built and replacing it by their per-round secret \(r_j\)
+                to build an intermediate tag \(T_j=(T_{j-1})^{(r_j)(s_j^{-1})}\)
+        \item adding a proof stating that they did their work correctly or exposing a misbehaving client (in that case they set \(T_j=0\))
+    \end{enumerate}
+    At the end \blockquote{
+        all servers learn a final linkage tag \(T_f=h_i^{\prod_{k=1}^m r_k}\)
+    }\cite{syta_identity_2015} in case of success or \(T_f=0\) in case of failure.
+    Obviously communication between all actors need to take place over secure authenticated channels
+    and if we don't want to destroy the purpose of DAGA we need an anonymous routing mechanism\cite{lindell_anonymous_2011}.
+
+    %- FIXME syta figure or not..or previous student here or later in implementation architecture !! cross ref ?
+    %anonymity is protected as long as there are respectively one and two\sidenote{
+    %"anonymity is trivially impossible if n-1 [(all other)] clients choose to collude
+    %against only one honest client."\cite{syta_identity_2015}
+    %} honest server and entity/client and that their private keys are not compromised.

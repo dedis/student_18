@@ -1,0 +1,65 @@
+\documentclass[11pt, a4paper, twoside, openright]{article} %draft
+
+\usepackage{hyperref}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{graphicx,color}
+\usepackage{amssymb, amsmath, array}
+\usepackage{float}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage{afterpage}
+\newcommand\blankpage{%
+    \null
+    % \thispagestyle{empty}%
+    \newpage}
+
+\def\blankpage{%
+      \clearpage%
+      \pagenumbering{gobble}
+    %   \addtocounter{page}{-1}%
+      \null%
+      \clearpage}
+
+
+
+\begin{document}
+\blankpage
+\input{cover}
+\blankpage
+\newpage
+\input{abstract.tex}
+\newpage
+\tableofcontents{\protect\thispagestyle{empty}
+\newpage
+% Start page count
+\pagenumbering{arabic}
+\setcounter{page}{4}
+
+\input{intro}
+
+\newpage
+\input{background.tex}
+
+\newpage
+\input{project_overview.tex}
+
+\newpage
+\input{implementation.tex}
+
+\newpage
+\input{evaluation.tex}
+
+\newpage
+\input{conclusion.tex}
+
+\newpage
+\input{acknowledgements.tex}
+
+\newpage
+\input{references.tex}
+
+\newpage
+\input{apendix.tex}
+
+\end{document}}

@@ -1,0 +1,18 @@
+\section{Conclusion and Future Work}
+
+We have presented a decentralized solution for fighting frauds in the automotive industry and establishing trust between vehicle owners, potential buyers, car manufacturers, garages, insurance companies and car dealers.\\
+\newline
+In our work, we designed a service using the ByzCoin \cite{ByzCoin} blockchain protocol together with the Calypso \cite{Calypso} framework for securely storing private data on a blockchain.\\
+\newline
+Overall, our implementation builds on top of the Cothority Template \cite{Template} (a starting point for creating a ByzCoin service) and includes definition of the access control structure, creation of the necessary car contract, handling the sensitive data with Calypso and development of a desktop Java application, used for interaction between the users and the blockchain service.\\
+\newline
+After producing a prototype, we have tested the correctness with unit and integration tests. Once we were confident that it is a valid proof of concept, we proceeded with stressing the network by introducing more nodes and concurrent transactions.\\
+\newline
+The evaluation has demonstrated that our system works well with up to 500 car enrollments in parallel. Moreover, with constant number of hosts, the wall time (number of seconds it takes in real life, including the network communication) calculated per transaction is  greater  when  there  are  lower  number  of  concurrent  transactions, because the block creation  time  is  equal in every scenario, whereas the system cost per transaction remains approximately the same independently on the number of concurrent transactions.
+\newline
+Furthermore, when we modified the number of hosts, we observed that it takes longer to communicate with the Calypso secret management cothority, due to the time used for coordination between nodes.\\
+\newline
+As a possible future task, we consider expanding the system to work on a larger scale (for example vehicles from the entire world). The approach that we would follow is \textbf{sharding} of the nodes, introduced in the OmniLedger paper \cite{OmniLedger}. It increases the transaction processing capacity with the addition of new members to the network \cite{OmniLedger}, as it does not require each one of them to validate every transaction in the system. Therefore, it also reduces the load of the nodes.
+Additionally, we propose a future expansion that includes creation of transactions directly by IoT devices attached to the vehicles.\\
+\newline
+With this proof of concept, we showed one of the many possible applications of the blockchain technology for establishing trust among distributed, distrustful parties.
