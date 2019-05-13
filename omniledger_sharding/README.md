@@ -10,4 +10,5 @@ Desc. from report.
 
 - [Report](report-2018_2-quangminh-omniledger_sharding.pdf)
 - [Presentation]()
-- [Code](https://github.com/dedis/student_18)
+- [Code from student](https://github.com/dedis/student_18_byzcoin)
+- [Code in PR](https://github.com/dedis/student_18/tree/master/omniledger_sharding)
